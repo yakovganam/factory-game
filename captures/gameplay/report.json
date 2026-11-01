@@ -1,0 +1,57 @@
+{
+  "when": "2026-11-01T02:37:46.319Z",
+  "renderer": "Chromium headless + SwiftShader (CPU) — not GPU evidence",
+  "scenes": [
+    {
+      "name": "interior_desktop",
+      "w": 1600,
+      "h": 900,
+      "scene": "interior",
+      "seconds": 150,
+      "file": "captures/gameplay/interior_desktop.png",
+      "stats": {
+        "calls": 332,
+        "tris": 351464,
+        "geoms": 205,
+        "tex": 41
+      },
+      "swiftshaderFrameMsMedian": 16.699999999999818,
+      "errors": [],
+      "ms": 18227
+    },
+    {
+      "name": "street_desktop",
+      "w": 1600,
+      "h": 900,
+      "scene": "street",
+      "seconds": 150,
+      "file": "captures/gameplay/street_desktop.png",
+      "stats": {
+        "calls": 366,
+        "tris": 389088,
+        "geoms": 185,
+        "tex": 51
+      },
+      "swiftshaderFrameMsMedian": 1166.6000000000004,
+      "errors": [],
+      "ms": 24153
+    },
+    {
+      "name": "city_desktop",
+      "w": 1600,
+      "h": 900,
+      "scene": "city",
+      "seconds": 150,
+      "file": "captures/gameplay/city_desktop.png",
+      "stats": {
+        "calls": 710,
+        "tris": 550708,
+        "geoms": 214,
+        "tex": 54
+      },
+      "swiftshaderFrameMsMedian": 733.3000000000011,
+      "errors": [],
+      "ms": 26757
+    }
+  ]
+}

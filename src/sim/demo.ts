@@ -10,8 +10,7 @@ export function applyDemoLayout(sim: Sim, f = 'ws1') {
   run({ t: 'import', f, items: { wood_pieces: 60, carton_flat: 30 } });
   const docks = sim.s.factories[f].entities.filter((e) => e.def === 'receiving_dock');
   run({ t: 'setFilter', f, e: docks.find((d) => d.y === 1)!.id, item: 'wood_pieces' });
-  // Cartons are stock-fed into the packer from receiving storage (no belt needed).
-  run({ t: 'setFilter', f, e: docks.find((d) => d.y === 4)!.id, item: 'wood_pieces' });
+  // Cartons are stock-fed into the packer from receiving storage (no belt or bay needed).
   run({ t: 'place', f, def: 'assembly_bench', x: 3, y: 1, rot: 0 });
   run({ t: 'placeBelts', f, tiles: [{ x: 1, y: 1, rot: 0 }, { x: 2, y: 1, rot: 0 }] });
   run({ t: 'placeBelts', f, tiles: [{ x: 5, y: 1, rot: 0 }, { x: 6, y: 1, rot: 1 }, { x: 6, y: 2, rot: 0 }, { x: 7, y: 2, rot: 0 }] });

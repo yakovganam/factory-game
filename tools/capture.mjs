@@ -44,6 +44,9 @@ await new Promise((res, rej) => {
   server.stderr.on('data', (d) => process.stderr.write(d));
 });
 
+// Merge with an existing report so partial re-captures keep the other scenes' evidence.
+import { existsSync, readFileSync } from 'node:fs';
+const prior = existsSync(`${outDir}/report.json`) ? JSON.parse(readFileSync(`${outDir}/report.json`, 'utf8')).scenes ?? [] : [];
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--autoplay-policy=no-user-gesture-required'] });
 const report = [];
 try {
@@ -74,10 +77,10 @@ try {
     console.log(`FAILED ${sc.name}: ${String(e).split('\n')[0]}`);
     report.push({ ...sc, failed: String(e).split('\n')[0] });
    }
-   writeFileSync(`${outDir}/report.json`, JSON.stringify({ when: new Date().toISOString(), renderer: 'Chromium headless + SwiftShader (CPU) — not GPU evidence', scenes: report }, null, 2));
+   const merged = [...prior.filter((p) => !report.some((r) => r.name === p.name)), ...report];
+   writeFileSync(`${outDir}/report.json`, JSON.stringify({ when: new Date().toISOString(), renderer: 'Chromium headless + SwiftShader (CPU) — not GPU evidence', scenes: merged }, null, 2));
   }
 } finally {
   await browser.close();
   server.kill('SIGTERM');
 }
-writeFileSync(`${outDir}/report.json`, JSON.stringify({ when: new Date().toISOString(), renderer: 'Chromium headless + SwiftShader (CPU) — not GPU evidence', scenes: report }, null, 2));

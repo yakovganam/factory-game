@@ -220,14 +220,14 @@ export function buildCity(s: GameState, keepOut: Rect[]): CityLayout {
     else pondShape.lineTo(px, pz);
   }
   const shoreG = new THREE.ShapeGeometry(pondShape, 24);
-  shoreG.rotateX(Math.PI / 2);
+  shoreG.rotateX(-Math.PI / 2); // face up (a +90° turn faces down and is back-face culled)
   shoreG.scale(1.12, 1, 1.18);
   shoreG.translate(66, 0.035, 26);
   const shore = new THREE.Mesh(shoreG, mat.sand);
   shore.receiveShadow = true;
   group.add(shore);
   const pondG = new THREE.ShapeGeometry(pondShape, 24);
-  pondG.rotateX(Math.PI / 2);
+  pondG.rotateX(-Math.PI / 2);
   pondG.translate(66, 0.06, 26);
   const pond = new THREE.Mesh(pondG, mat.water);
   pond.receiveShadow = true;
