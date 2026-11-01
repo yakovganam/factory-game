@@ -10,7 +10,7 @@ Severity levels: **S1** blocks release or the platform gate · **S2** major gap 
 | P1 | S1 | The Android build is blocked: `dl.google.com` (AGP + SDK) is denied by the environment network policy | Owner: allow the host or provide an SDK image. The project itself is generated |
 | P2 | S1 | iOS compile, sign and install need macOS, Xcode and Apple credentials | Owner: provide a Mac build worker and signing assets |
 | P3 | S1 | No physical device has been tested. Desktop Chrome/Edge/Firefox/Safari and mobile browsers are unverified | Manual test pass on the device matrix |
-| P4 | S2 | GPU performance hasn't been measured. Captures use SwiftShader (CPU), which is not performance evidence | Measure on target devices, then set budgets |
+| P4 | S2 | GPU performance hasn't been measured. Captures use SwiftShader (CPU), which is not performance evidence. Measured render load per frame: interior views take 316–332 draw calls and ~350k triangles; the city overview takes 710 draw calls and ~550k triangles. That is likely above a mid-range phone budget | Merge static building meshes, add building LODs and impostor-free simplified distant meshes, and cull interiors outside the view. Then measure on devices and set budgets |
 | P5 | S3 | `npm audit`: 4 moderate advisories in the dev-only `@capacitor/cli` dependency chain | Accepted for development; watch for an upstream fix |
 
 ## Scope (against the full brief)
