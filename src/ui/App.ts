@@ -873,6 +873,12 @@ export class App implements UiCtx {
     if (sel) this.sheet = null;
     this.showSupplyRoutes(sel);
     this.view.openBuilding = sel?.type === 'building' && this.sim.s.stores[sel.id] ? sel.id : null;
+    // In the city view, bring the selected building into frame (the panel covers the inline-end side).
+    if (sel?.type === 'building' && !this.interior) {
+      const b = this.sim.s.buildings.find((x) => x.id === sel.id);
+      const f = b ? this.sim.s.factories[b.id] : undefined;
+      if (b) this.view.rig.setGoal({ x: f ? b.x + f.w / 2 : b.x, z: f ? b.z + f.h / 2 : b.z });
+    }
     for (const fv of this.view.factories.values()) fv.highlight.clear();
     if (sel?.type === 'entity') this.view.factories.get(sel.f)?.highlight.add(sel.id);
     if (sel) this.audio.play('ui_tap');

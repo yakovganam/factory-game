@@ -1,5 +1,5 @@
 {
-  "when": "2026-11-01T02:37:46.319Z",
+  "when": "2026-11-01T02:43:48.102Z",
   "renderer": "Chromium headless + SwiftShader (CPU) — not GPU evidence",
   "scenes": [
     {
@@ -52,6 +52,213 @@
       "swiftshaderFrameMsMedian": 733.3000000000011,
       "errors": [],
       "ms": 26757
+    },
+    {
+      "name": "title_desktop",
+      "w": 1600,
+      "h": 900,
+      "title": true,
+      "file": "captures/gameplay/title_desktop.png",
+      "stats": {
+        "calls": 508,
+        "tris": 457714,
+        "geoms": 178,
+        "tex": 51
+      },
+      "swiftshaderFrameMsMedian": 16.699999999999818,
+      "errors": [],
+      "ms": 14240
+    },
+    {
+      "name": "title_phone",
+      "w": 844,
+      "h": 390,
+      "title": true,
+      "file": "captures/gameplay/title_phone.png",
+      "stats": {
+        "calls": 498,
+        "tris": 442524,
+        "geoms": 178,
+        "tex": 39
+      },
+      "swiftshaderFrameMsMedian": 16.699999999999818,
+      "errors": [],
+      "ms": 6388
+    },
+    {
+      "name": "interior_phone",
+      "w": 844,
+      "h": 390,
+      "scene": "interior",
+      "seconds": 150,
+      "file": "captures/gameplay/interior_phone.png",
+      "stats": {
+        "calls": 325,
+        "tris": 347494,
+        "geoms": 224,
+        "tex": 43
+      },
+      "swiftshaderFrameMsMedian": 533.3000000000011,
+      "errors": [],
+      "ms": 12396
+    },
+    {
+      "name": "machine_panel_desktop",
+      "w": 1600,
+      "h": 900,
+      "scene": "machine",
+      "seconds": 150,
+      "file": "captures/gameplay/machine_panel_desktop.png",
+      "stats": {
+        "calls": 331,
+        "tris": 354008,
+        "geoms": 229,
+        "tex": 56
+      },
+      "swiftshaderFrameMsMedian": 1283.2000000000007,
+      "errors": [
+        "warning: [.WebGL-0x18dc001a6600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      ],
+      "ms": 27403
+    },
+    {
+      "name": "build_ghost_phone",
+      "w": 844,
+      "h": 390,
+      "scene": "build",
+      "seconds": 60,
+      "file": "captures/gameplay/build_ghost_phone.png",
+      "stats": {
+        "calls": 317,
+        "tris": 345502,
+        "geoms": 228,
+        "tex": 43
+      },
+      "swiftshaderFrameMsMedian": 583.1999999999998,
+      "errors": [],
+      "ms": 11918
+    },
+    {
+      "name": "store_panel_phone",
+      "w": 844,
+      "h": 390,
+      "scene": "store",
+      "seconds": 200,
+      "file": "captures/gameplay/store_panel_phone.png",
+      "stats": {
+        "calls": 372,
+        "tris": 398480,
+        "geoms": 181,
+        "tex": 40
+      },
+      "swiftshaderFrameMsMedian": 316.60000000000036,
+      "errors": [],
+      "ms": 9553
+    },
+    {
+      "name": "night_interior_desktop",
+      "w": 1600,
+      "h": 900,
+      "scene": "interior",
+      "seconds": 150,
+      "hour": 21.5,
+      "file": "captures/gameplay/night_interior_desktop.png",
+      "stats": {
+        "calls": 316,
+        "tris": 341700,
+        "geoms": 235,
+        "tex": 35
+      },
+      "swiftshaderFrameMsMedian": 683.1999999999989,
+      "errors": [],
+      "ms": 28550
+    },
+    {
+      "name": "research_he_phone",
+      "w": 844,
+      "h": 390,
+      "scene": "research",
+      "seconds": 200,
+      "lang": "he",
+      "file": "captures/gameplay/research_he_phone.png",
+      "stats": {
+        "calls": 391,
+        "tris": 403848,
+        "geoms": 179,
+        "tex": 39
+      },
+      "swiftshaderFrameMsMedian": 283.2999999999993,
+      "errors": [],
+      "ms": 9822
+    },
+    {
+      "name": "interior_he_desktop",
+      "w": 1600,
+      "h": 900,
+      "scene": "machine",
+      "seconds": 150,
+      "lang": "he",
+      "file": "captures/gameplay/interior_he_desktop.png",
+      "stats": {
+        "calls": 331,
+        "tris": 354008,
+        "geoms": 229,
+        "tex": 56
+      },
+      "swiftshaderFrameMsMedian": 1450,
+      "errors": [],
+      "ms": 30618
+    },
+    {
+      "name": "stats_desktop",
+      "w": 1600,
+      "h": 900,
+      "scene": "stats",
+      "seconds": 400,
+      "file": "captures/gameplay/stats_desktop.png",
+      "stats": {
+        "calls": 410,
+        "tris": 419312,
+        "geoms": 179,
+        "tex": 51
+      },
+      "swiftshaderFrameMsMedian": 716.7000000000007,
+      "errors": [],
+      "ms": 22386
+    },
+    {
+      "name": "tutorial_fresh_phone",
+      "w": 844,
+      "h": 390,
+      "scene": "fresh",
+      "tutorial": true,
+      "file": "captures/gameplay/tutorial_fresh_phone.png",
+      "stats": {
+        "calls": 397,
+        "tris": 403984,
+        "geoms": 179,
+        "tex": 39
+      },
+      "swiftshaderFrameMsMedian": 283.3000000000002,
+      "errors": [],
+      "ms": 10534
+    },
+    {
+      "name": "tablet_interior",
+      "w": 1180,
+      "h": 820,
+      "scene": "interior",
+      "seconds": 150,
+      "file": "captures/gameplay/tablet_interior.png",
+      "stats": {
+        "calls": 317,
+        "tris": 351988,
+        "geoms": 224,
+        "tex": 55
+      },
+      "swiftshaderFrameMsMedian": 666.5999999999995,
+      "errors": [],
+      "ms": 24025
     }
   ]
 }

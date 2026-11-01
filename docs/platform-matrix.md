@@ -6,7 +6,7 @@ means nobody has checked it.
 
 | Platform / browser | Implemented | Builds | Installed | Tested | Release-ready | Evidence / blocker |
 |---|---|---|---|---|---|---|
-| Web — Chromium 153 headless (Linux, SwiftShader) | ✅ | ✅ `npm run build` | n/a | ⚠️ Automated only: in-engine screenshots + console-error capture | ❌ | `captures/gameplay/report.json`. Software rendering, so no GPU or performance evidence |
+| Web — Chromium 153 headless (Linux, SwiftShader) | ✅ | ✅ `npm run build` | n/a | ⚠️ Automated only. 15 in-engine scenes (phone 844×390, tablet 1180×820, desktop 1600×900; EN + HE) with 0 console errors. The end-to-end journey from fresh city to first sale passes using real input at desktop 1366×768 (mouse) and phone 844×390 (touch) | ❌ | `captures/gameplay/report.json`, `captures/e2e-evidence/`. Software rendering, so no GPU or performance evidence |
 | Web — desktop Chrome (GPU) | ✅ | ✅ (same bundle) | n/a | ❌ Unverified | ❌ | Needs a manual run on real hardware |
 | Web — desktop Edge | ✅ | ✅ | n/a | ❌ Unverified | ❌ | — |
 | Web — desktop Firefox | ✅ | ✅ | n/a | ❌ Unverified | ❌ | Playwright Firefox isn't installed in this environment |
