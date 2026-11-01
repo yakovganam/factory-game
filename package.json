@@ -1,0 +1,38 @@
+{
+  "name": "tiny-factory-tycoon-city",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tiny Factory: Tycoon City (working title) - stylized 3D economic city-builder for web, Android and iOS",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "validate:content": "tsx tools/validate-content.ts",
+    "capture": "node tools/capture.mjs",
+    "cap:sync": "npm run build && cap sync"
+  },
+  "dependencies": {
+    "@capacitor/app": "8.1.2",
+    "@capacitor/core": "8.6.0",
+    "@capacitor/filesystem": "8.1.5",
+    "@fontsource/rubik": "5.3.0",
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "8.6.0",
+    "@capacitor/cli": "8.6.0",
+    "@capacitor/ios": "8.6.0",
+    "@types/node": "24.10.1",
+    "@types/three": "0.187.0",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "vitest": "5.0.5"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
