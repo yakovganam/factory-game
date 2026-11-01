@@ -120,6 +120,23 @@ try {
     console.log('stats.json written');
     await ctx.close();
   }
+  // shader / console check: every model + variant in one scene, day and night, closed and cut away
+  if (!filter || 'shadercheck'.includes(filter)) {
+    for (const params of ['scene=grid&t=2&ui=0', 'scene=grid&t=2&ui=0&night=1&cutaway=1&status=no_power']) {
+      const ctx = await browser.newContext({ viewport: { width: 640, height: 400 } });
+      const page = await ctx.newPage();
+      const errs = [];
+      page.on('pageerror', (e) => errs.push(String(e)));
+      page.on('console', (m) => {
+        if (m.type() === 'error' || /shader|WebGLProgram/i.test(m.text())) errs.push(m.text().slice(0, 300));
+      });
+      await page.goto(`${BASE}?${params}`);
+      await page.waitForFunction(() => window.__ready || window.__error, null, { timeout: 240000 });
+      console.log(`shader check [${params}]: ${errs.length ? 'ERRORS\n  ' + errs.join('\n  ') : 'no console errors'}`);
+      if (errs.length) failures.push('shadercheck');
+      await ctx.close();
+    }
+  }
   for (const s of shots) {
     if (filter && !s.name.includes(filter)) continue;
     const ctx = await browser.newContext({ viewport: { width: s.w, height: s.h }, deviceScaleFactor: s.dpr });
@@ -135,7 +152,7 @@ try {
       await page.waitForFunction(() => window.__ready || window.__error, null, { timeout: 180000 });
       const err = await page.evaluate(() => window.__error);
       if (err) errs.push(err);
-      await page.screenshot({ path: resolve(OUT, `${s.name}.png`) });
+      await page.screenshot({ path: resolve(OUT, `${s.name}.png`), timeout: 180000 });
       console.log(`${s.name}.png  ${Date.now() - t0}ms${errs.length ? '  ERR: ' + errs.join(' | ').slice(0, 300) : ''}`);
       if (errs.length) failures.push(s.name);
     } catch (e) {
