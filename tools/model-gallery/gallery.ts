@@ -250,7 +250,7 @@ function setupWorkshop(level: number) {
     P.push(['mach_robot_assembler', 7, 3, 0, [2, 2], { progress: 0.58 }]);
     P.push(['mach_belt_mk2', 9, 4, 0, [1, 1]], ['mach_belt_mk2', 10, 4, 0, [1, 1]]);
     P.push(['mach_packing_station', 11, 4, 0, [2, 1], { status: 'starved', progress: 0.1 }]);
-    P.push(['mach_belt_mk2', 13, 4, 3, [1, 1]], ['mach_belt_mk2', 13, 3, 3, [1, 1]], ['mach_belt_mk2', 13, 2, 3, [1, 1]], ['mach_belt_mk2', 13, 1, 3, [1, 1]]);
+    P.push(['mach_belt_mk2_turn_l', 13, 4, 3, [1, 1]], ['mach_belt_mk2', 13, 3, 3, [1, 1]], ['mach_belt_mk2', 13, 2, 3, [1, 1]], ['mach_belt_mk2', 13, 1, 3, [1, 1]]);
     P.push(['mach_assembly_bench', 10, 6, 0, [2, 1], { status: 'no_worker' }]);
   } else {
     P.push(['mach_belt', 7, 4, 0, [1, 1], { status: 'blocked' }]);
@@ -340,7 +340,7 @@ function setupItems() {
       el.className = 'lbl';
       el.textContent = id;
       document.body.appendChild(el);
-      live.push({ inst: { root: m }, state: { status: 'idle', progress: 0, time: 0, night }, labelEl: el, anchor: m.position.clone().add(new THREE.Vector3(0, -0.02, 0.2)), phase: 0 });
+      live.push({ inst: { root: m }, state: { status: 'idle', progress: 0, time: 0, night }, labelEl: el, anchor: m.position.clone().add(new THREE.Vector3(0.12, 0, 0.16)), phase: 0 });
     }
   });
   focus.set(1.25, 0.1, 0.55);

@@ -20,8 +20,8 @@ const WALL = 0xf2b8a0; // coral plaster
 const TRIM = 0x2e7c78;
 const BOX = [PAL.yellow, PAL.red, PAL.blue, 0x3b2a6b];
 
-function shelfUnit(b: Builder, x: number, z: number, len: number, ry: number, double: boolean, seed: number): void {
-  b.push(x, 0, z, ry);
+function shelfUnit(b: Builder, x: number, z: number, len: number, ry: number, double: boolean, seed: number, y = 0): void {
+  b.push(x, y, z, ry);
   const d = double ? 0.6 : 0.4;
   b.span('satin', 0xf4f2ee, -len / 2, 0, -d / 2, len / 2, 0.12, d / 2, 0.01);
   b.span('satin', TRIM, -len / 2, 0.12, -0.03, len / 2, 1.65, 0.03, 0.006);
@@ -69,7 +69,7 @@ export function createToyStore(opts: ModelOptions = {}): ModelInstance {
   const doorU = -w / 2 + 1.5;
   const openings: Record<Side, Opening[]> = {
     S: [{ u: doorU, w: 1.2, y0: 0, y1: 2.4 }, { u: doorU + 0.9 + shopW / 2, w: shopW, y0: 0.45, y1: 2.55 }],
-    E: level >= 2 ? [{ u: h / 2 - 1.8, w: 2.4, y0: 0.45, y1: 2.55 }] : [{ u: 0, w: 1.4, y0: 1.0, y1: 2.4 }],
+    E: level >= 2 ? [{ u: -(h / 2 - 1.8), w: 2.4, y0: 0.45, y1: 2.55 }] : [{ u: 0, w: 1.4, y0: 1.0, y1: 2.4 }],
     N: [{ u: 0, w: 1.0, y0: 0, y1: 2.15 }],
     W: [],
   };
@@ -178,7 +178,8 @@ export function createToyStore(opts: ModelOptions = {}): ModelInstance {
   }
   // wall shelving along N and W
   shelfUnit(b, -w / 2 + 0.3, 0.6, Math.min(3.2, h - 2.4), Math.PI / 2, false, 7);
-  shelfUnit(b, w / 2 - 2.3, -h / 2 + 0.3, 3.0, Math.PI, false, 11);
+  const nLen = Math.min(3.0, w / 2 - 1.3);
+  shelfUnit(b, w / 2 - 0.2 - nLen / 2, -h / 2 + 0.3, nLen, 0, false, 11);
   checkout(b, w / 2 - 1.4, h / 2 - 1.6, Math.PI);
   if (level >= 2) checkout(b, w / 2 - 1.4, h / 2 - 3.0 + (level === 3 ? 0 : 0.2), Math.PI);
   // display window podiums with oversized toys (street side, behind the glass)
@@ -192,11 +193,12 @@ export function createToyStore(opts: ModelOptions = {}): ModelInstance {
   b.span('paint', 0x5a4a3a, doorU - 0.7, 0, h / 2 - 1.2, doorU + 0.7, 0.008, h / 2 - 0.05, 0);
   if (level === 3) {
     // play corner: rug + blocks + mini slide
-    b.span('paint', 0x93d6c3, -w / 2 + 0.4, 0, h / 2 - 2.6, -w / 2 + 2.6, 0.012, h / 2 - 0.4, 0);
+    const px = -1.6, pz = 1.2;
+    b.span('paint', 0x93d6c3, px, 0, pz, px + 2.6, 0.012, pz + 1.7, 0);
     const cols = [PAL.red, PAL.yellow, PAL.blue, PAL.green];
-    for (let i = 0; i < 6; i++) b.boxB('satin', cols[i % 4], 0.3, 0.3, 0.3, -w / 2 + 0.9 + (i % 3) * 0.4, (i > 2 ? 0.3 : 0) + 0.012, h / 2 - 1.2, 0.04);
-    b.boxB('satin', PAL.blue, 0.5, 0.9, 0.5, -w / 2 + 2.1, 0, h / 2 - 2.1, 0.06);
-    b.box('satin', PAL.yellow, 0.42, 0.05, 1.3, -w / 2 + 2.1, 0.5, h / 2 - 1.35, 0.02, { rx: 0.62 });
+    for (let i = 0; i < 6; i++) b.boxB('satin', cols[i % 4], 0.3, 0.3, 0.3, px + 0.5 + (i % 3) * 0.4, (i > 2 ? 0.3 : 0) + 0.012, pz + 0.5, 0.04);
+    b.boxB('satin', PAL.blue, 0.5, 0.9, 0.5, px + 2.05, 0.012, pz + 0.4, 0.06);
+    b.box('satin', PAL.yellow, 0.42, 0.05, 1.2, px + 2.05, 0.5, pz + 1.08, 0.02, { rx: 0.62 });
     // mezzanine along the north wall
     const fy = 3.4;
     b.span('concrete', 0xece6dc, -w / 2, fy - 0.2, -h / 2, w / 2, fy, -h / 2 + 2.2, 0);
@@ -204,7 +206,7 @@ export function createToyStore(opts: ModelOptions = {}): ModelInstance {
     b.box('glassClear', 0xffffff, w, 1.0, 0.02, 0, fy + 0.55, -h / 2 + 2.15, 0);
     b.box('metal', PAL.chrome, w, 0.05, 0.07, 0, fy + 1.06, -h / 2 + 2.15, 0.01);
     for (let x = -w / 2 + 1.0; x < w / 2; x += 2.5) b.rod('satin', TRIM, 0.04, [x, 2.3, -h / 2 + 0.02], [x, fy - 0.3, -h / 2 + 1.6], 6);
-    for (let i = 0; i < 3; i++) shelfUnit(b, -w / 2 + 2 + i * 3.6, -h / 2 + 0.6, 2.4, 0, false, 20 + i);
+    for (let i = 0; i < 3; i++) shelfUnit(b, -w / 2 + 2 + i * 3.6, -h / 2 + 0.45, 2.4, 0, false, 20 + i, fy);
     // rooftop sign
     const rs = signMat('toystoreRoof', { text: 'TOYS!', bg: '#d8453c', fg: '#ffffff', accent: '#f2bb2c', w: 512, h: 192, icon: 'robot', nightGlow: 1.3, dayGlow: 0.08 });
     roof.span('metal', PAL.steelDark, -2.2, H, -1.0, -2.1, H + 2.2, -0.9, 0);

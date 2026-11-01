@@ -486,7 +486,7 @@ export function setNightLevel(n: number): void {
   const lamp = mats.get('lamp') as THREE.MeshStandardMaterial | undefined;
   if (lamp) lamp.emissiveIntensity = 0.45 + 2.2 * k;
   const pool = mats.get('lightPool') as THREE.MeshBasicMaterial | undefined;
-  if (pool) pool.opacity = 0.55 * k;
+  if (pool) pool.opacity = 0.4 * k;
   for (const [key, m] of mats) if (key.startsWith('sign:')) (m as THREE.MeshStandardMaterial).emissiveIntensity = (m.userData.dayGlow ?? 0) + (m.userData.nightGlow ?? 1.2) * k;
 }
 

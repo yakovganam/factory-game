@@ -378,7 +378,7 @@ function sawRoof(c: Ctx, x0: number, x1: number, H: number, teeth: number, rise:
     for (const side of gableSides) {
       const f = sideFrame(side, c.w, c.h);
       const ua = f.u(a), ue = f.u(e);
-      const target = side === 'S' ? c.up.S : side === 'E' ? c.up.E : c.st;
+      const target = side === 'S' ? c.up.S : side === 'E' ? c.up.E : c.roof;
       gableTri(target, side, c, [[ua, H], [ue, H], [ue, H + rise]], false);
     }
   }
@@ -627,7 +627,19 @@ export function createWorkshop(opts: ModelOptions = {}): ModelInstance {
   wallLamp(c.up.E, h / 2 - 0.7, 2.6, T);
   c.up.E.pop();
 
-  if (level === 3) mascot(c, H3);
+  if (level === 3) {
+    mascot(c, H3);
+    // brand accent band under the parapet on all four faces
+    for (const side of ['S', 'E', 'N', 'W'] as Side[]) {
+      const f = sideFrame(side, w, h);
+      const bb = side === 'S' ? c.up.S : side === 'E' ? c.up.E : c.st;
+      const len = side === 'N' || side === 'S' ? w : h + 2 * T;
+      pushSide(bb, f);
+      bb.span('satin', PAL.teal, -len / 2, 6.55, T, len / 2, 6.85, T + 0.04, 0);
+      bb.span('satin', PAL.mint, -len / 2, 6.45, T, len / 2, 6.5, T + 0.03, 0);
+      bb.pop();
+    }
+  }
 
   const mezzU: [number, number] = [-w / 2 + 2.6 - 0.6, w / 2 + 0.6]; // N frame u = -x: mezzanine x∈[-w/2,-1.6] → u∈[1.6, w/2]
   const dressArgs: [number, number, { N?: [number, number]; W?: [number, number] }] =
@@ -712,7 +724,8 @@ function mezzanine(c: Ctx, H: number): void {
   b.box('glassClear', 0xffffff, x1 - x0, 1.0, 0.02, (x0 + x1) / 2, fy + 0.55, z1 - 0.05, 0);
   b.box('metal', PAL.chrome, x1 - x0, 0.05, 0.07, (x0 + x1) / 2, fy + 1.06, z1 - 0.05, 0.01);
   for (let x = x0 + 0.5; x <= x1; x += 1.4) b.span('metal', PAL.steel, x - 0.02, fy, z1 - 0.08, x + 0.02, fy + 1.04, z1 - 0.02, 0);
-  b.span('metal', PAL.steel, x1 - 0.04, fy, z0, x1, fy + 1.04, z1, 0);
+  b.box('glassClear', 0xffffff, 0.02, 1.0, z1 - z0, x1 - 0.02, fy + 0.55, (z0 + z1) / 2, 0);
+  b.box('metal', PAL.chrome, 0.07, 0.05, z1 - z0, x1 - 0.02, fy + 1.06, (z0 + z1) / 2, 0.01);
   // office box
   const ox1 = x0 + 6.2, oy = fy + 2.6;
   const oz1 = z1 - 0.35;
@@ -721,7 +734,8 @@ function mezzanine(c: Ctx, H: number): void {
   b.box('glassClear', 0xffffff, ox1 - x0, 2.6, 0.02, (x0 + ox1) / 2, fy + 1.3, oz1 - 0.03, 0);
   b.box('glassClear', 0xffffff, 0.02, 2.6, oz1 - z0, ox1, fy + 1.3, (z0 + oz1) / 2, 0);
   for (let x = x0 + 1.0; x < ox1; x += 1.05) b.span('satin', PAL.graphite, x - 0.025, fy, oz1 - 0.06, x + 0.025, oy, oz1, 0);
-  b.span('satin', PAL.graphite, ox1 - 0.03, fy, z0, ox1 + 0.03, oy, oz1, 0);
+  b.span('satin', PAL.graphite, ox1 - 0.03, fy, oz1 - 0.06, ox1 + 0.03, oy, oz1, 0);
+  b.span('satin', PAL.graphite, ox1 - 0.03, oy - 0.06, z0, ox1 + 0.03, oy, oz1, 0);
   b.span('satin', PAL.graphite, x0, fy + 1.05, oz1 - 0.06, ox1, fy + 1.1, oz1, 0);
   for (const z of [z0 + 0.6, z0 + 1.3]) b.span('satin', PAL.graphite, ox1 - 0.03, fy, z - 0.025, ox1 + 0.03, oy, z + 0.025, 0);
   b.box('lampCool', 0xffffff, 1.2, 0.02, 0.6, x0 + 1.6, oy - 0.012, (z0 + oz1) / 2, 0.004);
@@ -751,7 +765,7 @@ function mascot(c: Ctx, H: number): void {
   const { w, h } = c;
   const bx = -w / 2 - T / 2, bz = h / 2 - 0.8;
   const top = H + 0.45;
-  b.push(bx, top, bz, Math.PI / 4);
+  b.push(bx, top, bz, Math.PI / 4, 0, 0, 1.45);
   // frame
   for (const s of [-1, 1]) b.span('metal', PAL.steelDark, s * 0.7 - 0.05, 0, -0.05, s * 0.7 + 0.05, 1.0, 0.05, 0);
   b.span('metal', PAL.steelDark, -0.9, 0.95, -0.06, 0.9, 1.05, 0.06, 0);

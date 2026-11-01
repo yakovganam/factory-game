@@ -62,9 +62,9 @@ function buildArm(root: THREE.Object3D): ArmRig {
   turret.position.set(BASE.x, 0.5, BASE.z);
   root.add(turret);
   const tb = new Builder();
-  tb.cylB('satin', ARM, 0.2, 0.12, 0, 0, 0, 20);
+  tb.cylB('satin', ARM, 0.23, 0.13, 0, 0, 0, 20);
   tb.cylB('satin', JOINT, 0.21, 0.025, 0, 0.0, 0, 20);
-  tb.boxB('satin', ARM, 0.24, 0.22, 0.28, 0.02, 0.1, 0, 0.05);
+  tb.boxB('satin', ARM, 0.28, 0.24, 0.32, 0.02, 0.1, 0, 0.06);
   tb.cyl('satin', JOINT, 0.08, 0.06, -0.1, 0.2, 0, 'x', 12);
   turret.add(tb.build({ name: 'turret' }));
 
@@ -72,9 +72,9 @@ function buildArm(root: THREE.Object3D): ArmRig {
   shoulder.position.set(SHOULDER_OFF, SHOULDER_Y - 0.5, 0);
   turret.add(shoulder);
   const ub = new Builder();
-  ub.cyl('satin', JOINT, 0.11, 0.3, 0, 0, 0, 'z', 18);
-  ub.cyl('satin', ARM, 0.075, 0.32, 0, 0, 0, 'z', 14);
-  ub.box('satin', ARM, L1 + 0.04, 0.15, 0.17, L1 / 2, 0, 0, 0.045);
+  ub.cyl('satin', JOINT, 0.13, 0.34, 0, 0, 0, 'z', 18);
+  ub.cyl('satin', PAL.white, 0.085, 0.36, 0, 0, 0, 'z', 14);
+  ub.box('satin', ARM, L1 + 0.06, 0.2, 0.21, L1 / 2, 0, 0, 0.06);
   ub.box('satin', shade(ARM), L1 * 0.6, 0.1, 0.012, L1 / 2, 0, 0.09, 0.004);
   ub.cyl('satin', JOINT, 0.06, 0.12, L1 * 0.25, 0.0, -0.13, 'z', 12); // motor
   ub.rod('satin', 0x26282d, 0.018, [0.05, 0.1, -0.09], [L1 - 0.05, 0.09, -0.09], 6); // cable
@@ -84,10 +84,10 @@ function buildArm(root: THREE.Object3D): ArmRig {
   elbow.position.set(L1, 0, 0);
   shoulder.add(elbow);
   const fb = new Builder();
-  fb.cyl('satin', JOINT, 0.085, 0.22, 0, 0, 0, 'z', 16);
-  fb.cyl('satin', ARM, 0.06, 0.24, 0, 0, 0, 'z', 12);
-  fb.box('satin', ARM, L2, 0.11, 0.12, L2 / 2, 0, 0, 0.04);
-  fb.box('satin', shade(ARM), 0.18, 0.13, 0.135, 0.09, 0, 0, 0.04);
+  fb.cyl('satin', JOINT, 0.1, 0.26, 0, 0, 0, 'z', 16);
+  fb.cyl('satin', PAL.white, 0.07, 0.28, 0, 0, 0, 'z', 12);
+  fb.box('satin', ARM, L2, 0.14, 0.15, L2 / 2, 0, 0, 0.045);
+  fb.box('satin', shade(ARM), 0.2, 0.17, 0.17, 0.1, 0, 0, 0.05);
   fb.cyl('satin', JOINT, 0.055, 0.08, L2, 0, 0, 'z', 12);
   elbow.add(fb.build({ name: 'forearm' }));
 
@@ -155,7 +155,7 @@ export function createRobotAssembler(): ModelInstance {
   const body = cached('robot_assembler', () => {
     const b = new Builder();
     stackHousing(b, -0.72, 1.62, -0.8, 0.12, 1.25);
-    basePlate(b, 1.94, 1.94, 0.08);
+    basePlate(b, 1.94, 1.94, 0.08, 0x8d979f);
     // arm pedestal
     b.cylB('satin', 0x4a5059, 0.17, 0.42, BASE.x, 0.08, BASE.z, 16);
     b.cylB('satin', JOINT, 0.24, 0.05, BASE.x, 0.08, BASE.z, 16);
@@ -199,12 +199,12 @@ export function createRobotAssembler(): ModelInstance {
     b.box('satin', PAL.graphite, 0.5, 0.05, 0.08, -0.37, 0.105, -0.6, 0.01);
     // safety fence: corner posts, back + side panels (sides above trays)
     const F = 0.94;
-    for (const [x, z] of [[-F, -F], [F, -F], [-F, F], [F, F]] as [number, number][]) post(b, x, z, 1.55);
-    meshPanel(b, -0.52, -F, F - 0.03, -F, 0.12, 1.5);
-    meshPanel(b, -F, -0.5, -F, F - 0.03, 0.72, 1.5);
-    meshPanel(b, F, -F + 0.03, F, F - 0.03, 0.72, 1.5);
-    b.box('satin', PAL.yellow, 0.035, 0.035, 1.88, -F, 1.535, 0, 0.008);
-    b.box('satin', PAL.yellow, 0.035, 0.035, 1.88, F, 1.535, 0, 0.008);
+    for (const [x, z] of [[-F, -F], [F, -F], [-F, F], [F, F]] as [number, number][]) post(b, x, z, 1.36);
+    meshPanel(b, -0.52, -F, F - 0.03, -F, 0.12, 1.3);
+    meshPanel(b, -F, -0.5, -F, F - 0.03, 0.72, 1.3);
+    meshPanel(b, F, -F + 0.03, F, F - 0.03, 0.72, 1.3);
+    b.box('satin', PAL.yellow, 0.035, 0.035, 1.88, -F, 1.335, 0, 0.008);
+    b.box('satin', PAL.yellow, 0.035, 0.035, 1.88, F, 1.335, 0, 0.008);
     // front light curtain (open side, faces the camera): emitter + receiver strips
     for (const x of [-F, F]) {
       b.span('satin', PAL.graphite, x - 0.03, 0.15, F - 0.075, x + 0.03, 1.3, F - 0.045, 0.006);
