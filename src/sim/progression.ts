@@ -54,6 +54,10 @@ export function makeableGoods(s: GameState, db: ContentDB): string[] {
 }
 
 export const ORDER_SLOTS = 3;
+/** At most this many accepted contracts in progress at once. */
+export const MAX_ACTIVE_ORDERS = 3;
+/** Minimum time between new offers. */
+export const ORDER_INTERVAL = 90 * 10;
 export const ORDER_OFFER_TICKS = 10 * TICKS_PER_MIN;
 
 export function generateOrder(s: GameState, db: ContentDB, ev: EventBus): Order | null {
@@ -104,13 +108,19 @@ export function tickOrders(s: GameState, db: ContentDB, ev: EventBus) {
   const ordersOpen = s.tutorial.done || s.tutorial.skipped || s.tutorial.step >= TUTORIAL_ORDER_STEP;
   if (!ordersOpen) return;
   const offered = s.orders.filter((o) => o.status === 'offered').length;
-  if (offered < ORDER_SLOTS && s.tick % (90 * 10) === 0) generateOrder(s, db, ev);
-  if (offered === 0) generateOrder(s, db, ev);
+  const last = s.orders.reduce((m, o) => Math.max(m, o.offeredTick), -Infinity);
+  // First offer arrives promptly; later ones at a steady pace, never more than ORDER_SLOTS waiting.
+  if (offered < ORDER_SLOTS && (last === -Infinity || s.tick - last >= ORDER_INTERVAL)) generateOrder(s, db, ev);
+}
+
+export function activeOrders(s: GameState): number {
+  return s.orders.filter((o) => o.status === 'accepted' || o.status === 'dispatched').length;
 }
 
 export function acceptOrder(s: GameState, id: number): boolean {
   const o = s.orders.find((x) => x.id === id);
   if (!o || o.status !== 'offered') return false;
+  if (activeOrders(s) >= MAX_ACTIVE_ORDERS) return false;
   o.status = 'accepted';
   o.bonusTick = s.tick + o.bonusTick;
   s.stats.ordersAccepted++;

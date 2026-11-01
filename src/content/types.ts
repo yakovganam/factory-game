@@ -53,6 +53,13 @@ export interface ItemDef {
 export interface Stack {
   item: ItemId;
   qty: number;
+  /**
+   * How a recipe input reaches the machine. 'belt' (default): delivered by conveyor into the
+   * machine's input buffer. 'stock': drawn directly from the building's receiving storage when a
+   * cycle starts (parts bins, carton magazines, paint lines) — for consumables, so a line needs
+   * only one belt-fed workpiece input. Stock-fed inputs may also arrive by belt.
+   */
+  feed?: 'belt' | 'stock';
 }
 
 export interface OutputStack extends Stack {

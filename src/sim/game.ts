@@ -13,7 +13,7 @@ import { SAVE_VERSION } from './types';
 import { initialWorld } from './world';
 import { execCommand, type Command, type CmdResult } from './commands';
 
-export const START_CASH = 120000;
+export const START_CASH = 150000;
 export const START_POPULATION = 1000;
 export const START_WORKFORCE = 40;
 export const START_STAFF = 2;

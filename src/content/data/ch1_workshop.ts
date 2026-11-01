@@ -38,16 +38,16 @@ export const ch1: ContentPack = {
 
   recipes: [
     { id: 'make_block_set', machine: 'assembly_bench', inputs: [{ item: 'wood_pieces', qty: 4 }], outputs: [{ item: 'block_set', qty: 1 }], durationSec: 5 },
-    { id: 'make_toy_car_raw', machine: 'assembly_bench', inputs: [{ item: 'wood_pieces', qty: 2 }, { item: 'toy_wheels', qty: 1 }], outputs: [{ item: 'toy_car_raw', qty: 1 }], durationSec: 6, unlock: 'ch1_toy_car' },
-    { id: 'paint_toy_car', machine: 'paint_booth', inputs: [{ item: 'toy_car_raw', qty: 1 }, { item: 'paint_can', qty: 1 }], outputs: [{ item: 'toy_car', qty: 1 }], durationSec: 4, unlock: 'ch1_toy_car' },
-    { id: 'make_robot_raw', machine: 'robot_assembler', inputs: [{ item: 'plastic_parts', qty: 2 }, { item: 'mini_motor', qty: 1 }], outputs: [{ item: 'robot_raw', qty: 1 }], durationSec: 10, unlock: 'ch1_robot' },
-    { id: 'paint_robot', machine: 'paint_booth', inputs: [{ item: 'robot_raw', qty: 1 }, { item: 'paint_can', qty: 1 }], outputs: [{ item: 'toy_robot', qty: 1 }], durationSec: 5, unlock: 'ch1_robot' },
-    { id: 'make_smart_robot_raw', machine: 'robot_assembler', inputs: [{ item: 'plastic_parts', qty: 2 }, { item: 'mini_motor', qty: 1 }, { item: 'control_chip', qty: 1 }], outputs: [{ item: 'smart_robot_raw', qty: 1 }], durationSec: 14, unlock: 'ch1_smart_robot' },
-    { id: 'paint_smart_robot', machine: 'paint_booth', inputs: [{ item: 'smart_robot_raw', qty: 1 }, { item: 'paint_can', qty: 1 }], outputs: [{ item: 'smart_robot', qty: 1 }], durationSec: 6, unlock: 'ch1_smart_robot' },
-    { id: 'pack_blocks', machine: 'packing_station', inputs: [{ item: 'block_set', qty: 1 }, { item: 'carton_flat', qty: 1 }], outputs: [{ item: 'boxed_blocks', qty: 1 }], durationSec: 3 },
-    { id: 'pack_car', machine: 'packing_station', inputs: [{ item: 'toy_car', qty: 1 }, { item: 'carton_flat', qty: 1 }], outputs: [{ item: 'boxed_car', qty: 1 }], durationSec: 3, unlock: 'ch1_toy_car' },
-    { id: 'pack_robot', machine: 'packing_station', inputs: [{ item: 'toy_robot', qty: 1 }, { item: 'carton_flat', qty: 1 }], outputs: [{ item: 'boxed_robot', qty: 1 }], durationSec: 4, unlock: 'ch1_robot' },
-    { id: 'pack_smart_robot', machine: 'packing_station', inputs: [{ item: 'smart_robot', qty: 1 }, { item: 'carton_flat', qty: 1 }], outputs: [{ item: 'boxed_smart_robot', qty: 1 }], durationSec: 4, unlock: 'ch1_smart_robot' },
+    { id: 'make_toy_car_raw', machine: 'assembly_bench', inputs: [{ item: 'wood_pieces', qty: 2 }, { item: 'toy_wheels', qty: 1, feed: 'stock' }], outputs: [{ item: 'toy_car_raw', qty: 1 }], durationSec: 6, unlock: 'ch1_toy_car' },
+    { id: 'paint_toy_car', machine: 'paint_booth', inputs: [{ item: 'toy_car_raw', qty: 1 }, { item: 'paint_can', qty: 1, feed: 'stock' }], outputs: [{ item: 'toy_car', qty: 1 }], durationSec: 4, unlock: 'ch1_toy_car' },
+    { id: 'make_robot_raw', machine: 'robot_assembler', inputs: [{ item: 'plastic_parts', qty: 2 }, { item: 'mini_motor', qty: 1, feed: 'stock' }], outputs: [{ item: 'robot_raw', qty: 1 }], durationSec: 10, unlock: 'ch1_robot' },
+    { id: 'paint_robot', machine: 'paint_booth', inputs: [{ item: 'robot_raw', qty: 1 }, { item: 'paint_can', qty: 1, feed: 'stock' }], outputs: [{ item: 'toy_robot', qty: 1 }], durationSec: 5, unlock: 'ch1_robot' },
+    { id: 'make_smart_robot_raw', machine: 'robot_assembler', inputs: [{ item: 'plastic_parts', qty: 2 }, { item: 'mini_motor', qty: 1, feed: 'stock' }, { item: 'control_chip', qty: 1, feed: 'stock' }], outputs: [{ item: 'smart_robot_raw', qty: 1 }], durationSec: 14, unlock: 'ch1_smart_robot' },
+    { id: 'paint_smart_robot', machine: 'paint_booth', inputs: [{ item: 'smart_robot_raw', qty: 1 }, { item: 'paint_can', qty: 1, feed: 'stock' }], outputs: [{ item: 'smart_robot', qty: 1 }], durationSec: 6, unlock: 'ch1_smart_robot' },
+    { id: 'pack_blocks', machine: 'packing_station', inputs: [{ item: 'block_set', qty: 1 }, { item: 'carton_flat', qty: 1, feed: 'stock' }], outputs: [{ item: 'boxed_blocks', qty: 1 }], durationSec: 3 },
+    { id: 'pack_car', machine: 'packing_station', inputs: [{ item: 'toy_car', qty: 1 }, { item: 'carton_flat', qty: 1, feed: 'stock' }], outputs: [{ item: 'boxed_car', qty: 1 }], durationSec: 3, unlock: 'ch1_toy_car' },
+    { id: 'pack_robot', machine: 'packing_station', inputs: [{ item: 'toy_robot', qty: 1 }, { item: 'carton_flat', qty: 1, feed: 'stock' }], outputs: [{ item: 'boxed_robot', qty: 1 }], durationSec: 4, unlock: 'ch1_robot' },
+    { id: 'pack_smart_robot', machine: 'packing_station', inputs: [{ item: 'smart_robot', qty: 1 }, { item: 'carton_flat', qty: 1, feed: 'stock' }], outputs: [{ item: 'boxed_smart_robot', qty: 1 }], durationSec: 4, unlock: 'ch1_smart_robot' },
   ],
 
   machines: [
@@ -56,7 +56,7 @@ export const ch1: ContentPack = {
     { id: 'belt', footprint: [1, 1], cost: 500, powerKw: 0.05, staff: 0, maintenancePerMin: 0, inputCrafts: 0, outputCap: 0, speedPct: [100, 200], upgradeCost: [0, 700], anim: 'splitter', model: 'mach_belt', buildings: [W], role: 'belt' },
     { id: 'assembly_bench', footprint: [2, 1], cost: 18000, powerKw: 0.5, staff: 1, maintenancePerMin: 2, inputCrafts: 2, outputCap: 4, speedPct: [100, 140, 180], upgradeCost: [0, 25000, 60000], anim: 'bench', model: 'mach_assembly_bench', buildings: [W] },
     { id: 'packing_station', footprint: [2, 1], cost: 15000, powerKw: 1, staff: 1, maintenancePerMin: 3, inputCrafts: 2, outputCap: 4, speedPct: [100, 150, 200], upgradeCost: [0, 22000, 55000], anim: 'packer', model: 'mach_packing_station', buildings: [W] },
-    { id: 'paint_booth', footprint: [2, 2], cost: 32000, powerKw: 3, staff: 1, maintenancePerMin: 5, inputCrafts: 2, outputCap: 4, speedPct: [100, 150, 200], upgradeCost: [0, 40000, 90000], anim: 'booth', model: 'mach_paint_booth', buildings: [W], unlock: 'ch1_toy_car' },
+    { id: 'paint_booth', footprint: [2, 2], cost: 26000, powerKw: 3, staff: 1, maintenancePerMin: 5, inputCrafts: 2, outputCap: 4, speedPct: [100, 150, 200], upgradeCost: [0, 40000, 90000], anim: 'booth', model: 'mach_paint_booth', buildings: [W], unlock: 'ch1_toy_car' },
     { id: 'robot_assembler', footprint: [2, 2], cost: 65000, powerKw: 4, staff: 1, maintenancePerMin: 8, inputCrafts: 2, outputCap: 4, speedPct: [100, 140, 180], upgradeCost: [0, 70000, 150000], anim: 'arm', model: 'mach_robot_assembler', buildings: [W], unlock: 'ch1_robot' },
     { id: 'storage_crate', footprint: [1, 1], cost: 6000, powerKw: 0, staff: 0, maintenancePerMin: 0, inputCrafts: 0, outputCap: 0, speedPct: [100], upgradeCost: [0], anim: 'storage', model: 'mach_storage_crate', buildings: [W], role: 'storage', storageCap: 30, unlock: 'ch1_storage' },
     { id: 'splitter', footprint: [1, 1], cost: 4000, powerKw: 0.1, staff: 0, maintenancePerMin: 0, inputCrafts: 0, outputCap: 0, speedPct: [100], upgradeCost: [0], anim: 'splitter', model: 'mach_splitter', buildings: [W], role: 'splitter', unlock: 'ch1_splitter' },
@@ -75,7 +75,7 @@ export const ch1: ContentPack = {
       model: 'bld_toy_workshop',
       levels: [
         {
-          level: 1, cost: 0, interior: [10, 7], powerCapKw: 8, inboundCap: 120, outboundCap: 60, staffCap: 4,
+          level: 1, cost: 0, interior: [10, 7], powerCapKw: 8, inboundCap: 120, outboundCap: 60, staffCap: 5,
           bays: [
             { machine: 'receiving_dock', x: 0, y: 1, rot: 0 },
             { machine: 'receiving_dock', x: 0, y: 4, rot: 0 },
@@ -84,7 +84,7 @@ export const ch1: ContentPack = {
           visualChange: 'Small brick workshop with one roller door, two receiving hatches and a hand-painted sign.',
         },
         {
-          level: 2, cost: 250000, interior: [14, 8], powerCapKw: 18, inboundCap: 240, outboundCap: 120, staffCap: 8, requires: 'ch1_workshop_l2',
+          level: 2, cost: 160000, interior: [14, 8], powerCapKw: 18, inboundCap: 240, outboundCap: 120, staffCap: 9, requires: 'ch1_workshop_l2',
           bays: [
             { machine: 'receiving_dock', x: 0, y: 1, rot: 0 },
             { machine: 'receiving_dock', x: 0, y: 4, rot: 0 },
@@ -163,8 +163,8 @@ export const ch1: ContentPack = {
     { id: 'ch1_splitter', chapter: 1, cost: 10000, requires: ['ch1_toy_car'], category: 'machine' },
     { id: 'ch1_auto_import', chapter: 1, cost: 15000, requires: [], conditions: [{ t: 'orders', count: 1 }], category: 'management' },
     { id: 'ch1_second_van', chapter: 1, cost: 30000, requires: ['ch1_toy_car'], category: 'logistics' },
-    { id: 'ch1_workshop_l2', chapter: 1, cost: 40000, requires: ['ch1_toy_car'], conditions: [{ t: 'revenue', cents: 150000 }], category: 'building' },
-    { id: 'ch1_robot', chapter: 1, cost: 60000, requires: ['ch1_workshop_l2'], category: 'product' },
+    { id: 'ch1_workshop_l2', chapter: 1, cost: 30000, requires: ['ch1_toy_car'], conditions: [{ t: 'revenue', cents: 120000 }], category: 'building' },
+    { id: 'ch1_robot', chapter: 1, cost: 50000, requires: ['ch1_workshop_l2'], category: 'product' },
     { id: 'ch1_belt_mk2', chapter: 1, cost: 50000, requires: ['ch1_workshop_l2'], category: 'machine' },
     { id: 'ch1_store_l2', chapter: 1, cost: 30000, requires: ['ch1_toy_car'], conditions: [{ t: 'sold', item: 'boxed_car', qty: 20 }], category: 'building' },
     { id: 'ch1_workshop_l3', chapter: 1, cost: 120000, requires: ['ch1_robot'], conditions: [{ t: 'sold', item: 'boxed_robot', qty: 30 }], category: 'building' },
@@ -173,8 +173,8 @@ export const ch1: ContentPack = {
   ],
 
   demand: [
-    { item: 'boxed_blocks', baseMilliPerMinPer1000: 6000, refPrice: 900 },
-    { item: 'boxed_car', baseMilliPerMinPer1000: 4500, refPrice: 1400 },
+    { item: 'boxed_blocks', baseMilliPerMinPer1000: 7500, refPrice: 900 },
+    { item: 'boxed_car', baseMilliPerMinPer1000: 5500, refPrice: 1400 },
     { item: 'boxed_robot', baseMilliPerMinPer1000: 3500, refPrice: 2600 },
     { item: 'boxed_smart_robot', baseMilliPerMinPer1000: 1800, refPrice: 4800 },
   ],

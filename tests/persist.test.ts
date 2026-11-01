@@ -41,7 +41,7 @@ describe('save system', () => {
   it('detects tampering/bit-rot via checksum', () => {
     const a = makeSim(23);
     const env = makeEnvelope(a.s, 0, 1000);
-    const text = serialize(env).replace('"cash":120000', '"cash":999999999');
+    const text = serialize(env).replace('"cash":150000', '"cash":999999999');
     const r = parseEnvelope(text);
     expect(r.ok).toBe(false);
   });

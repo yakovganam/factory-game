@@ -8,7 +8,7 @@ import { addQty, EventBus, post, trySpend } from './core';
 import { checkPlacement, entityFootprint, levelDef, newBeltEntity, newMachineEntity, UPGRADE_SECONDS } from './factory';
 import { orderImport, VAN_CAPACITY, VAN_SPEED } from './logistics';
 import { STORE_SHELVES } from './market';
-import { acceptOrder, claimGrant, grantUnlock, unlockState } from './progression';
+import { acceptOrder, activeOrders, claimGrant, grantUnlock, MAX_ACTIVE_ORDERS, unlockState } from './progression';
 import type { Dir, Entity, FactoryState, GameState, ImportPolicy } from './types';
 import { TPS } from './types';
 
@@ -346,6 +346,7 @@ export function execCommand(s: GameState, db: ContentDB, c: Command, ev: EventBu
       return { ok: true, cost: u.cost };
     }
     case 'acceptOrder':
+      if (activeOrders(s) >= MAX_ACTIVE_ORDERS) return fail('err.too_many_orders', { n: MAX_ACTIVE_ORDERS });
       return acceptOrder(s, c.id) ? { ok: true } : fail('err.order_unavailable');
     case 'buyVan': {
       const f = s.factories[c.f];

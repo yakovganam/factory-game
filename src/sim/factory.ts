@@ -229,12 +229,6 @@ export function tickFactory(s: GameState, db: ContentDB, f: FactoryState, ev: Ev
   const capW = lv.powerCapKw * 1000;
   f.powerCapW = capW;
 
-  // Construction of an upgrade proceeds while production continues.
-  if (f.upgradeTicks > 0) {
-    f.upgradeTicks--;
-    if (f.upgradeTicks === 0) applyLevel(s, db, f, f.level + 1, ev);
-  }
-
   // Staffing: hired workers are assigned to staffed machines in placement order.
   let workers = f.staff;
   let workerIdx = 0;
@@ -347,6 +341,13 @@ export function tickFactory(s: GameState, db: ContentDB, f: FactoryState, ev: Ev
     }
   }
 
+  // Construction of an upgrade proceeds while production continues. The expansion is applied at
+  // the END of the tick: the grid stride changes, so no lookups may use the old derived grid after it.
+  if (f.upgradeTicks > 0) {
+    f.upgradeTicks--;
+    if (f.upgradeTicks === 0) applyLevel(s, db, f, f.level + 1, ev);
+  }
+
   // Running costs (integer accumulators; no money is lost to rounding).
   f.powerW = usedW;
   f.acc.energyWT += usedW + idleW;
@@ -432,7 +433,8 @@ function tickRecipeMachine(
     return usedW;
   }
   for (const i of r.inputs) {
-    if (qty(e.inv, i.item) < i.qty) {
+    const have = qty(e.inv, i.item) + (i.feed === 'stock' ? qty(f.inbound, i.item) : 0);
+    if (have < i.qty) {
       setStatus(e, 'starved', i.item, f, ev);
       return usedW;
     }
@@ -448,7 +450,10 @@ function tickRecipeMachine(
     return usedW;
   }
   for (const i of r.inputs) {
-    addQty(e.inv, i.item, -i.qty);
+    // Buffer first, then (for stock-fed consumables) receiving storage.
+    const fromBuf = Math.min(qty(e.inv, i.item), i.qty);
+    if (fromBuf) addQty(e.inv, i.item, -fromBuf);
+    if (i.qty - fromBuf) addQty(f.inbound, i.item, -(i.qty - fromBuf));
     s.stats.consumed[i.item] = (s.stats.consumed[i.item] ?? 0) + i.qty;
   }
   e.working = true;

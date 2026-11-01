@@ -210,3 +210,40 @@ describe('recovery paths', () => {
     expect(r4.ok === false && r4.reason).toBe('err.fixed_bay');
   });
 });
+
+describe('regressions', () => {
+  it('a workshop expansion completing mid-operation does not teleport goods between belts', async () => {
+    const { buildOpeningLine: open } = await import('./helpers');
+    const sim = makeSim(1);
+    open(sim);
+    sim.run(min(2));
+    sim.s.unlocked.push('ch1_workshop_l2');
+    sim.s.cash += 300000;
+    ok(sim, { t: 'upgradeBuilding', id: WS });
+    for (let i = 0; i < min(2); i++) {
+      sim.step();
+      const f = sim.s.factories[WS];
+      for (const e of f.entities) {
+        if (e.kind !== 'belt') continue;
+        const onBlockPath = (e.x === 5 && e.y === 1) || (e.x === 6 && e.y <= 2) || (e.x === 7 && e.y === 2);
+        if (onBlockPath) for (const it of e.items) expect(it.item).not.toBe('wood_pieces');
+      }
+    }
+    expect(sim.s.factories[WS].level).toBe(2);
+    expect(strip(worldStock(sim.s))).toEqual(expectedStock(sim.s));
+  });
+
+  it('contract offers are rate-limited and active contracts are capped', () => {
+    const sim = makeSim(2);
+    sim.s.tutorial.skipped = true;
+    let accepted = 0;
+    for (let i = 0; i < min(20); i++) {
+      sim.step();
+      for (const o of sim.s.orders) if (o.status === 'offered' && sim.exec({ t: 'acceptOrder', id: o.id }).ok) accepted++;
+    }
+    // 20 minutes at one offer per 90 s at most => <= 14 offers; at most 3 active at once.
+    expect(sim.s.orders.length).toBeLessThanOrEqual(15);
+    expect(sim.s.orders.filter((o) => o.status === 'accepted' || o.status === 'dispatched').length).toBeLessThanOrEqual(3);
+    expect(accepted).toBeLessThanOrEqual(3);
+  });
+});
