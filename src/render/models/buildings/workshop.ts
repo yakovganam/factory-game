@@ -242,7 +242,7 @@ function interiorDressing(c: Ctx, H: number, busyN: [number, number][], busyW: [
     const py = pipeY;
     b.cyl('satin', PAL.red, 0.035, len - 0.1, 0, py, -0.09, 'x', 8);
     b.cyl('metal', PAL.steel, 0.045, len - 0.1, 0, py - 0.14, -0.1, 'x', 8);
-    for (let u = -len / 2 + 0.6; u < len / 2 - 0.3; u += 1.6) b.box('satin', PAL.graphite, 0.03, 0.26, 0.12, u, py - 0.07, -0.06, 0.005);
+    for (let u = -len / 2 + 0.6; u < len / 2 - 0.3; u += 2.4) b.box('satin', PAL.graphite, 0.03, 0.26, 0.12, u, py - 0.07, -0.06, 0);
     void busy;
     b.pop();
   };
@@ -558,7 +558,7 @@ export function createWorkshop(opts: ModelOptions = {}): ModelInstance {
       const tilt = 0.42;
       r.box('solar', 0xffffff, x1 - x0, 0.05, 1.3, (x0 + x1) / 2, H3 + 0.55, z, 0.01, { rx: tilt });
       r.box('metal', PAL.steel, x1 - x0 + 0.04, 0.03, 0.04, (x0 + x1) / 2, H3 + 0.55 - Math.sin(tilt) * 0.65, z + Math.cos(tilt) * 0.65, 0.005);
-      for (let x = x0 + 0.3; x < x1; x += 1.8) {
+      for (let x = x0 + 0.3; x < x1; x += 2.6) {
         r.span('metal', PAL.steelDark, x - 0.03, H3, z - 0.45, x + 0.03, H3 + 0.82, z - 0.39, 0);
         r.span('metal', PAL.steelDark, x - 0.03, H3, z + 0.39, x + 0.03, H3 + 0.32, z + 0.45, 0);
       }

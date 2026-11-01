@@ -274,9 +274,9 @@ function setupWorkshop(level: number) {
     const w = add('chr_worker', { variant: v }, new THREE.Vector3(gx + fp[0] / 2 - interior[0] / 2 + dx, 0, gy + fp[1] / 2 - interior[1] / 2 + dz), yaw, { pose: pz }, undefined, parent);
     return w;
   };
-  spot(3, 1, [2, 1], 0.1, 0.85, Math.PI, 0, 'work');
-  spot(6, 1, [2, 1], 0.1, 0.85, Math.PI, 1, 'work');
-  spot(3, 3, [2, 2], 0.2, 1.25, Math.PI, 2, 'work');
+  spot(3, 1, [2, 1], 0.0, 0.82, Math.PI / 2, 0, 'work');
+  spot(6, 1, [2, 1], -0.55, 0.85, Math.PI / 2, 1, 'work');
+  spot(3, 3, [2, 2], 1.25, 0.45, Math.PI, 2, 'work');
   spot(1, 5, [1, 1], 0.2, 0.6, -Math.PI / 2 + 0.5, 3, 'carry');
   // items on belts
   const items: [string, number, number][] = [['wood_pieces', 1, 1], ['wood_pieces', 2.4, 1], ['block_set', 5.2, 1], ['toy_car_raw', 1.6, 4], ['toy_car', 6.2, 4]];
