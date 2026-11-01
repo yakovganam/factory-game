@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tiny Factory — Model Gallery</title>
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #bcdcef; font-family: 'Rubik', system-ui, sans-serif; }
+      canvas { display: block; }
+      #hud { position: fixed; left: 10px; top: 8px; color: #1d2a33; font-size: 13px; background: rgba(255,255,255,0.72); padding: 6px 9px; border-radius: 8px; pointer-events: none; white-space: pre; }
+      .lbl { position: fixed; transform: translate(-50%, 0); font-size: 11px; color: #1d2a33; background: rgba(255,255,255,0.8); padding: 1px 5px; border-radius: 5px; pointer-events: none; white-space: nowrap; }
+      body.night #hud, body.night .lbl { background: rgba(10,20,40,0.7); color: #dfe8ff; }
+    </style>
+  </head>
+  <body>
+    <div id="hud"></div>
+    <script type="module" src="./gallery.ts"></script>
+  </body>
+</html>

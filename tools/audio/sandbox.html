@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Audio sandbox — Tiny Factory</title>
+    <style>
+      :root { color-scheme: dark; font-family: system-ui, sans-serif; font-size: 14px; }
+      body { margin: 0; background: #1d2a33; color: #e8eef2; }
+      header { position: sticky; top: 0; background: #14202a; padding: 8px 12px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; z-index: 2; border-bottom: 1px solid #2e4150; }
+      main { display: grid; grid-template-columns: minmax(320px, 1fr) 360px; gap: 12px; padding: 12px; }
+      section { background: #22323e; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; }
+      h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 8px; color: #9fc3d8; }
+      h3 { font-size: 12px; margin: 10px 0 4px; color: #c6d6e0; }
+      button { background: #2f4656; color: #e8eef2; border: 1px solid #3f5a6c; border-radius: 6px; padding: 5px 8px; margin: 2px; cursor: pointer; font-size: 12px; }
+      button:hover { background: #3b5669; }
+      button.on { background: #3d7a52; border-color: #58a26f; }
+      button.v { padding: 3px 6px; font-size: 11px; opacity: 0.85; }
+      label { display: flex; align-items: center; gap: 6px; margin: 3px 0; font-size: 12px; }
+      label span { width: 78px; color: #a9bfcd; }
+      input[type='range'] { flex: 1; }
+      pre { font-size: 11px; white-space: pre-wrap; margin: 0; max-height: 70vh; overflow: auto; }
+      .ev { display: inline-flex; align-items: center; background: #1b2831; border-radius: 6px; margin: 2px; padding: 1px 2px; }
+      .hint { color: #8aa3b3; font-size: 12px; }
+      #unlock.ok { background: #3d7a52; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <button id="unlock">Unlock audio</button>
+      <span class="hint">Every button plays a synthesized event; numbered buttons force a variation. Positional play uses the "source X" offset.</span>
+    </header>
+    <main>
+      <div id="left"></div>
+      <div id="right"></div>
+    </main>
+    <script type="module" src="./sandbox.ts"></script>
+  </body>
+</html>

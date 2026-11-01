@@ -21,6 +21,12 @@ export interface ListenerContext {
   activity: number;
   /** True when the player is inside a factory cutaway. */
   interior: boolean;
+  /**
+   * Optional camera yaw in radians (rotation about +Y; 0 = camera looking toward -Z, so +X is
+   * screen-right). Needed for correct stereo panning when the camera orbits; for a three.js
+   * camera use `Math.atan2(-dir.x, -dir.z)` of its world direction. Omitted = 0.
+   */
+  yaw?: number;
 }
 
 export interface PlayOptions {

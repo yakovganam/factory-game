@@ -193,13 +193,27 @@ export function orderImport(s: GameState, db: ContentDB, factoryId: string, item
     ev.push({ t: 'vehicle', v: v.id, what: 'depart' });
   }
   // Auto-assign an unloading item to idle receiving docks so the first import "just works".
+  // Consumables that every recipe takes straight from storage are not assigned (no belt needed).
   for (const k of Object.keys(items).sort()) {
+    if (stockFedOnly(db, k)) continue;
     const docks = f.entities.filter((e) => e.kind === 'machine' && e.def.includes('receiving'));
     if (docks.some((d) => d.kind === 'machine' && d.filter === k)) continue;
     const free = docks.find((d) => d.kind === 'machine' && !d.filter);
     if (free && free.kind === 'machine') free.filter = k;
   }
   return { ok: true, cost: q.goods + q.freight };
+}
+
+/** True if every recipe consuming `item` draws it from receiving storage (feed: 'stock'). */
+export function stockFedOnly(db: ContentDB, item: string): boolean {
+  let used = false;
+  for (const r of db.recipes.values())
+    for (const i of r.inputs)
+      if (i.item === item) {
+        used = true;
+        if (i.feed !== 'stock') return false;
+      }
+  return used;
 }
 
 // ---------------------------------------------------------------------------- dispatch

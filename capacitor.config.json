@@ -1,0 +1,8 @@
+{
+  "appId": "dev.tinyfactory.tycooncity",
+  "appName": "Tiny Factory",
+  "webDir": "dist",
+  "backgroundColor": "#1d2a33",
+  "android": { "allowMixedContent": false, "webContentsDebuggingEnabled": false },
+  "ios": { "contentInset": "never", "scrollEnabled": false, "backgroundColor": "#1d2a33" }
+}

@@ -3,7 +3,7 @@ import { ch1 } from '../src/content/data/ch1_workshop';
 import { factoryContents } from '../src/sim/factory';
 import { newGame, Sim } from '../src/sim/game';
 import type { Command } from '../src/sim/commands';
-import type { GameState } from '../src/sim/types';
+import type { Dir, GameState } from '../src/sim/types';
 import { TPS } from '../src/sim/types';
 
 export const db = buildDB([ch1]);
@@ -38,7 +38,11 @@ export function buildOpeningLine(sim: Sim) {
   ok(sim, { t: 'setRecipe', f: WS, e: packer.id, recipe: 'pack_blocks' });
   ok(sim, {
     t: 'placeBelts', f: WS,
-    tiles: [1, 2, 3, 4, 5, 6].map((x) => ({ x, y: 4, rot: 0 as const })).concat([{ x: 7, y: 4, rot: 3 as const }, { x: 7, y: 3, rot: 0 as const }]),
+    tiles: [
+      ...[1, 2, 3, 4, 5, 6].map((x) => ({ x, y: 4, rot: 0 as Dir })),
+      { x: 7, y: 4, rot: 3 as Dir },
+      { x: 7, y: 3, rot: 0 as Dir },
+    ],
   });
   ok(sim, { t: 'placeBelts', f: WS, tiles: [{ x: 8, y: 1, rot: 3 }] });
 }

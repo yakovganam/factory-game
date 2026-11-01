@@ -111,3 +111,14 @@ describe('offline catch-up', () => {
     expect(sim.s.cash).toBeLessThan(cash0);
   });
 });
+
+describe('offline compute budget', () => {
+  it('limits catch-up on slow devices / large cities and says so', () => {
+    const sim = makeSim(35);
+    sim.s.wallMs = 1;
+    const plan = planCatchUp(sim, 1 + 4 * 3600 * 1000, 1.0); // 1 ms per tick measured
+    expect(plan.budgetClamped).toBe(true);
+    expect(plan.ticks).toBeLessThanOrEqual(15000);
+    expect(planCatchUp(sim, 1 + 4 * 3600 * 1000, 0.01).budgetClamped).toBe(false);
+  });
+});

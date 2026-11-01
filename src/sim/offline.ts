@@ -18,17 +18,36 @@ export const OFFLINE_MIN_SEC = 5;
 export interface CatchUpPlan {
   ticks: number;
   elapsedSec: number;
+  /** Elapsed time exceeded the horizon. */
   clamped: boolean;
+  /** The device's compute budget limited the catch-up (large city / slow device). */
+  budgetClamped: boolean;
   clockSkew: boolean;
 }
 
-export function planCatchUp(sim: Sim, nowMs: number): CatchUpPlan {
+/** Max wall-clock compute spent catching up, so returning never means a long wait. */
+export const OFFLINE_COMPUTE_BUDGET_MS = 15000;
+
+/**
+ * @param msPerTick measured cost of one simulation tick on this device (0 = unknown → no budget clamp)
+ */
+export function planCatchUp(sim: Sim, nowMs: number, msPerTick = 0): CatchUpPlan {
   const last = sim.s.wallMs;
-  if (!last || nowMs <= last) return { ticks: 0, elapsedSec: 0, clamped: false, clockSkew: nowMs < last };
+  const none = { ticks: 0, clamped: false, budgetClamped: false };
+  if (!last || nowMs <= last) return { ...none, elapsedSec: 0, clockSkew: nowMs < last };
   const elapsedSec = Math.floor((nowMs - last) / 1000);
-  if (elapsedSec < OFFLINE_MIN_SEC) return { ticks: 0, elapsedSec, clamped: false, clockSkew: false };
+  if (elapsedSec < OFFLINE_MIN_SEC) return { ...none, elapsedSec, clockSkew: false };
   const sec = Math.min(elapsedSec, OFFLINE_HORIZON_SEC);
-  return { ticks: sec * TPS, elapsedSec, clamped: sec < elapsedSec, clockSkew: false };
+  let ticks = sec * TPS;
+  let budgetClamped = false;
+  if (msPerTick > 0) {
+    const maxTicks = Math.floor(OFFLINE_COMPUTE_BUDGET_MS / msPerTick);
+    if (ticks > maxTicks) {
+      ticks = Math.max(TPS * 60, maxTicks);
+      budgetClamped = true;
+    }
+  }
+  return { ticks, elapsedSec, clamped: sec < elapsedSec, budgetClamped, clockSkew: false };
 }
 
 /**

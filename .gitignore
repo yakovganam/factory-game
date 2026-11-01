@@ -10,3 +10,8 @@ Thumbs.db
 .idea/
 captures/tmp/
 coverage/
+.capture-dist/
+.e2e-dist/
+tools/audio/out/
+captures/e2e/
+captures/e2e-phone/
