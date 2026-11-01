@@ -187,3 +187,10 @@ select.sel { min-height: var(--tap); border-radius: 10px; border: 2px solid var(
   * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
 .reduced-motion * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+
+/* Phones: when a panel is open, the tutorial card collapses to its title so the hall stays visible. */
+@media (max-height: 480px) {
+  .panel:not(.hidden) ~ .tutorial p, .panel:not(.hidden) ~ .tutorial .steps { display: none; }
+  .panel:not(.hidden) ~ .tutorial { width: auto; max-width: 34vw; padding: .45rem .7rem; }
+  .panel:not(.hidden) ~ .tutorial h4 { margin: 0 0 .3rem; font-size: .85rem; }
+}
