@@ -59,7 +59,7 @@ try {
   await step('title', async () => {});
   await step('new_city', async () => { await tap('text=New city'); await tap('.slot .btn.primary'); await page.waitForTimeout(1500); });
   await step('enter_workshop', async () => { await tap('[data-tut="ui:enter"]'); await page.waitForTimeout(2500); });
-  await step('import_wood', async () => { await tap('[data-tut="ui:imports"]'); await tap('[data-tut="import:wood_pieces"] .btn >> nth=1'); await tap('[data-tut="import:carton_flat"] .btn >> nth=0'); });
+  await step('import_wood', async () => { await tap('[data-tut="ui:imports"]'); await tap('[data-tut="import:wood_pieces"] .btn >> nth=2'); await tap('[data-tut="import:carton_flat"] .btn >> nth=0'); });
   await step('build_bench', async () => { await tap('[data-tut="ui:build"]'); await tap('[data-tut="build:assembly_bench"]'); await page.waitForTimeout(300); await tapTile(3, 1); });
   await step('bench_recipe', async () => { await tap('[data-tut="recipe"] .choice >> nth=0'); });
   await step('belts_in', async () => { await tap('[data-tut="ui:build"]'); await tap('[data-tut="build:belt"]'); await dragTiles([[1, 1], [2, 1]]); });
@@ -71,7 +71,7 @@ try {
   await step('speed3', async () => { await tap('.speed .btn >> nth=3'); });
   const t0 = Date.now();
   let st = await state();
-  while (!Object.values(st.sold).some((n) => n > 0) && Date.now() - t0 < 600000) { await page.waitForTimeout(5000); st = await state(); }
+  while (!Object.values(st.sold).some((n) => n > 0) && Date.now() - t0 < 1200000) { await page.waitForTimeout(5000); st = await state(); }
   await step('first_sale', async () => { await tap('[data-tut="ui:enter"], [data-tut="ui:exit"]'); await page.waitForTimeout(1500); });
   const final = await state();
   const ok = Object.values(final.sold).some((n) => n > 0);

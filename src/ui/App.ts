@@ -752,9 +752,17 @@ export class App implements UiCtx {
     if (id) this.select({ type: 'entity', f: fid, id });
   }
 
+  /**
+   * Belt drawing follows the pointer's actual trail (tile by tile; backtracking erases).
+   * Tiles occupied by machines at either end are trimmed and the belt points into/out of them,
+   * so "drag from the bench to the packer" just works.
+   */
+  private trail: [number, number][] = [];
+
   private drawStart(x: number, y: number) {
     const tile = this.view.tileUnder(x, y, this.interior!);
     if (!tile) return;
+    this.trail = [[tile[0], tile[1]]];
     this.drawing = { sx: tile[0], sy: tile[1], tiles: [], valid: true };
     this.drawMove(x, y);
   }
@@ -764,38 +772,37 @@ export class App implements UiCtx {
     const tile = this.view.tileUnder(x, y, this.interior);
     if (!tile) return;
     const f = this.sim.s.factories[this.interior];
-    const [cx, cy] = [Math.max(0, Math.min(f.w - 1, tile[0])), Math.max(0, Math.min(f.h - 1, tile[1]))];
-    const { sx, sy } = this.drawing;
-    const pts: [number, number][] = [];
-    const horizFirst = Math.abs(cx - sx) >= Math.abs(cy - sy);
-    let x0 = sx;
-    let y0 = sy;
-    pts.push([x0, y0]);
-    const stepTo = (tx: number, ty: number) => {
-      while (x0 !== tx || y0 !== ty) {
-        if (x0 !== tx) x0 += Math.sign(tx - x0);
-        else y0 += Math.sign(ty - y0);
-        pts.push([x0, y0]);
-      }
-    };
-    if (horizFirst) {
-      stepTo(cx, sy);
-      stepTo(cx, cy);
-    } else {
-      stepTo(sx, cy);
-      stepTo(cx, cy);
+    const cx = Math.max(0, Math.min(f.w - 1, tile[0]));
+    const cy = Math.max(0, Math.min(f.h - 1, tile[1]));
+    // Extend the trail with Manhattan steps toward the pointer; backtracking truncates.
+    let [lx, ly] = this.trail[this.trail.length - 1];
+    while (lx !== cx || ly !== cy) {
+      if (lx !== cx) lx += Math.sign(cx - lx);
+      else ly += Math.sign(cy - ly);
+      const back = this.trail.findIndex(([px, py]) => px === lx && py === ly);
+      if (back >= 0) this.trail.length = back + 1;
+      else this.trail.push([lx, ly]);
     }
+    const isMachine = (px: number, py: number) => {
+      const e = entityAt(f, this.db, px, py);
+      return !!e && e.kind !== 'belt';
+    };
+    const pts = this.trail.slice();
+    // Trim machine tiles at the ends (keep the direction toward them).
+    let headInto: [number, number] | null = null;
+    while (pts.length > 1 && isMachine(pts[pts.length - 1][0], pts[pts.length - 1][1])) headInto = pts.pop()!;
+    while (pts.length > 1 && isMachine(pts[0][0], pts[0][1])) pts.shift();
+    const dirOf = (dx: number, dy: number): Dir => (dx === 1 ? 0 : dy === 1 ? 1 : dx === -1 ? 2 : 3);
     const tiles: { x: number; y: number; rot: Dir }[] = [];
     let valid = true;
     for (let i = 0; i < pts.length; i++) {
       const [px, py] = pts[i];
-      let rot: Dir = this.tool!.rot;
-      const n = pts[i + 1] ?? null;
+      const n = pts[i + 1] ?? (i === pts.length - 1 ? headInto : null);
       const p = pts[i - 1] ?? null;
-      const d = n ? [n[0] - px, n[1] - py] : p ? [px - p[0], py - p[1]] : null;
-      if (d) rot = (d[0] === 1 ? 0 : d[1] === 1 ? 1 : d[0] === -1 ? 2 : 3) as Dir;
-      const ex = entityAt(f, this.db, px, py);
-      if (ex && ex.kind !== 'belt') valid = false;
+      let rot: Dir = this.tool!.rot;
+      if (n) rot = dirOf(n[0] - px, n[1] - py);
+      else if (p) rot = dirOf(px - p[0], py - p[1]);
+      if (isMachine(px, py)) valid = false;
       tiles.push({ x: px, y: py, rot });
     }
     const newCount = tiles.filter((tt) => !(entityAt(f, this.db, tt.x, tt.y)?.kind === 'belt')).length;
