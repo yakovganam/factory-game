@@ -11,7 +11,7 @@ const out = `captures/e2e${phone ? '-phone' : ''}`;
 mkdirSync(out, { recursive: true });
 const PORT = 5198;
 execSync('npx vite build --outDir .e2e-dist --emptyOutDir --logLevel error', { stdio: 'inherit' });
-const server = spawn('npx', ['vite', 'preview', '--outDir', '.e2e-dist', '--port', String(PORT), '--strictPort'], { stdio: ['ignore', 'pipe', 'pipe'] });
+const server = spawn('node_modules/.bin/vite', ['preview', '--outDir', '.e2e-dist', '--port', String(PORT), '--strictPort'], { stdio: ['ignore', 'pipe', 'pipe'] });
 await new Promise((r) => server.stdout.on('data', (d) => String(d).includes('Local') && r()));
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const vp = phone ? { width: 844, height: 390 } : { width: 1366, height: 768 };

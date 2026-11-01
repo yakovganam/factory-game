@@ -1097,12 +1097,13 @@ export const SFX_CATALOG: SfxDef[] = [
       noiseHit(k, { dur: T, a: 0.001, hold: T, amp: 0.35, color: 'brown', filter: { type: 'lowpass', f: 150 }, pan: -0.4, seed: 21 });
       noiseHit(k, { dur: T, a: 0.001, hold: T, amp: 0.35, color: 'brown', filter: { type: 'lowpass', f: 160 }, pan: 0.4, seed: 22 });
       const room = roomSend(k, 0.8, k.out, 1.8);
-      for (const [t, f, p] of [[0.9, 420, -0.5], [3.4, 760, 0.6], [6.2, 560, -0.2], [9.7, 880, 0.3]] as Array<[number, number, number]>) {
+      // events end (incl. ~1.8 s reverb) before the loop point so the wrap has no level step
+      for (const [t, f, p] of [[0.9, 420, -0.5], [3.4, 760, 0.6], [6.2, 560, -0.2], [8.4, 880, 0.3]] as Array<[number, number, number]>) {
         ring(k, { t, f, amp: 0.03, pan: p, dest: room, partials: [[1, 1, 0.8], [2.3, 0.5, 0.5], [3.9, 0.2, 0.3]] });
         thud(k, t, 100, 60, 0.15, 0.06, room);
       }
-      for (const t of [2.2, 7.8]) noiseHit(k, { t, dur: 1.2, a: 0.1, amp: 0.03, shape: 'swell', filter: { type: 'highpass', f: 2500 }, seed: 30 + t, dest: room });
-      for (const t of [5.0, 5.35, 11.0, 11.35]) thud(k, t, 90, 50, 0.12, 0.06, room);
+      for (const t of [2.2, 7.2]) noiseHit(k, { t, dur: 1.2, a: 0.1, amp: 0.03, shape: 'swell', filter: { type: 'highpass', f: 2500 }, seed: 30 + t, dest: room });
+      for (const t of [5.0, 5.35, 9.6, 9.95]) thud(k, t, 90, 50, 0.12, 0.06, room);
     },
   }),
 

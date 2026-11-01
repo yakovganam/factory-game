@@ -37,7 +37,7 @@ const scenes = only ? ALL.filter((s) => only.includes(s.name)) : ALL;
 // Capture from a production build (immune to source edits/HMR, closer to what ships).
 import { execSync } from 'node:child_process';
 execSync('npx vite build --outDir .capture-dist --emptyOutDir --logLevel error', { stdio: 'inherit' });
-const server = spawn('npx', ['vite', 'preview', '--outDir', '.capture-dist', '--port', String(PORT), '--strictPort'], { stdio: ['ignore', 'pipe', 'pipe'] });
+const server = spawn('node_modules/.bin/vite', ['preview', '--outDir', '.capture-dist', '--port', String(PORT), '--strictPort'], { stdio: ['ignore', 'pipe', 'pipe'] });
 await new Promise((res, rej) => {
   const to = setTimeout(() => rej(new Error('vite start timeout')), 60000);
   server.stdout.on('data', (d) => { if (String(d).includes('Local')) { clearTimeout(to); res(); } });
