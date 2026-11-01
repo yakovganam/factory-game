@@ -7,6 +7,11 @@ Use this to pick up work in the next session. Keep it short and current.
 * **Milestone A** (feasibility): the stack is decided and pinned (ADR 0001). The web build runs.
   Input, save, audio and loading are proven in the browser. Native shells are generated.
   The Android and iOS builds are blocked by the environment (see the platform matrix).
+* **Workstreams finished this session:**
+  * Content catalog: 377 items, 346 recipes, 50 factories and 10 businesses. The validator reports 0 errors.
+  * Model library: 33 model ids and 18 item visuals, with gallery captures in `captures/models/`.
+  * Audio: 75 events, 174 variations and 2 themes, all synthesized and not yet reviewed by a human listener.
+* **End-to-end UI journey** (fresh city to first sale using real input) passes on desktop 1366×768 and on a phone-size 844×390 touch screen. Evidence is in `captures/e2e-evidence/`.
 * **Milestone B** (opening experience): playable in the browser. Workshop and toy store, imports,
   belts, 7 machine types (bench, packer, paint booth, robot assembler, storage, splitter, belts)
   plus loading bays, orders, research, tutorial, saves, offline progress, EN/HE. Pacing has only

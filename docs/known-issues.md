@@ -43,3 +43,5 @@ Severity levels: **S1** blocks release or the platform gate · **S2** major gap 
 | R1 | S3 | Store shelves inside the toy store model don't show actual stock (stock is shown in the UI) | Bind shelf anchors from the model |
 | R2 | S3 | Hebrew strings were written by the development team, not a native-speaker reviewer | Native review before release |
 | R3 | S4 | Title-screen text overlaps the 3D backdrop. Legibility depends on the scene | Add a framed backdrop or vignette |
+| R4 | S3 | Art benchmark limits (from the art self-review): characters are rigid-segment toy figures; there's no baked AO and few decals; there's no bloom or SSAO; buildings take 35–45 draw calls each, so the full city needs LODs and instancing; workshop items shown inside machines are placeholders | Art backlog in `docs/art-bible.md` §10 |
+| R5 | S3 | The building cutaway assumes a south-east camera. Interior view yaw is clamped to that quadrant on purpose | Per-side cutaway if free orbit inside is wanted |
