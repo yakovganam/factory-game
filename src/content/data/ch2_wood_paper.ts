@@ -1,0 +1,198 @@
+/**
+ * Chapter 2 — Wood, paper & packaging: Sawmill (#02), Engineered Wood Plant (#03),
+ * Furniture Factory (#04), Paper Mill (#05), Packaging Factory (#06) and the Furniture Showroom (business #4).
+ *
+ * Backward-integration hooks into chapter 1: `chop_offcuts` → wood_pieces, `die_cut_carton` → carton_flat.
+ */
+import type { ContentPack } from '../types';
+import { bays, collect, item, machine, recipe, site, source } from './resources';
+
+const SAW = 'sawmill';
+const EWP = 'engineered_wood_plant';
+const FUR = 'furniture_factory';
+const PAP = 'paper_mill';
+const PKG = 'packaging_factory';
+const SHOW = 'furniture_showroom';
+
+const sites = collect([
+  site({
+    id: SAW, kind: 'factory', index: 2, chapter: 2, plot: [26, 18], unlock: 'ch2_sawmill',
+    machines: ['head_saw', 'offcut_chopper', 'lumber_kiln'], mechanics: ['cutting_layout', 'material_recovery'],
+    identity: 'Logs are broken down by selectable cutting layouts that trade lumber and beam yield against recoverable offcuts, which are chopped into wood pieces for the toy workshop.',
+    interior: [12, 7], cost: 220000, kw: 30, staff: 4, dock: 150, bay: 'bay_timber',
+    visual: ['Open-sided saw shed with a log deck and sawdust chute.', 'Enclosed kiln hall and a second log infeed.', 'Automated scanning line, chip silo and timber gantry crane.'],
+    l2: [{ t: 'produced', item: 'lumber', qty: 500 }], l3: [{ t: 'produced', item: 'lumber', qty: 3000 }],
+  }),
+  site({
+    id: EWP, kind: 'factory', index: 3, chapter: 2, plot: [26, 20], unlock: 'ch2_engineered_wood',
+    machines: ['veneer_lathe', 'glue_spreader', 'hot_press'], mechanics: ['batch_press', 'curing'],
+    identity: 'Veneers, chips and lumber are glued and hot-pressed in batches; plywood, particleboard and glulam beams compete for the same limited press time.',
+    interior: [12, 8], cost: 300000, kw: 35, staff: 4, dock: 150, bay: 'bay_timber',
+    visual: ['Single daylight press under a steam-vented roof.', 'Second press bay and veneer drying racks.', 'Continuous press line with glulam curing hall.'],
+    l2: [{ t: 'produced', item: 'plywood', qty: 200 }], l3: [{ t: 'produced', item: 'particleboard', qty: 1500 }],
+  }),
+  site({
+    id: FUR, kind: 'factory', index: 4, chapter: 2, plot: [26, 20], unlock: 'ch2_furniture',
+    machines: ['panel_cnc', 'joinery_bench', 'finishing_line', 'flatpack_packer', 'upholstery_station'],
+    mechanics: ['assembly_balance', 'configurable_spec'],
+    identity: 'Panels, dried lumber and fittings flow through configurable assembly routes — flat-pack or pre-assembled, plain or upholstered — trading freight volume against showroom value.',
+    interior: [12, 8], cost: 280000, kw: 25, staff: 5, dock: 120, bay: 'bay_timber',
+    visual: ['Joinery hall with workbenches and a varnish booth.', 'Flat-pack wing with carton feeders.', 'Upholstery loft and branded showroom facade.'],
+    l3Req: ['ch2_showroom'],
+    l2: [{ t: 'produced', item: 'chair', qty: 150 }], l3: [{ t: 'sold', item: 'dining_table', qty: 200 }],
+  }),
+  site({
+    id: PAP, kind: 'factory', index: 5, chapter: 2, plot: [32, 20], unlock: 'ch2_paper_mill',
+    machines: ['pulper', 'paper_machine', 'dryer_section', 'rewinder'], mechanics: ['water_use', 'drying_capacity'],
+    identity: 'Chips and recovered paper are pulped with heavy water use, then the drying section’s capacity decides how much kraft, paperboard and tissue the mill can finish.',
+    interior: [14, 8], cost: 450000, kw: 70, staff: 5, dock: 200, bay: 'bay_paper',
+    visual: ['Pulper house and one steaming paper machine.', 'Longer dryer hall with extra steam hoods.', 'Twin machines, effluent clarifier and reel store.'],
+    l2: [{ t: 'produced', item: 'kraft_paper', qty: 600 }], l3: [{ t: 'produced', item: 'paperboard', qty: 3000 }],
+  }),
+  site({
+    id: PKG, kind: 'factory', index: 6, chapter: 2, plot: [26, 18], unlock: 'ch2_packaging_factory',
+    machines: ['corrugator', 'die_cutter', 'folder_gluer', 'pallet_nailer', 'pulp_molder'], mechanics: ['freight_dimensions', 'spec_variants'],
+    identity: 'Paperboard and kraft become flat cartons, shipping boxes, bags, pallets and trays; package dimensions decide how efficiently every downstream product ships.',
+    interior: [12, 8], cost: 320000, kw: 40, staff: 5, dock: 200, bay: 'bay_paper',
+    visual: ['Corrugator shed with stacked board bundles.', 'Die-cutting hall and pallet yard.', 'High-speed converting line with automated strapping.'],
+    l2: [{ t: 'produced', item: 'carton_flat', qty: 1000 }], l3: [{ t: 'produced', item: 'shipping_box', qty: 3000 }],
+  }),
+  site({
+    id: SHOW, kind: 'business', index: 4, chapter: 2, plot: [18, 14], unlock: 'ch2_showroom',
+    machines: ['showroom_stockroom'], mechanics: ['display_space', 'delivery_schedule'],
+    identity: 'Displays furniture room sets; floor space per line and the home-delivery schedule decide what sells.',
+    interior: [12, 8], grow: [4, 2], cost: 200000, kw: 6, staff: 3,
+    visual: ['Glass-fronted showroom with three room sets.', 'Mezzanine gallery and delivery van bay.', 'Two-storey flagship with lit totem sign.'],
+    l3Req: ['ch2_bed_frame'],
+    l2: [{ t: 'sold', item: 'chair', qty: 100 }], l3: [{ t: 'sold', item: 'bed_frame', qty: 120 }],
+    sells: ['chair', 'dining_table', 'bookshelf_kit', 'bookshelf', 'bed_frame', 'sofa'],
+  }),
+]);
+
+export const ch2: ContentPack = {
+  items: [
+    item('lumber', 'material', 1, 30, 'bulk', { tags: ['wood'] }),
+    item('dried_lumber', 'material', 1, 45, 'dry', { tags: ['wood'] }),
+    item('timber_beam', 'material', 1, 70, 'bulk', { volume: 2, tags: ['wood', 'construction'] }),
+    item('wood_offcuts', 'byproduct', 0, 15, 'dry', { tags: ['wood'] }),
+    item('wood_chips', 'byproduct', 0, 4, 'bulk', { tags: ['wood'] }),
+    item('veneer', 'material', 1, 12, 'dry', { tags: ['wood'] }),
+    item('veneer_layup', 'component', 1, 90, 'dry', { tags: ['wood'] }),
+    item('plywood', 'material', 2, 110, 'dry', { volume: 2, tags: ['wood'] }),
+    item('particleboard', 'material', 1, 60, 'dry', { volume: 2, tags: ['wood'] }),
+    item('glulam_beam', 'material', 2, 220, 'bulk', { volume: 3, tags: ['wood', 'construction'] }),
+    item('resin_glue', 'material', 1, 40, 'liquid'),
+    item('furniture_panel', 'component', 1, 30, 'dry'),
+    item('furniture_fittings', 'component', 1, 40, 'dry', { tags: ['metal'] }),
+    item('chair', 'product', 2, 900, 'dry', { volume: 2, consumer: true }),
+    item('table_raw', 'component', 2, 700, 'dry', { volume: 4 }),
+    item('dining_table', 'product', 2, 1500, 'dry', { volume: 4, consumer: true }),
+    item('bookshelf_kit', 'packaged', 2, 800, 'dry', { volume: 2, consumer: true }),
+    item('bookshelf', 'product', 2, 1000, 'dry', { volume: 5, consumer: true }),
+    item('bed_frame', 'product', 2, 1800, 'dry', { volume: 6, consumer: true }),
+    item('sofa', 'product', 3, 3500, 'dry', { volume: 6, consumer: true }),
+    item('pulp', 'material', 1, 10, 'liquid', { tags: ['paper'] }),
+    item('wet_web', 'component', 1, 14, 'bulk', { tags: ['paper'] }),
+    item('kraft_paper', 'material', 1, 25, 'dry', { tags: ['paper'] }),
+    item('paperboard', 'material', 1, 35, 'dry', { tags: ['paper'] }),
+    item('tissue_parent_roll', 'component', 1, 30, 'dry', { volume: 2, tags: ['paper'] }),
+    item('tissue_pack', 'packaged', 1, 80, 'dry', { consumer: true, tags: ['paper'] }),
+    item('corrugated_board', 'material', 1, 35, 'dry', { tags: ['paper'] }),
+    item('shipping_box', 'packaging', 1, 30, 'dry', { tags: ['paper'] }),
+    item('paper_bag', 'packaging', 1, 8, 'dry', { tags: ['paper'] }),
+    item('wood_pallet', 'packaging', 1, 200, 'dry', { volume: 2, tags: ['wood'] }),
+    item('molded_tray', 'packaging', 1, 5, 'dry', { tags: ['paper'] }),
+    item('liquid_carton', 'packaging', 1, 15, 'dry', { tags: ['paper'] }),
+  ],
+
+  recipes: [
+    recipe('saw_lumber_yield', 'head_saw', 'log*2', 'lumber*5,wood_offcuts*2,wood_chips*2', 10),
+    recipe('saw_beam_layout', 'head_saw', 'log*3', 'timber_beam*2,wood_offcuts*4,wood_chips*3', 14),
+    recipe('chop_offcuts', 'offcut_chopper', 'wood_offcuts*2', 'wood_pieces*2', 4, { tags: ['backward_integration'] }),
+    recipe('kiln_dry_lumber', 'lumber_kiln', 'lumber*6', 'dried_lumber*6', 45),
+    recipe('peel_veneer', 'veneer_lathe', 'log*1', 'veneer*6,wood_chips*1', 8),
+    recipe('layup_veneer', 'glue_spreader', 'veneer*5,resin_glue*1', 'veneer_layup*1', 6),
+    recipe('press_plywood', 'hot_press', 'veneer_layup*2', 'plywood*2', 30),
+    recipe('press_particleboard', 'hot_press', 'wood_chips*6,resin_glue*1', 'particleboard*2', 25),
+    recipe('press_glulam', 'hot_press', 'lumber*4,resin_glue*1', 'glulam_beam*1', 40, { unlock: 'ch2_glulam' }),
+    recipe('cut_panels', 'panel_cnc', 'particleboard*2', 'furniture_panel*5,wood_chips*1', 8),
+    recipe('assemble_chair', 'joinery_bench', 'dried_lumber*3,furniture_fittings*1', 'chair*1', 12),
+    recipe('assemble_table', 'joinery_bench', 'dried_lumber*4,plywood*1,furniture_fittings*2', 'table_raw*1', 16),
+    recipe('finish_table', 'finishing_line', 'table_raw*1,paint_can*1', 'dining_table*1', 10),
+    recipe('pack_bookshelf_kit', 'flatpack_packer', 'furniture_panel*5,furniture_fittings*1,carton_flat*2', 'bookshelf_kit*1', 8),
+    recipe('assemble_bookshelf', 'joinery_bench', 'furniture_panel*5,furniture_fittings*1', 'bookshelf*1', 14),
+    recipe('assemble_bed_frame', 'joinery_bench', 'dried_lumber*4,furniture_panel*2,furniture_fittings*2', 'bed_frame*1', 18, { unlock: 'ch2_bed_frame' }),
+    recipe('upholster_sofa', 'upholstery_station', 'plywood*2,dried_lumber*2,upholstery_fabric*3', 'sofa*1', 24, { unlock: 'ch5_sofa' }),
+    recipe('pulp_chips', 'pulper', 'wood_chips*6', 'pulp*4', 20, { waterL: 400 }),
+    recipe('pulp_recovered', 'pulper', 'waste_paper*5', 'pulp*4', 18, { waterL: 250, recycling: true, unlock: 'ch2_recycling' }),
+    recipe('form_web', 'paper_machine', 'pulp*4', 'wet_web*4', 12, { waterL: 300 }),
+    recipe('dry_kraft', 'dryer_section', 'wet_web*4', 'kraft_paper*3', 30),
+    recipe('dry_paperboard', 'dryer_section', 'wet_web*6', 'paperboard*3', 36),
+    recipe('dry_tissue', 'dryer_section', 'wet_web*3', 'tissue_parent_roll*2', 24, { unlock: 'ch3_tissue' }),
+    recipe('convert_tissue', 'rewinder', 'tissue_parent_roll*1,kraft_paper*1', 'tissue_pack*3', 8, { unlock: 'ch3_tissue' }),
+    recipe('corrugate_board', 'corrugator', 'kraft_paper*2,paperboard*1', 'corrugated_board*3', 10),
+    recipe('die_cut_carton', 'die_cutter', 'paperboard*1', 'carton_flat*3,waste_paper*1', 5, { tags: ['backward_integration'] }),
+    recipe('fold_shipping_box', 'folder_gluer', 'corrugated_board*2', 'shipping_box*3,waste_paper*1', 6),
+    recipe('make_paper_bag', 'folder_gluer', 'kraft_paper*1', 'paper_bag*4', 4),
+    recipe('form_liquid_carton', 'folder_gluer', 'paperboard*2,resin_glue*1', 'liquid_carton*8', 8, { unlock: 'ch3_dairy' }),
+    recipe('nail_pallet', 'pallet_nailer', 'lumber*5', 'wood_pallet*1', 10),
+    recipe('mold_food_tray', 'pulp_molder', 'pulp*2', 'molded_tray*6', 8),
+  ],
+
+  machines: [
+    ...bays('bay_timber', [SAW, EWP, FUR]),
+    ...bays('bay_paper', [PAP, PKG]),
+    machine('head_saw', [SAW], 'saw', [3, 2], 60000, 12, 1, 6),
+    machine('offcut_chopper', [SAW], 'saw', [2, 1], 22000, 3, 1, 2),
+    machine('lumber_kiln', [SAW], 'kiln', [3, 3], 48000, 10, 0, 3),
+    machine('veneer_lathe', [EWP], 'saw', [3, 2], 52000, 9, 1, 5),
+    machine('glue_spreader', [EWP], 'mixer', [2, 2], 30000, 4, 1, 3),
+    machine('hot_press', [EWP], 'press', [3, 3], 90000, 18, 1, 8),
+    machine('panel_cnc', [FUR], 'cnc', [2, 2], 55000, 6, 1, 5),
+    machine('joinery_bench', [FUR], 'bench', [2, 1], 20000, 1, 1, 2),
+    machine('finishing_line', [FUR], 'booth', [3, 2], 42000, 5, 1, 4),
+    machine('flatpack_packer', [FUR], 'packer', [2, 1], 18000, 1.5, 1, 2),
+    machine('upholstery_station', [FUR], 'bench', [2, 2], 30000, 1, 1, 2, { unlock: 'ch5_sofa' }),
+    machine('pulper', [PAP], 'mixer', [3, 2], 50000, 10, 1, 4),
+    machine('paper_machine', [PAP], 'winder', [4, 2], 120000, 20, 1, 8),
+    machine('dryer_section', [PAP], 'oven', [4, 2], 90000, 24, 1, 6),
+    machine('rewinder', [PAP], 'winder', [2, 2], 35000, 4, 1, 3, { unlock: 'ch3_tissue' }),
+    machine('corrugator', [PKG], 'winder', [4, 2], 85000, 14, 1, 6),
+    machine('die_cutter', [PKG], 'press', [2, 2], 40000, 6, 1, 3),
+    machine('folder_gluer', [PKG], 'packer', [3, 1], 36000, 4, 1, 3),
+    machine('pallet_nailer', [PKG], 'bench', [2, 2], 24000, 2, 1, 2, { unlock: 'ch2_pallets' }),
+    machine('pulp_molder', [PKG], 'molder', [2, 2], 32000, 6, 1, 3, { unlock: 'ch3_grain_mill' }),
+    machine('showroom_stockroom', [SHOW], 'storage', [2, 2], 12000, 0.2, 0, 0, { role: 'storage', storageCap: 40, inputCrafts: 0, outputCap: 0, speedPct: [100], upgradeCost: [0] }),
+  ],
+
+  buildings: sites.buildings,
+
+  sources: [
+    source('imp_resin_glue', 'resin_glue', 'import', 45, 200, undefined, 'ch2_sawmill'),
+    source('imp_furniture_fittings', 'furniture_fittings', 'import', 50, 200, undefined, 'ch2_furniture'),
+  ],
+
+  unlocks: [
+    { id: 'ch2_sawmill', chapter: 2, cost: 50000, requires: ['ch1_workshop_l2'], conditions: [{ t: 'revenue', cents: 300000 }], category: 'building' },
+    { id: 'ch2_engineered_wood', chapter: 2, cost: 80000, requires: ['ch2_sawmill'], conditions: [{ t: 'produced', item: 'lumber', qty: 300 }], category: 'building' },
+    { id: 'ch2_furniture', chapter: 2, cost: 90000, requires: ['ch2_engineered_wood'], conditions: [{ t: 'produced', item: 'plywood', qty: 40 }], category: 'building' },
+    { id: 'ch2_showroom', chapter: 2, cost: 40000, requires: ['ch2_furniture'], conditions: [{ t: 'produced', item: 'chair', qty: 5 }], category: 'building' },
+    { id: 'ch2_paper_mill', chapter: 2, cost: 120000, requires: ['ch2_sawmill'], conditions: [{ t: 'produced', item: 'wood_chips', qty: 300 }], category: 'building' },
+    { id: 'ch2_packaging_factory', chapter: 2, cost: 100000, requires: ['ch2_paper_mill'], conditions: [{ t: 'produced', item: 'paperboard', qty: 60 }], category: 'building' },
+    { id: 'ch2_recycling', chapter: 2, cost: 40000, requires: ['ch2_packaging_factory'], conditions: [{ t: 'produced', item: 'carton_flat', qty: 200 }], category: 'city' },
+    { id: 'ch2_glulam', chapter: 2, cost: 60000, requires: ['ch2_engineered_wood'], conditions: [{ t: 'produced', item: 'particleboard', qty: 100 }], category: 'product' },
+    { id: 'ch2_bed_frame', chapter: 2, cost: 50000, requires: ['ch2_showroom'], conditions: [{ t: 'sold', item: 'chair', qty: 40 }], category: 'product' },
+    { id: 'ch2_pallets', chapter: 2, cost: 30000, requires: ['ch2_packaging_factory'], category: 'logistics' },
+    ...sites.unlocks,
+  ],
+
+  demand: [
+    { item: 'chair', baseMilliPerMinPer1000: 1500, refPrice: 900 },
+    { item: 'dining_table', baseMilliPerMinPer1000: 600, refPrice: 1500 },
+    { item: 'bookshelf_kit', baseMilliPerMinPer1000: 1200, refPrice: 800 },
+    { item: 'bookshelf', baseMilliPerMinPer1000: 500, refPrice: 1000 },
+    { item: 'bed_frame', baseMilliPerMinPer1000: 400, refPrice: 1800 },
+    { item: 'sofa', baseMilliPerMinPer1000: 300, refPrice: 3500 },
+    { item: 'tissue_pack', baseMilliPerMinPer1000: 3000, refPrice: 80 },
+  ],
+};

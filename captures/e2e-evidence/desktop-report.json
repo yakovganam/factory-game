@@ -1,0 +1,94 @@
+{
+  "ok": true,
+  "viewport": {
+    "width": 1366,
+    "height": 768
+  },
+  "phone": false,
+  "steps": [
+    {
+      "name": "title",
+      "ms": 6566
+    },
+    {
+      "name": "new_city",
+      "ms": 12909
+    },
+    {
+      "name": "enter_workshop",
+      "ms": 13848
+    },
+    {
+      "name": "import_wood",
+      "ms": 21014
+    },
+    {
+      "name": "build_bench",
+      "ms": 23037
+    },
+    {
+      "name": "bench_recipe",
+      "ms": 10158
+    },
+    {
+      "name": "belts_in",
+      "ms": 9557
+    },
+    {
+      "name": "belts_out",
+      "ms": 9220
+    },
+    {
+      "name": "build_packer",
+      "ms": 16230
+    },
+    {
+      "name": "packer_recipe",
+      "ms": 9221
+    },
+    {
+      "name": "belt_ship",
+      "ms": 16151
+    },
+    {
+      "name": "speed3",
+      "ms": 9595
+    },
+    {
+      "name": "first_sale",
+      "ms": 11601
+    }
+  ],
+  "final": {
+    "tick": 674,
+    "cash": 109808,
+    "sold": {
+      "boxed_blocks": 1
+    },
+    "produced": {
+      "block_set": 7,
+      "boxed_blocks": 5
+    },
+    "tut": 9,
+    "ents": [
+      "receiving_dock",
+      "receiving_dock",
+      "shipping_dock",
+      "assembly_bench",
+      "belt",
+      "belt",
+      "belt",
+      "belt",
+      "belt",
+      "belt",
+      "packing_station",
+      "belt"
+    ]
+  },
+  "errors": [
+    "THREE.WebGLProgram: Shader Error 0 - VALIDATE_STATUS false\n\nMaterial Name: glow\nMaterial Type: MeshStandardMaterial\n\nProgram Info Log: Fragment shader is not compiled.\n\nFRAGMENT\n\nERROR: 0:1785: 'assign' : cannot convert from 'in highp 4-component vector of float' to 'highp 3-component vector of float'\n\n  1780: \t#ifdef DECODE_VIDEO_TEXTURE_EMISSIVE\n  1781: \t\temissiveColor = sRGBTransferEOTF( emissiveColor );\n  1782: \t#endif\n  1783: \ttotalEmissiveRadiance *= emissiveColor.rgb;\n  1784: #endif\n> 1785:  totalEmissiveRadiance *= vColor;\n  1786: PhysicalMaterial material;\n  1787: material.diffuseColor = diffuseColor.rgb;\n  1788: material.diffuseContribution = diffuseColor.rgb * ( 1.0 - metalnessFactor );\n  1789: material.metalness = metalnessFactor;\n  1790: vec3 dxy = max( abs( dFdx( nonPerturbedNormal ) ), abs( dFdy( nonPerturbedNormal ) ) );\n  1791: float geometryRoughness = max( max( dxy.x, dxy.y ), dxy.z );",
+    "THREE.WebGLProgram: Shader Error 1282 - VALIDATE_STATUS false\n\nMaterial Name: glow\nMaterial Type: MeshStandardMaterial\n\nProgram Info Log: Fragment shader is not compiled.\n\nFRAGMENT\n\nERROR: 0:1785: 'assign' : cannot convert from 'in highp 4-component vector of float' to 'highp 3-component vector of float'\n\n  1780: \t#ifdef DECODE_VIDEO_TEXTURE_EMISSIVE\n  1781: \t\temissiveColor = sRGBTransferEOTF( emissiveColor );\n  1782: \t#endif\n  1783: \ttotalEmissiveRadiance *= emissiveColor.rgb;\n  1784: #endif\n> 1785:  totalEmissiveRadiance *= vColor;\n  1786: PhysicalMaterial material;\n  1787: material.diffuseColor = diffuseColor.rgb;\n  1788: material.diffuseContribution = diffuseColor.rgb * ( 1.0 - metalnessFactor );\n  1789: material.metalness = metalnessFactor;\n  1790: vec3 dxy = max( abs( dFdx( nonPerturbedNormal ) ), abs( dFdy( nonPerturbedNormal ) ) );\n  1791: float geometryRoughness = max( max( dxy.x, dxy.y ), dxy.z );",
+    "THREE.WebGLProgram: Shader Error 1282 - VALIDATE_STATUS false\n\nMaterial Name: glow\nMaterial Type: MeshStandardMaterial\n\nProgram Info Log: Fragment shader is not compiled.\n\nFRAGMENT\n\nERROR: 0:1784: 'assign' : cannot convert from 'in highp 4-component vector of float' to 'highp 3-component vector of float'\n\n  1779: \t#ifdef DECODE_VIDEO_TEXTURE_EMISSIVE\n  1780: \t\temissiveColor = sRGBTransferEOTF( emissiveColor );\n  1781: \t#endif\n  1782: \ttotalEmissiveRadiance *= emissiveColor.rgb;\n  1783: #endif\n> 1784:  totalEmissiveRadiance *= vColor;\n  1785: PhysicalMaterial material;\n  1786: material.diffuseColor = diffuseColor.rgb;\n  1787: material.diffuseContribution = diffuseColor.rgb * ( 1.0 - metalnessFactor );\n  1788: material.metalness = metalnessFactor;\n  1789: vec3 dxy = max( abs( dFdx( nonPerturbedNormal ) ), abs( dFdy( nonPerturbedNormal ) ) );\n  1790: float geometryRoughness = max( max( dxy.x, dxy.y ), dxy.z );"
+  ],
+  "realSecondsToFirstSale": 62
+}
