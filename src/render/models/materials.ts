@@ -385,13 +385,17 @@ function create(key: MatKey): THREE.Material {
         side: THREE.DoubleSide,
       });
     case 'lamp':
-      return std({ name: 'lamp', roughness: 0.3, metalness: 0, emissive: new THREE.Color(0xffd28c), emissiveIntensity: 0.25 });
     case 'lampCool':
-      return std({ name: 'lampCool', roughness: 0.3, metalness: 0, emissive: new THREE.Color(0xe6f2ff), emissiveIntensity: 0.35 });
     case 'tail':
-      return std({ name: 'tail', roughness: 0.3, metalness: 0, emissive: new THREE.Color(0xff3020), emissiveIntensity: 0.25 });
-    case 'screen':
-      return std({ name: 'screen', roughness: 0.25, metalness: 0, emissive: new THREE.Color(0x58e0ff), emissiveIntensity: 0.9 });
+    case 'screen': {
+      // one shared emissive material; the glow colour comes from the vertex colour (see GLOW_TINT)
+      const m = std({ name: 'glow', roughness: 0.3, metalness: 0, emissive: new THREE.Color(0xffffff), emissiveIntensity: 0.45 });
+      m.onBeforeCompile = (sh) => {
+        sh.fragmentShader = sh.fragmentShader.replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n totalEmissiveRadiance *= vColor;');
+      };
+      m.customProgramCacheKey = () => 'glowVC';
+      return m;
+    }
     case 'solar':
       return std({ name: 'solar', roughness: 0.18, metalness: 0.5, map: solarTexture() });
     case 'wire':
@@ -434,7 +438,11 @@ function create(key: MatKey): THREE.Material {
   }
 }
 
+/** Default vertex tint for the emissive aliases (used when a part is coloured 0xffffff). */
+export const GLOW_TINT: Partial<Record<MatKey, number>> = { lamp: 0xffd08a, lampCool: 0xe8f3ff, tail: 0xff3a24, screen: 0x58e0ff };
+
 export function mat(key: MatKey): THREE.Material {
+  if (key === 'lampCool' || key === 'tail' || key === 'screen') key = 'lamp';
   let m = mats.get(key);
   if (!m) {
     m = create(key);
@@ -476,13 +484,7 @@ export function setNightLevel(n: number): void {
   const gl = mats.get('glassLit') as THREE.MeshStandardMaterial | undefined;
   if (gl) gl.emissiveIntensity = 1.35 * k;
   const lamp = mats.get('lamp') as THREE.MeshStandardMaterial | undefined;
-  if (lamp) lamp.emissiveIntensity = 0.25 + 2.6 * k;
-  const lc = mats.get('lampCool') as THREE.MeshStandardMaterial | undefined;
-  if (lc) lc.emissiveIntensity = 0.35 + 1.6 * k;
-  const tail = mats.get('tail') as THREE.MeshStandardMaterial | undefined;
-  if (tail) tail.emissiveIntensity = 0.25 + 1.8 * k;
-  const sc = mats.get('screen') as THREE.MeshStandardMaterial | undefined;
-  if (sc) sc.emissiveIntensity = 0.9 + 0.8 * k;
+  if (lamp) lamp.emissiveIntensity = 0.45 + 2.2 * k;
   const pool = mats.get('lightPool') as THREE.MeshBasicMaterial | undefined;
   if (pool) pool.opacity = 0.55 * k;
   for (const [key, m] of mats) if (key.startsWith('sign:')) (m as THREE.MeshStandardMaterial).emissiveIntensity = (m.userData.dayGlow ?? 0) + (m.userData.nightGlow ?? 1.2) * k;

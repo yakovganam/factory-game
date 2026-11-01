@@ -9,7 +9,7 @@
  */
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { mat, type MatKey } from './materials';
+import { GLOW_TINT, mat, type MatKey } from './materials';
 
 const _m = new THREE.Matrix4();
 const _q = new THREE.Quaternion();
@@ -167,6 +167,17 @@ export function roundedRectShape(w: number, h: number, r: number, cx = 0, cy = 0
   return s;
 }
 
+/** Chamfer LOD: tiny bevels are invisible at 10–15 m and cost 32 extra triangles each. */
+function lodC(c: number, w: number, h: number, d: number): number {
+  if (c < 0.008) return 0;
+  if (Math.min(w, h, d) < 0.025) return 0;
+  return c;
+}
+/** Radial segment LOD from radius (metres). */
+export function lodSeg(r: number, seg: number): number {
+  return Math.max(5, Math.min(seg, Math.round(5 + r * 36)));
+}
+
 /** Ensure the geometry is non-indexed with position/normal/uv only (colour added later). */
 function normalize(g: THREE.BufferGeometry): THREE.BufferGeometry {
   let out = g.index ? g.toNonIndexed() : g;
@@ -251,6 +262,7 @@ export class Builder {
   add(m: MatRef, geo: THREE.BufferGeometry, color: ColorSpec, x = 0, y = 0, z = 0, xf?: Xf): this {
     const g = normalize(geo);
     if (geo !== g) geo.dispose();
+    if (color === 0xffffff && typeof m === 'string' && GLOW_TINT[m] !== undefined) color = GLOW_TINT[m]!;
     paint(g, color);
     _m.compose(
       _p.set(x, y, z),
@@ -267,23 +279,23 @@ export class Builder {
     return this;
   }
 
-  /** Chamfered box centred at (x,y,z). */
+  /** Chamfered box centred at (x,y,z). Chamfers under 8 mm (invisible at game distance) are dropped. */
   box(m: MatRef, color: ColorSpec, w: number, h: number, d: number, x: number, y: number, z: number, c = 0.02, xf?: Xf): this {
-    return this.add(m, chamferBox(w, h, d, c), color, x, y, z, xf);
+    return this.add(m, chamferBox(w, h, d, lodC(c, w, h, d)), color, x, y, z, xf);
   }
   /** Chamfered box with its BASE at y. */
   boxB(m: MatRef, color: ColorSpec, w: number, h: number, d: number, x: number, y: number, z: number, c = 0.02, xf?: Xf): this {
-    return this.add(m, chamferBox(w, h, d, c), color, x, y + h / 2, z, xf);
+    return this.add(m, chamferBox(w, h, d, lodC(c, w, h, d)), color, x, y + h / 2, z, xf);
   }
   /** Box spanning explicit min/max corners (no rotation). */
   span(m: MatRef, color: ColorSpec, x0: number, y0: number, z0: number, x1: number, y1: number, z1: number, c = 0): this {
     const w = Math.abs(x1 - x0), h = Math.abs(y1 - y0), d = Math.abs(z1 - z0);
     if (w < 1e-4 || h < 1e-4 || d < 1e-4) return this;
-    return this.add(m, chamferBox(w, h, d, c), color, (x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2);
+    return this.add(m, chamferBox(w, h, d, lodC(c, w, h, d)), color, (x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2);
   }
   /** Cylinder centred at (x,y,z) along axis. */
   cyl(m: MatRef, color: ColorSpec, r: number, h: number, x: number, y: number, z: number, axis: 'x' | 'y' | 'z' = 'y', seg = 12, rTop?: number, open = false): this {
-    const g = new THREE.CylinderGeometry(rTop ?? r, r, h, seg, 1, open);
+    const g = new THREE.CylinderGeometry(rTop ?? r, r, h, lodSeg(Math.max(r, rTop ?? 0), seg), 1, open);
     const xf: Xf = axis === 'x' ? { rz: -HALF_PI } : axis === 'z' ? { rx: HALF_PI } : {};
     return this.add(m, g, color, x, y, z, xf);
   }
@@ -296,16 +308,19 @@ export class Builder {
     const dx = b[0] - a[0], dy = b[1] - a[1], dz = b[2] - a[2];
     const len = Math.hypot(dx, dy, dz);
     if (len < 1e-5) return this;
-    const g = new THREE.CylinderGeometry(r, r, len, seg, 1, false);
+    const g = new THREE.CylinderGeometry(r, r, len, Math.min(seg, r < 0.03 ? 4 : 6), 1, false);
     _q.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(dx / len, dy / len, dz / len));
     g.applyQuaternion(_q);
     return this.add(m, g, color, (a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2);
   }
   sphere(m: MatRef, color: ColorSpec, r: number, x: number, y: number, z: number, ws = 10, hs = 7, xf?: Xf): this {
-    return this.add(m, new THREE.SphereGeometry(r, ws, hs), color, x, y, z, xf);
+    const w2 = lodSeg(r, ws);
+    return this.add(m, new THREE.SphereGeometry(r, w2, Math.max(3, Math.min(hs, Math.round(w2 * 0.65)))), color, x, y, z, xf);
   }
   lathe(m: MatRef, color: ColorSpec, profile: [number, number][], x: number, y: number, z: number, seg = 14, xf?: Xf): this {
-    return this.add(m, new THREE.LatheGeometry(profile.map(([r, h]) => new THREE.Vector2(r, h)), seg), color, x, y, z, xf);
+    let rMax = 0;
+    for (const p of profile) rMax = Math.max(rMax, p[0]);
+    return this.add(m, new THREE.LatheGeometry(profile.map(([r, h]) => new THREE.Vector2(r, h)), lodSeg(rMax, seg)), color, x, y, z, xf);
   }
   /** Thin flat quad facing +Z (or rotated), centred. */
   quad(m: MatRef, color: ColorSpec, w: number, h: number, x: number, y: number, z: number, xf?: Xf): this {

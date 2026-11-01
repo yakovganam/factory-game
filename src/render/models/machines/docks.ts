@@ -9,7 +9,7 @@ import * as THREE from 'three';
 import type { ModelInstance } from '../types';
 import { Builder, approach, cached } from '../geom';
 import { PAL } from '../materials';
-import { hazardStrip, isRunning, makeInstance, StackLight } from '../common';
+import { hazardStrip, isRunning, makeInstance, StackLight, stackHousing } from '../common';
 import { BELT_TOP_Y, machineMeta } from './kit';
 
 const DOOR_H = 2.5;
@@ -41,10 +41,10 @@ function createDock(kind: 'receiving' | 'shipping'): ModelInstance {
   if (ship) holder.scale.x = -1;
   root.add(holder);
 
-  const lb = new Builder();
-  const light = new StackLight(lb, -0.3, DRUM_Y + 0.38, 0.62, 0.02, 1.1);
+  const light = new StackLight(null, -0.3, DRUM_Y + 0.38, 0.62, 0.02, 1.1);
   const body = cached('dock:' + kind, () => {
     const b = new Builder();
+    stackHousing(b, -0.3, DRUM_Y + 0.38, 0.62, 0.02, 1.1);
     // deck frame
     for (const z of [-0.96, 0, 0.96]) b.span('satin', PAL.steelDark, -0.44, BELT_TOP_Y - 0.11, z - 0.03, 0.5, BELT_TOP_Y + 0.012, z + 0.03, 0.008);
     b.span('satin', PAL.steelDark, 0.44, BELT_TOP_Y - 0.11, -0.96, 0.5, BELT_TOP_Y - 0.02, 0.96, 0.006);
@@ -77,7 +77,7 @@ function createDock(kind: 'receiving' | 'shipping'): ModelInstance {
     }
     return b.build({ name: 'dockBody' });
   });
-  holder.add(body, lb.build({ name: 'lightHousing' }), light.object);
+  holder.add(body, light.object);
 
   // rollers (per-instance material so the stripe texture can scroll = rollers turning)
   const base = rollerTexture();

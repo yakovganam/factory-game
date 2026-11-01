@@ -8,7 +8,7 @@ import * as THREE from 'three';
 import type { ModelInstance } from '../types';
 import { Builder, cached, approach } from '../geom';
 import { PAL } from '../materials';
-import { isRunning, makeInstance, StackLight } from '../common';
+import { isRunning, makeInstance, StackLight, stackHousing } from '../common';
 import { BELT_TOP_Y, machineMeta } from './kit';
 
 /** Belt surface speed at AnimState.speed = 1, in metres per second. */
@@ -38,9 +38,8 @@ export function beltBody(b: Builder, st: BeltStyle, rails = true): void {
   for (const s of [-1, 1]) {
     const z = s * (W / 2 + 0.03);
     b.span('satin', st.frame, -0.5, BT - 0.13, z - 0.03, 0.5, BT + 0.012, z + 0.03, 0.006);
-    b.span('satin', shade(st.frame), -0.5, BT - 0.135, z - 0.045 * s - 0.0, 0.5, BT - 0.115, z + 0.0, 0);
     // roller axle caps
-    for (const x of [-0.38, 0, 0.38]) b.cyl('metal', PAL.chrome, 0.018, 0.012, x, BT - 0.04, z + s * 0.034, 'z', 8);
+    for (const x of [-0.38, 0.38]) b.cyl('satin', PAL.chrome, 0.018, 0.012, x, BT - 0.04, z + s * 0.034, 'z', 6);
     if (rails) {
       // guide rail on two posts
       for (const x of [-0.3, 0.3]) b.span('satin', st.frame, x - 0.015, BT + 0.012, z - 0.012, x + 0.015, BT + 0.07, z + 0.012, 0.004);
@@ -57,7 +56,7 @@ export function beltBody(b: Builder, st: BeltStyle, rails = true): void {
     b.span('satin', 0x8a949c, x - 0.02, 0.1, -W / 2 + 0.02, x + 0.02, 0.14, W / 2 - 0.02, 0.004);
   }
   // under-belt return roller
-  b.cyl('metal', PAL.steel, 0.03, W - 0.02, 0, BT - 0.17, 0, 'z', 8);
+  b.cyl('satin', PAL.steel, 0.03, W - 0.02, 0, BT - 0.17, 0, 'z', 6);
 }
 
 function shade(c: number): number {
@@ -86,19 +85,18 @@ function cleatStrip(st: BeltStyle): THREE.Object3D {
 
 function createBeltLike(id: string, st: BeltStyle): ModelInstance {
   const root = new THREE.Group();
-  const lightB = new Builder();
-  const led = new StackLight(lightB, 0.3, BT - 0.06, W / 2 + 0.07, 0, 0.5, 1, false);
+  const led = new StackLight(null, 0.3, BT - 0.06, W / 2 + 0.07, 0, 0.5, 1, false);
   const body = cached('belt:' + id, () => {
     const b = new Builder();
     beltBody(b, st);
+    stackHousing(b, 0.3, BT - 0.06, W / 2 + 0.07, 0, 0.5, 1);
     // drive motor box on the +Z side
     b.span('satin', st.frame, 0.12, BT - 0.2, W / 2 + 0.06, 0.42, BT - 0.06, W / 2 + 0.12, 0.012);
     b.cyl('satin', st.rail, 0.06, 0.08, 0.02, BT - 0.13, W / 2 + 0.1, 'x', 12);
     b.span('satin', PAL.graphite, 0.25, BT - 0.08, W / 2 + 0.04, 0.35, BT - 0.06, W / 2 + 0.1, 0.004);
     return b.build({ name: 'beltBody' });
   });
-  const ledHousing = lightB.build({ name: 'ledHousing', shadows: false });
-  root.add(body, ledHousing, led.object);
+  root.add(body, led.object);
   const strip = cleatStrip(st);
   root.add(strip);
   machineMeta(root, id, [1, 1], { ports: { in: [[-0.5, 0]], out: [[0.5, 0]] } });
@@ -123,11 +121,11 @@ export const createBeltMk2 = () => createBeltLike('mach_belt_mk2', MK2);
 /** 1×1 diverter: belt section + overhead gantry with a swinging paddle. */
 export function createSplitter(): ModelInstance {
   const root = new THREE.Group();
-  const sb = new Builder();
-  const light = new StackLight(sb, -0.3, 1.0, -W / 2 - 0.06, 0.05, 0.8);
+  const light = new StackLight(null, -0.3, 1.0, -W / 2 - 0.06, 0.05, 0.8);
   const body = cached('splitter', () => {
     const b = new Builder();
     beltBody(b, MK1, false);
+    stackHousing(b, -0.3, 1.0, -W / 2 - 0.06, 0.05, 0.8);
     // low side guards with exits (open on both sides in the middle)
     for (const s of [-1, 1]) {
       const z = s * (W / 2 + 0.03);
@@ -150,7 +148,6 @@ export function createSplitter(): ModelInstance {
     for (const s of [-1, 1]) b.box('paint', PAL.white, 0.12, 0.004, 0.03, 0.15, BT - 0.01, s * (W / 2 + 0.061), 0.001, { rx: Math.PI / 2 });
     return b.build({ name: 'splitterBody' });
   });
-  const lightHousing = sb.build({ name: 'lightHousing' });
   // paddle
   const paddlePivot = new THREE.Group();
   paddlePivot.position.set(-0.3, 0, 0);
@@ -161,7 +158,7 @@ export function createSplitter(): ModelInstance {
   pb.box('hazard', 0xffffff, 0.2, 0.07, 0.038, 0.5, BT + 0.08, 0, 0.003);
   const paddle = pb.build({ name: 'paddle' });
   paddlePivot.add(paddle);
-  root.add(body, lightHousing, light.object, paddlePivot);
+  root.add(body, light.object, paddlePivot);
   const strip = cleatStrip(MK1);
   root.add(strip);
   machineMeta(root, 'mach_splitter', [1, 1], { ports: { in: [[-0.5, 0]], out: [[0.5, 0], [0, -0.5], [0, 0.5]] } });
@@ -287,11 +284,11 @@ function createCurve(id: string, st: BeltStyle, left: boolean): ModelInstance {
   if (left) holder.scale.z = -1;
   root.add(holder);
   const am = (A0 + A1) / 2, rl = 0.5 + W / 2 + 0.13;
-  const lb = new Builder();
-  const led = new StackLight(lb, CX + rl * Math.cos(am), BT - 0.06, CZ + rl * Math.sin(am), 0, 0.5, 1, false);
+  const led = new StackLight(null, CX + rl * Math.cos(am), BT - 0.06, CZ + rl * Math.sin(am), 0, 0.5, 1, false);
   const body = cached('beltCurve:' + st.chevron, () => {
     const b = new Builder();
     curveBody(b, st);
+    stackHousing(b, CX + rl * Math.cos(am), BT - 0.06, CZ + rl * Math.sin(am), 0, 0.5, 1);
     return b.build({ name: 'beltCurveBody' });
   });
   const pivotG = new THREE.Group();
@@ -299,7 +296,7 @@ function createCurve(id: string, st: BeltStyle, left: boolean): ModelInstance {
   const strip = curveCleats(st);
   strip.position.set(-CX, 0, -CZ);
   pivotG.add(strip);
-  holder.add(body, lb.build({ name: 'ledHousing', shadows: false }), led.object, pivotG);
+  holder.add(body, led.object, pivotG);
   const step = (A1 - A0) / Math.max(2, Math.round((Math.PI / 4) / st.pitch));
   machineMeta(root, id, [1, 1], { ports: left ? { in: [[0, -0.5]], out: [[0.5, 0]] } : { in: [[0, 0.5]], out: [[0.5, 0]] }, turn: left ? 'left' : 'right', pathRadius: 0.5 });
   let ang = 0, v = 0;

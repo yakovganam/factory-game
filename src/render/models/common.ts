@@ -92,8 +92,8 @@ function lensGeometry(r: number, tierH: number, tiers: number): THREE.BufferGeom
   for (const tier of ids) {
     const isCap = tier === 4;
     const src = isCap
-      ? new THREE.SphereGeometry(r * 0.92, 12, 5, 0, TAU, 0, Math.PI / 2)
-      : new THREE.CylinderGeometry(r, r, tierH * 0.86, 14, 1, false);
+      ? new THREE.SphereGeometry(r * 0.92, 10, 3, 0, TAU, 0, Math.PI / 2)
+      : new THREE.CylinderGeometry(r, r, tierH * 0.86, 10, 1, false);
     src.translate(0, isCap ? y : y + tierH / 2, 0);
     const geo = src.toNonIndexed();
     src.dispose();
@@ -133,6 +133,17 @@ function lensGeometry(r: number, tierH: number, tiers: number): THREE.BufferGeom
 
 let haloTex: THREE.Texture | null = null;
 
+/** Static stack-light housing (base, pole, lens collar). Same parameters as the StackLight constructor. */
+export function stackHousing(b: Builder, x: number, y: number, z: number, pole = 0.3, size = 1, tiers = 5): void {
+  const r = 0.055 * size;
+  const tierH = 0.065 * size;
+  b.cylB('satin', PAL.graphite, r * 1.25, 0.03 * size, x, y, z, 12);
+  if (pole > 0.001) b.cylB('satin', PAL.steel, 0.012 * size + 0.006, pole, x, y + 0.03 * size, z, 8);
+  const lensY = y + 0.03 * size + pole;
+  b.cylB('satin', PAL.graphite, r * 1.08, 0.025 * size, x, lensY - 0.012 * size, z, 12);
+  if (tiers !== 5) b.cylB('satin', PAL.graphite, r * 1.08, 0.02 * size, x, lensY + tierH * tiers, z, 12);
+}
+
 /**
  * Industrial stack light. Housing (base, pole, cap) is added into the caller's static Builder; the
  * lens is one mesh with a per-instance material (shared shader program) + an additive halo sprite
@@ -156,17 +167,13 @@ export class StackLight {
    * @param size scale (1 = 0.11 m diameter lens)
    * @param tiers 5 for the full stack, 1 for a single green/amber LED (belts)
    */
-  constructor(b: Builder, x: number, y: number, z: number, pole = 0.3, size = 1, tiers = 5, halo = true) {
+  constructor(b: Builder | null, x: number, y: number, z: number, pole = 0.3, size = 1, tiers = 5, halo = true) {
     const r = 0.055 * size;
     this.tierH = 0.065 * size;
     this.tiers = tiers;
-    // housing
-    b.cylB('satin', PAL.graphite, r * 1.25, 0.03 * size, x, y, z, 12);
-    if (pole > 0.001) b.cylB('metal', PAL.steel, 0.012 * size + 0.006, pole, x, y + 0.03 * size, z, 8);
+    // housing (pass b = null when the housing was baked into a cached body with stackHousing())
+    if (b) stackHousing(b, x, y, z, pole, size, tiers);
     const lensY = y + 0.03 * size + pole;
-    b.cylB('satin', PAL.graphite, r * 1.08, 0.025 * size, x, lensY - 0.012 * size, z, 12);
-    const h = this.tierH * (tiers === 5 ? 4 : tiers);
-    if (tiers !== 5) b.cylB('satin', PAL.graphite, r * 1.08, 0.02 * size, x, lensY + h, z, 12);
     this.uA = { value: new THREE.Vector4() };
     this.uB = { value: 0 };
     this.mat = new THREE.MeshStandardMaterial({ name: 'stackLens', vertexColors: true, roughness: 0.25, metalness: 0, emissive: 0xffffff, emissiveIntensity: 1 });

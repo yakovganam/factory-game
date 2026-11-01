@@ -189,10 +189,10 @@ function insulator(b: Builder, x: number, y: number, z: number, n: number, color
   const prof: [number, number][] = [[0.0, 0]];
   for (let i = 0; i < n; i++) {
     const y0 = i * 0.09;
-    prof.push([0.05, y0], [0.11, y0 + 0.02], [0.11, y0 + 0.035], [0.05, y0 + 0.06]);
+    prof.push([0.045, y0], [0.1, y0 + 0.03], [0.045, y0 + 0.07]);
   }
-  prof.push([0.04, n * 0.09], [0.0, n * 0.09 + 0.01]);
-  b.lathe('satin', color, prof, x, y, z, 10);
+  prof.push([0.0, n * 0.09 + 0.01]);
+  b.lathe('satin', color, prof, x, y, z, 6);
 }
 
 function transformer(b: Builder, x: number, z: number): void {

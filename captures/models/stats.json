@@ -1,0 +1,520 @@
+{
+  "rows": [
+    {
+      "model": "bld_toy_workshop L1",
+      "tris": 10964,
+      "drawCalls": 34,
+      "materials": 11
+    },
+    {
+      "model": "bld_toy_workshop L2",
+      "tris": 15224,
+      "drawCalls": 44,
+      "materials": 12
+    },
+    {
+      "model": "bld_toy_workshop L3",
+      "tris": 21358,
+      "drawCalls": 43,
+      "materials": 15
+    },
+    {
+      "model": "bld_toy_store L1",
+      "tris": 8314,
+      "drawCalls": 23,
+      "materials": 10
+    },
+    {
+      "model": "bld_toy_store L2",
+      "tris": 9726,
+      "drawCalls": 23,
+      "materials": 10
+    },
+    {
+      "model": "bld_toy_store L3",
+      "tris": 13932,
+      "drawCalls": 26,
+      "materials": 12
+    },
+    {
+      "model": "bld_import_depot",
+      "tris": 11234,
+      "drawCalls": 17,
+      "materials": 12
+    },
+    {
+      "model": "bld_house v0",
+      "tris": 3318,
+      "drawCalls": 11,
+      "materials": 11
+    },
+    {
+      "model": "bld_house v1",
+      "tris": 4540,
+      "drawCalls": 10,
+      "materials": 10
+    },
+    {
+      "model": "bld_house v2",
+      "tris": 3280,
+      "drawCalls": 11,
+      "materials": 11
+    },
+    {
+      "model": "bld_house v3",
+      "tris": 3592,
+      "drawCalls": 11,
+      "materials": 11
+    },
+    {
+      "model": "bld_house v4",
+      "tris": 4998,
+      "drawCalls": 11,
+      "materials": 11
+    },
+    {
+      "model": "bld_house v5",
+      "tris": 4034,
+      "drawCalls": 11,
+      "materials": 11
+    },
+    {
+      "model": "bld_substation",
+      "tris": 8036,
+      "drawCalls": 7,
+      "materials": 7
+    },
+    {
+      "model": "mach_belt",
+      "tris": 696,
+      "drawCalls": 3,
+      "materials": 2
+    },
+    {
+      "model": "mach_belt_mk2",
+      "tris": 768,
+      "drawCalls": 3,
+      "materials": 2
+    },
+    {
+      "model": "mach_belt_turn_r",
+      "tris": 1136,
+      "drawCalls": 3,
+      "materials": 2
+    },
+    {
+      "model": "mach_belt_turn_l",
+      "tris": 1136,
+      "drawCalls": 3,
+      "materials": 2
+    },
+    {
+      "model": "mach_belt_mk2_turn_r",
+      "tris": 1196,
+      "drawCalls": 3,
+      "materials": 2
+    },
+    {
+      "model": "mach_belt_mk2_turn_l",
+      "tris": 1196,
+      "drawCalls": 3,
+      "materials": 2
+    },
+    {
+      "model": "mach_splitter",
+      "tris": 1218,
+      "drawCalls": 9,
+      "materials": 6
+    },
+    {
+      "model": "mach_receiving_dock",
+      "tris": 1738,
+      "drawCalls": 9,
+      "materials": 8
+    },
+    {
+      "model": "mach_shipping_dock",
+      "tris": 1738,
+      "drawCalls": 9,
+      "materials": 8
+    },
+    {
+      "model": "mach_assembly_bench",
+      "tris": 3990,
+      "drawCalls": 11,
+      "materials": 8
+    },
+    {
+      "model": "mach_packing_station",
+      "tris": 2828,
+      "drawCalls": 18,
+      "materials": 10
+    },
+    {
+      "model": "mach_paint_booth",
+      "tris": 2950,
+      "drawCalls": 11,
+      "materials": 9
+    },
+    {
+      "model": "mach_robot_assembler",
+      "tris": 3706,
+      "drawCalls": 20,
+      "materials": 8
+    },
+    {
+      "model": "mach_storage_crate",
+      "tris": 1058,
+      "drawCalls": 7,
+      "materials": 6
+    },
+    {
+      "model": "veh_van v0",
+      "tris": 2870,
+      "drawCalls": 19,
+      "materials": 7
+    },
+    {
+      "model": "veh_van v1",
+      "tris": 2870,
+      "drawCalls": 19,
+      "materials": 7
+    },
+    {
+      "model": "veh_van v2",
+      "tris": 2870,
+      "drawCalls": 19,
+      "materials": 7
+    },
+    {
+      "model": "veh_van v3",
+      "tris": 2870,
+      "drawCalls": 19,
+      "materials": 7
+    },
+    {
+      "model": "veh_truck v0",
+      "tris": 3414,
+      "drawCalls": 16,
+      "materials": 9
+    },
+    {
+      "model": "veh_truck v1",
+      "tris": 3414,
+      "drawCalls": 16,
+      "materials": 9
+    },
+    {
+      "model": "veh_truck v2",
+      "tris": 3414,
+      "drawCalls": 16,
+      "materials": 9
+    },
+    {
+      "model": "veh_truck v3",
+      "tris": 3414,
+      "drawCalls": 16,
+      "materials": 9
+    },
+    {
+      "model": "chr_worker v0",
+      "tris": 1802,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "chr_worker v1",
+      "tris": 1838,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "chr_worker v2",
+      "tris": 1770,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "chr_worker v3",
+      "tris": 1826,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "chr_worker v4",
+      "tris": 1726,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "chr_worker v5",
+      "tris": 1814,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "chr_pedestrian v0",
+      "tris": 1500,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "chr_pedestrian v1",
+      "tris": 1576,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "chr_pedestrian v2",
+      "tris": 1520,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "chr_pedestrian v3",
+      "tris": 1538,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "chr_pedestrian v4",
+      "tris": 1608,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "chr_pedestrian v5",
+      "tris": 1678,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "prop_tree v0",
+      "tris": 642,
+      "drawCalls": 3,
+      "materials": 3
+    },
+    {
+      "model": "prop_tree v1",
+      "tris": 106,
+      "drawCalls": 3,
+      "materials": 3
+    },
+    {
+      "model": "prop_tree v2",
+      "tris": 930,
+      "drawCalls": 3,
+      "materials": 3
+    },
+    {
+      "model": "prop_streetlamp",
+      "tris": 472,
+      "drawCalls": 4,
+      "materials": 4
+    },
+    {
+      "model": "prop_bench",
+      "tris": 662,
+      "drawCalls": 3,
+      "materials": 3
+    },
+    {
+      "model": "prop_hydrant",
+      "tris": 378,
+      "drawCalls": 3,
+      "materials": 3
+    },
+    {
+      "model": "prop_fence v0",
+      "tris": 420,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "prop_fence v1",
+      "tris": 708,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "prop_bin",
+      "tris": 398,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "prop_planter",
+      "tris": 582,
+      "drawCalls": 5,
+      "materials": 5
+    },
+    {
+      "model": "prop_sign_for_sale",
+      "tris": 424,
+      "drawCalls": 6,
+      "materials": 6
+    },
+    {
+      "model": "prop_bollard",
+      "tris": 174,
+      "drawCalls": 2,
+      "materials": 2
+    },
+    {
+      "model": "prop_bus_stop",
+      "tris": 612,
+      "drawCalls": 10,
+      "materials": 10
+    },
+    {
+      "model": "item:wood_pieces",
+      "tris": 204,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:toy_wheels",
+      "tris": 300,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:paint_can",
+      "tris": 208,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:carton_flat",
+      "tris": 72,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:plastic_parts",
+      "tris": 560,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:mini_motor",
+      "tris": 216,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:control_chip",
+      "tris": 216,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:block_set",
+      "tris": 308,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:toy_car_raw",
+      "tris": 296,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:toy_car",
+      "tris": 444,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:robot_raw",
+      "tris": 320,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:toy_robot",
+      "tris": 356,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:smart_robot_raw",
+      "tris": 568,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:smart_robot",
+      "tris": 592,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:boxed_blocks",
+      "tris": 248,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:boxed_car",
+      "tris": 376,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:boxed_robot",
+      "tris": 296,
+      "drawCalls": 1,
+      "materials": 1
+    },
+    {
+      "model": "item:boxed_smart_robot",
+      "tris": 296,
+      "drawCalls": 1,
+      "materials": 1
+    }
+  ],
+  "sharedMaterials": [
+    "brick",
+    "concrete",
+    "contact",
+    "contactRound",
+    "foliage",
+    "glass",
+    "glassClear",
+    "glassLit",
+    "glow",
+    "hazard",
+    "lightPool",
+    "livery",
+    "metal",
+    "paint",
+    "ribbed",
+    "satin",
+    "sign:busad",
+    "sign:bussign",
+    "sign:danger",
+    "sign:depot",
+    "sign:forsale",
+    "sign:toystore",
+    "sign:toystoreRoof",
+    "sign:toyworks1",
+    "sign:toyworks2",
+    "sign:toyworks3",
+    "slats",
+    "solar",
+    "tiles",
+    "wire",
+    "wood"
+  ],
+  "sharedMaterialCount": 31,
+  "perInstanceMaterialKinds": [
+    "MeshBasicMaterial",
+    "MeshStandardMaterial",
+    "SpriteMaterial",
+    "dockRollers",
+    "stackLens"
+  ],
+  "libraryMaterialsCreated": 31
+}

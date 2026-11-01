@@ -799,7 +799,7 @@ function checkI18n(ctx: Ctx, en: Record<string, string>, he: Record<string, stri
       }
       if (lang === 'he' && !HEB.test(v)) ctx.warn('i18n_not_hebrew', `he string for "${key}" contains no Hebrew letters`, key);
       if (lang === 'en' && HEB.test(v)) ctx.warn('i18n_hebrew_in_en', `en string for "${key}" contains Hebrew`, key);
-      if (!key.endsWith('.desc') && [...v].length > 24) ctx.warn('i18n_long_name', `${lang} name for "${key}" is ${[...v].length} chars (UI chips prefer ≤ 24)`, key);
+      if (/^(item|recipe|machine|building)\.[a-z0-9_]+$/.test(key) && [...v].length > 24) ctx.warn('i18n_long_name', `${lang} name for "${key}" is ${[...v].length} chars (UI chips prefer ≤ 24)`, key);
     }
   }
   for (const [lang, table] of [['en', en], ['he', he]] as const) {

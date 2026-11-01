@@ -162,7 +162,7 @@ function emitRun(c: Ctx, r: RunSpec): void {
     }
   }
   // coping on the wall top
-  bUp.span('paint', COL.cap, r.u0 - 0.0, r.top, -0.03, r.u1 + 0.0, r.top + 0.08, T + 0.05, 0.01);
+  bUp.span('paint', COL.cap, r.u0 - 0.0, r.top, -0.03, r.u1 + 0.0, r.top + 0.08, T + 0.05, 0);
   if (r.piers) {
     const pTop = (r.cladFrom ?? r.top) - 0.25;
     for (const s of [-1, 1]) {

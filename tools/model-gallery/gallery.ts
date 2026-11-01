@@ -318,11 +318,11 @@ function setupGrid() {
     maxX = Math.max(maxX, x);
     rowDepth = Math.max(rowDepth, c);
   });
-  const group = new THREE.Group();
-  scene.add(group);
   focus.set(maxX / 2, 0, (z + rowDepth) / 2);
   viewRadius = Math.max(maxX, z + rowDepth) * 0.6;
-  placeCamera(viewRadius * 0.9, 'top');
+  if (!q.has('pitch')) q.set('pitch', '55');
+  if (!q.has('yaw')) q.set('yaw', '30');
+  placeCamera(viewRadius * 0.75, 'top');
 }
 
 function setupItems() {
@@ -357,6 +357,11 @@ function setupStreet() {
   road.position.set(0, 0.004, 9.5);
   road.receiveShadow = true;
   scene.add(road);
+  const walk = new THREE.Mesh(new THREE.PlaneGeometry(120, 2.6), new THREE.MeshStandardMaterial({ color: 0xd9d4ca, roughness: 0.9 }));
+  walk.rotation.x = -Math.PI / 2;
+  walk.position.set(0, 0.006, 5.7);
+  walk.receiveShadow = true;
+  scene.add(walk);
   const props: [string, ModelOptions, number, number, number][] = [
     ['prop_streetlamp', {}, -20, 6.4, 0], ['prop_streetlamp', {}, 0, 6.4, 0], ['prop_streetlamp', {}, 20, 6.4, 0],
     ['prop_tree', { variant: 0 }, -15, 6.6, 0], ['prop_tree', { variant: 1 }, 5, 6.6, 0], ['prop_tree', { variant: 2 }, 15, 6.6, 0],
@@ -417,6 +422,11 @@ function frame() {
     const d = Math.hypot(camera.position.x - focus.x, camera.position.z - focus.z);
     camera.position.set(focus.x + Math.sin(a + 0.785) * d, camera.position.y, focus.z + Math.cos(a + 0.785) * d);
     camera.lookAt(focus);
+  }
+  if (scene.fog instanceof THREE.Fog) {
+    const cd = camera.position.distanceTo(focus);
+    scene.fog.near = cd * 1.6;
+    scene.fog.far = cd * 4.5;
   }
   rig.update(night, focus, viewRadius);
   sky.update(night);

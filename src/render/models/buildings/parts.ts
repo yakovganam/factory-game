@@ -157,7 +157,7 @@ export function windowUnit(b: Builder, u: number, y0: number, w: number, h: numb
   b.box('satin', frame, ft, h - ft * 2, fd, u + w / 2 - ft / 2, cy, zg, 0.006);
   for (let i = 1; i < px; i++) b.box('satin', frame, 0.026, h - ft * 2, 0.045, u - w / 2 + (w * i) / px, cy, zg, 0);
   for (let j = 1; j < py; j++) b.box('satin', frame, w - ft * 2, 0.026, 0.045, u, y0 + (h * j) / py, zg, 0);
-  if (o.sill !== null) b.box('paint', o.sill ?? PAL.cream, w + 0.12, 0.06, T * 0.5 + 0.08, u, y0 - 0.03, T - T * 0.25 + 0.04, 0.012);
+  if (o.sill !== null) b.box('paint', o.sill ?? PAL.cream, w + 0.12, 0.06, T * 0.5 + 0.08, u, y0 - 0.03, T - T * 0.25 + 0.04, 0);
   if (o.lintel !== null && o.lintel !== undefined) b.box('paint', o.lintel, w + 0.24, 0.16, 0.03, u, y0 + h + 0.08, T + 0.015, 0.008);
   if (o.innerSill !== null) b.box('paint', o.innerSill ?? PAL.cream, w + 0.04, 0.03, zg + 0.06, u, y0 - 0.015, zg / 2 - 0.03, 0.008);
 }

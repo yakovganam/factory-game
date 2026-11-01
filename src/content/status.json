@@ -1,0 +1,634 @@
+{
+  "toy_workshop": {
+    "data": true,
+    "simMechanics": "partial",
+    "interiorPlayable": true,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "sawmill": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "engineered_wood_plant": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "furniture_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "paper_mill": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "packaging_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "textile_mill": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "clothing_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "footwear_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "glassworks": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "steelworks": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "aluminum_plant": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "cable_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "plastics_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "tire_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "concrete_plant": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "brick_works": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "paint_plant": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "precision_parts_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "motor_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "grain_mill": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "industrial_bakery": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "pasta_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "dairy_plant": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "cheese_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "beverage_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "canning_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "frozen_food_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "chocolate_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "snack_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "pcb_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "semiconductor_plant": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "battery_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "computer_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "smartphone_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "wearables_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "audio_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "appliance_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "camera_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "network_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "robotics_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "drone_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "bicycle_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "escooter_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "ev_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "forklift_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "solar_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "led_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "medical_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "modular_factory": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "supermarket": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "electronics_store": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "toy_store": {
+    "data": true,
+    "simMechanics": "partial",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "furniture_showroom": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "cafe": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "hotel": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "delivery_depot": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "distribution_warehouse": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "fulfillment_center": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "construction_company": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "bauxite_mine": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "clay_pit": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "cotton_farm": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "dairy_farm": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "grain_farm": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "house": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "import_depot": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "iron_mine": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "orchard": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "power_plant": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "quarry": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "recycling_center": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "rubber_plantation": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "sand_pit": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "solar_farm": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "substation": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "tree_farm": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "veg_farm": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  },
+  "water_works": {
+    "data": true,
+    "simMechanics": "none",
+    "interiorPlayable": false,
+    "art": "none",
+    "audio": "none",
+    "saveTested": false
+  }
+}

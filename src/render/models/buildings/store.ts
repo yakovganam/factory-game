@@ -35,8 +35,7 @@ function shelfUnit(b: Builder, x: number, z: number, len: number, ry: number, do
     for (let x0 = -len / 2 + 0.08; x0 < len / 2 - 0.2; x0 += 0.27) {
       const c = BOX[k++ % 4];
       const h = 0.26 + ((k * 7) % 3) * 0.04;
-      b.boxB('satin', c, 0.22, h, 0.18, x0 + 0.11, level, side * (d / 2 - 0.11), 0.01);
-      b.box('satin', PAL.white, 0.2, 0.04, 0.005, x0 + 0.11, level + h * 0.35, side * (d / 2 - 0.02), 0);
+      b.boxB('satin', c, 0.22, h, 0.18, x0 + 0.11, level, side * (d / 2 - 0.11), 0);
     }
   }
   b.pop();

@@ -91,7 +91,7 @@ const geoCache = new Map<string, THREE.BufferGeometry>();
 
 function capsuleBetween(b: Builder, color: number, r: number, y0: number, y1: number, x = 0, z = 0): void {
   const len = Math.abs(y1 - y0) - 2 * r;
-  b.add('paint', new THREE.CapsuleGeometry(r, Math.max(0.01, len), 2, 8), color, x, (y0 + y1) / 2, z);
+  b.add('paint', new THREE.CapsuleGeometry(r, Math.max(0.01, len), 1, 6), color, x, (y0 + y1) / 2, z);
 }
 
 /** Build the bind-pose body geometry with skin attributes. */
@@ -138,28 +138,27 @@ function bodyGeometry(key: string, L: Look, worker: boolean): THREE.BufferGeomet
   bone(B.neck, (b) => {
     b.cyl('paint', L.skin, 0.05, 0.08, 0, neck.y + 0.0, 0, 'y', 8);
     const hy = neck.y + 0.155;
-    b.add('paint', new THREE.SphereGeometry(0.13, 12, 9), L.skin, 0, hy, 0, { sx: 0.93, sy: 1.04, sz: 0.92 });
+    b.add('paint', new THREE.SphereGeometry(0.13, 10, 6), L.skin, 0, hy, 0, { sx: 0.93, sy: 1.04, sz: 0.92 });
     b.box('paint', shadeK(L.skin, 0.92), 0.04, 0.045, 0.035, 0.122, hy - 0.005, 0, 0.012);
     for (const s of [-1, 1]) {
-      b.sphere('paint', 0x1d1f24, 0.017, 0.112, hy + 0.025, s * 0.045, 6, 4);
-      b.sphere('paint', L.skin, 0.028, 0, hy, s * 0.12, 6, 4);
+      b.box('paint', 0x1d1f24, 0.02, 0.034, 0.026, 0.115, hy + 0.025, s * 0.045, 0);
     }
     if (L.beard) b.box('paint', L.hair, 0.06, 0.07, 0.17, 0.095, hy - 0.07, 0, 0.025);
     // hair
-    if (L.hair2 !== 'bald') b.add('paint', new THREE.SphereGeometry(0.137, 12, 6, 0, TAU, 0, Math.PI * 0.55), L.hair, -0.012, hy + 0.0, 0, { sx: 0.95, sz: 0.95 });
+    if (L.hair2 !== 'bald') b.add('paint', new THREE.SphereGeometry(0.137, 10, 4, 0, TAU, 0, Math.PI * 0.55), L.hair, -0.012, hy + 0.0, 0, { sx: 0.95, sz: 0.95 });
     if (L.hair2 === 'bob') b.box('paint', L.hair, 0.16, 0.14, 0.27, -0.035, hy - 0.06, 0, 0.05);
     if (L.hair2 === 'long') b.box('paint', L.hair, 0.08, 0.26, 0.22, -0.1, hy - 0.12, 0, 0.04);
     if (L.hair2 === 'bun') b.sphere('paint', L.hair, 0.06, -0.12, hy + 0.06, 0, 8, 6);
     // headwear
     if (L.hat === 'hardhat') {
-      b.add('paint', new THREE.SphereGeometry(0.15, 12, 6, 0, TAU, 0, HALF_PI), L.hatColor, 0, hy + 0.035, 0, { sy: 0.85 });
+      b.add('paint', new THREE.SphereGeometry(0.15, 10, 4, 0, TAU, 0, HALF_PI), L.hatColor, 0, hy + 0.035, 0, { sy: 0.85 });
       b.cyl('paint', L.hatColor, 0.17, 0.018, 0.015, hy + 0.035, 0, 'y', 14);
       b.box('paint', shadeK(L.hatColor, 0.85), 0.24, 0.03, 0.025, 0, hy + 0.13, 0, 0.01);
     } else if (L.hat === 'cap') {
-      b.add('paint', new THREE.SphereGeometry(0.142, 12, 6, 0, TAU, 0, HALF_PI), L.hatColor, 0, hy + 0.03, 0, { sy: 0.8 });
+      b.add('paint', new THREE.SphereGeometry(0.142, 10, 4, 0, TAU, 0, HALF_PI), L.hatColor, 0, hy + 0.03, 0, { sy: 0.8 });
       b.box('paint', L.hatColor, 0.12, 0.016, 0.18, 0.15, hy + 0.04, 0, 0.008);
     } else if (L.hat === 'beanie') {
-      b.add('paint', new THREE.SphereGeometry(0.143, 12, 6, 0, TAU, 0, HALF_PI), L.hatColor, 0, hy + 0.02, 0, { sy: 1.05 });
+      b.add('paint', new THREE.SphereGeometry(0.143, 10, 4, 0, TAU, 0, HALF_PI), L.hatColor, 0, hy + 0.02, 0, { sy: 1.05 });
       b.cyl('paint', shadeK(L.hatColor, 0.8), 0.145, 0.05, 0, hy + 0.03, 0, 'y', 14);
       b.sphere('paint', L.hatColor, 0.035, 0, hy + 0.17, 0, 6, 4);
     }
@@ -167,12 +166,11 @@ function bodyGeometry(key: string, L: Look, worker: boolean): THREE.BufferGeomet
   for (const [sh, el, ha, s] of [[B.shL, B.elL, B.haL, -1], [B.shR, B.elR, B.haR, 1]] as [B, B, B, number][]) {
     const ps = P(sh), pe = P(el), ph = P(ha);
     bone(sh, (b) => {
-      b.sphere('paint', L.sleeves, 0.062, 0, ps.y, ps.z, 8, 6);
-      capsuleBetween(b, L.sleeves, 0.055, ps.y, pe.y, 0, ps.z);
+      b.sphere('paint', L.sleeves, 0.062, 0, ps.y, ps.z, 6, 4);
+      capsuleBetween(b, L.sleeves, 0.055, ps.y, pe.y - 0.03, 0, ps.z);
     });
     bone(el, (b) => {
-      capsuleBetween(b, L.forearm, 0.047, pe.y + 0.02, ph.y + 0.01, 0, pe.z);
-      b.sphere('paint', L.forearm, 0.05, 0, pe.y, pe.z, 7, 4);
+      capsuleBetween(b, L.forearm, 0.05, pe.y + 0.045, ph.y + 0.01, 0, pe.z);
     });
     bone(ha, (b) => {
       b.box('paint', L.skin, 0.06, 0.09, 0.05, 0.005, ph.y - 0.04, ph.z, 0.02);
@@ -186,11 +184,10 @@ function bodyGeometry(key: string, L: Look, worker: boolean): THREE.BufferGeomet
   }
   for (const [th, kn, an] of [[B.thL, B.knL, B.anL], [B.thR, B.knR, B.anR]] as [B, B, B][]) {
     const pt = P(th), pk = P(kn), pa = P(an);
-    bone(th, (b) => capsuleBetween(b, L.overalls ?? L.legs, 0.072, pt.y + 0.04, pk.y - 0.02, 0, pt.z));
+    bone(th, (b) => capsuleBetween(b, L.overalls ?? L.legs, 0.072, pt.y + 0.04, pk.y - 0.04, 0, pt.z));
     bone(kn, (b) => {
       const c = L.skirt !== null ? L.skin : L.overalls ?? L.legs;
-      capsuleBetween(b, c, 0.06, pk.y + 0.02, pa.y + 0.02, 0, pk.z);
-      b.sphere('paint', c, 0.064, 0, pk.y, pk.z, 7, 4);
+      capsuleBetween(b, c, 0.063, pk.y + 0.055, pa.y + 0.02, 0, pk.z);
     });
     bone(an, (b) => {
       b.box('paint', L.shoes, 0.25, 0.085, 0.11, 0.05, pa.y - 0.028, pa.z, 0.03);

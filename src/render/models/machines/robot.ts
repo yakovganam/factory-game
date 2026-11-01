@@ -8,7 +8,7 @@ import * as THREE from 'three';
 import type { ModelInstance } from '../types';
 import { Builder, cached, approach, smooth, HALF_PI, TAU } from '../geom';
 import { PAL } from '../materials';
-import { controlPanel, contactShadow, isRunning, makeInstance, StackLight } from '../common';
+import { controlPanel, contactShadow, isRunning, makeInstance, StackLight, stackHousing } from '../common';
 import { basePlate, BELT_TOP_Y, machineMeta, meshPanel, post, rollerTray } from './kit';
 
 const ARM = PAL.orange;
@@ -151,10 +151,10 @@ function solve(rig: ArmRig, px: number, py: number, pz: number): void {
 
 export function createRobotAssembler(): ModelInstance {
   const root = new THREE.Group();
-  const sb = new Builder();
-  const light = new StackLight(sb, -0.72, 1.62, -0.8, 0.12, 1.25);
+  const light = new StackLight(null, -0.72, 1.62, -0.8, 0.12, 1.25);
   const body = cached('robot_assembler', () => {
     const b = new Builder();
+    stackHousing(b, -0.72, 1.62, -0.8, 0.12, 1.25);
     basePlate(b, 1.94, 1.94, 0.08);
     // arm pedestal
     b.cylB('satin', 0x4a5059, 0.17, 0.42, BASE.x, 0.08, BASE.z, 16);
@@ -213,7 +213,7 @@ export function createRobotAssembler(): ModelInstance {
     b.box('hazard', 0xffffff, 1.7, 0.012, 0.12, 0, 0.086, F - 0.1, 0.002);
     return b.build({ name: 'robotCell' });
   });
-  root.add(body, sb.build({ name: 'lightHousing' }), light.object, contactShadow(2.0, 2.0));
+  root.add(body, light.object, contactShadow(2.0, 2.0));
   const rig = buildArm(root);
   // workpiece on the jig (a raw robot torso being assembled)
   const wb = new Builder();

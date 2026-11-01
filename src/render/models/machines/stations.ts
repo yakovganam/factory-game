@@ -8,7 +8,7 @@ import * as THREE from 'three';
 import type { ModelInstance } from '../types';
 import { Builder, approach, cached, clamp01, fract, ramp, smooth, TAU } from '../geom';
 import { PAL } from '../materials';
-import { contactShadow, controlPanel, isRunning, makeInstance, StackLight } from '../common';
+import { contactShadow, controlPanel, isRunning, makeInstance, StackLight, stackHousing } from '../common';
 import { basePlate, BELT_TOP_Y, legs4, machineMeta, rollerTray } from './kit';
 import { itemGeometry } from '../items';
 
@@ -19,11 +19,11 @@ const BT = BELT_TOP_Y;
 
 export function createAssemblyBench(): ModelInstance {
   const root = new THREE.Group();
-  const lb = new Builder();
-  const light = new StackLight(lb, 0.66, 1.86, -0.4, 0.05, 1.1);
+  const light = new StackLight(null, 0.66, 1.86, -0.4, 0.05, 1.1);
   const TOP = 0.88;
   const body = cached('assembly_bench', () => {
     const b = new Builder();
+    stackHousing(b, 0.66, 1.86, -0.4, 0.05, 1.1);
     // in / out chutes at belt height
     rollerTray(b, -1.0, -0.64, -0.3, 0.3);
     rollerTray(b, 0.64, 1.0, -0.3, 0.3);
@@ -46,7 +46,7 @@ export function createAssemblyBench(): ModelInstance {
     b.span('satin', PAL.teal, -0.6, TOP, -0.44, -0.56, 1.8, -0.4, 0.006);
     b.span('satin', PAL.teal, 0.56, TOP, -0.44, 0.6, 1.8, -0.4, 0.006);
     b.span('paint', 0xe8dcc0, -0.56, TOP + 0.05, -0.44, 0.56, 1.78, -0.42, 0);
-    for (let y = TOP + 0.12; y < 1.76; y += 0.09) for (let x = -0.5; x < 0.52; x += 0.09) b.box('paint', 0xb7a888, 0.012, 0.012, 0.003, x, y, -0.419, 0);
+    for (let y = TOP + 0.2; y < 1.76; y += 0.3) b.box('paint', 0xcdbf9f, 1.08, 0.012, 0.004, 0, y, -0.419, 0);
     // hammer, wrench, screwdriver, saw silhouettes
     b.box('wood', PAL.wood, 0.03, 0.28, 0.02, -0.4, 1.4, -0.405, 0.004);
     b.box('metal', PAL.steelDark, 0.12, 0.05, 0.03, -0.4, 1.55, -0.405, 0.006);
@@ -91,7 +91,7 @@ export function createAssemblyBench(): ModelInstance {
   lever.sphere('satin', PAL.red, 0.028, 0.29, 0, 0, 8, 6);
   const leverM = lever.build({ name: 'pressLever' });
   leverM.position.set(-0.15, TOP + 0.54, -0.17);
-  root.add(body, lb.build({ name: 'lightHousing' }), light.object, ramM, leverM, contactShadow(1.4, 0.8));
+  root.add(body, light.object, ramM, leverM, contactShadow(1.4, 0.8));
   machineMeta(root, 'mach_assembly_bench', [2, 1], { ports: { in: [[-1, 0]], out: [[1, 0]] }, workerSpot: { x: 0.0, z: 0.82, yaw: Math.PI / 2 } });
   let k = 0;
   return makeInstance({
@@ -122,11 +122,11 @@ function shadeHex(c: number, k: number): number {
 
 export function createPackingStation(): ModelInstance {
   const root = new THREE.Group();
-  const lb = new Builder();
-  const light = new StackLight(lb, 0.38, 1.36, -0.42, 0.04, 1.1);
+  const light = new StackLight(null, 0.38, 1.36, -0.42, 0.04, 1.1);
   const FRAME = 0x3a6fa8;
   const body = cached('packing_station', () => {
     const b = new Builder();
+    stackHousing(b, 0.38, 1.36, -0.42, 0.04, 1.1);
     // conveyor bed through the whole machine
     rollerTray(b, -1.0, 1.0, -0.26, 0.26, 0x2f4e70, false);
     legs4(b, -0.98, 0.98, -0.3, 0.3, BT - 0.1, 0x2f4e70, 0.05);
@@ -154,7 +154,7 @@ export function createPackingStation(): ModelInstance {
     b.box('hazard', 0xffffff, 0.06, 0.01, 0.52, 0.97, BT + 0.012, 0, 0.002);
     return b.build({ name: 'packBody' });
   });
-  root.add(body, lb.build({ name: 'lightHousing' }), light.object, contactShadow(2.0, 0.9));
+  root.add(body, light.object, contactShadow(2.0, 0.9));
 
   // carton: open body + 4 flaps + tape strip
   const cw = 0.3, ch = 0.24, cd = 0.26, t = 0.008;
@@ -269,12 +269,12 @@ export function createPackingStation(): ModelInstance {
 
 export function createPaintBooth(): ModelInstance {
   const root = new THREE.Group();
-  const lb = new Builder();
-  const light = new StackLight(lb, 0.62, 2.18, 0.62, 0.06, 1.25);
+  const light = new StackLight(null, 0.62, 2.18, 0.62, 0.06, 1.25);
   const X0 = -0.85, X1 = 0.75, Z0 = -0.85, Z1 = 0.75, H = 2.1;
   const PANEL = 0xeef0ec, STRIPE = PAL.orange, POST = 0x5f6b74;
   const body = cached('paint_booth', () => {
     const b = new Builder();
+    stackHousing(b, 0.62, 2.18, 0.62, 0.06, 1.25);
     basePlate(b, 1.96, 1.96, 0.06, PAL.graphite, false);
     // interior floor grate + conveyor
     b.span('satin', 0x4a5057, X0, 0.06, Z0, X1, 0.09, Z1, 0);
@@ -334,7 +334,7 @@ export function createPaintBooth(): ModelInstance {
     // input/output roller trays outside
     return b.build({ name: 'boothBody' });
   });
-  root.add(body, lb.build({ name: 'lightHousing' }), light.object, contactShadow(2.0, 2.0));
+  root.add(body, light.object, contactShadow(2.0, 2.0));
   // spray carriage on the rail (moves along Z)
   const cb = new Builder();
   cb.boxB('satin', 0x5f6b74, 0.28, 0.1, 0.16, 0, 1.5, 0, 0.02);
@@ -392,10 +392,10 @@ export function createPaintBooth(): ModelInstance {
 
 export function createStorageCrate(): ModelInstance {
   const root = new THREE.Group();
-  const lb = new Builder();
-  const led = new StackLight(lb, 0.43, 1.0, 0.43, 0.0, 0.7, 1, false);
+  const led = new StackLight(null, 0.43, 1.0, 0.43, 0.0, 0.7, 1, false);
   const body = cached('storage_crate', () => {
     const b = new Builder();
+    stackHousing(b, 0.43, 1.0, 0.43, 0.0, 0.7, 1);
     // pallet
     for (const z of [-0.4, 0, 0.4]) b.span('wood', PAL.wood, -0.45, 0.0, z - 0.06, 0.45, 0.1, z + 0.06, 0.008);
     for (let i = 0; i < 5; i++) b.span('wood', PAL.woodLight, -0.45 + i * 0.2 - 0.0, 0.1, -0.46, -0.45 + i * 0.2 + 0.1, 0.13, 0.46, 0.004);
@@ -439,7 +439,7 @@ export function createStorageCrate(): ModelInstance {
   boxMesh.geometry = g;
   g.userData.shared = true; // attributes are shared with the cache; never dispose
   const perBox = boxMesh.geometry.attributes.position.count / 8;
-  root.add(body, boxes, lb.build({ name: 'ledHousing' }), led.object, contactShadow(0.95, 0.95));
+  root.add(body, boxes, led.object, contactShadow(0.95, 0.95));
   machineMeta(root, 'mach_storage_crate', [1, 1], { ports: { in: [[-0.5, 0]], out: [[0.5, 0]] }, fillFromProgress: true });
   let shown = -1;
   return makeInstance({
