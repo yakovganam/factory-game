@@ -42,7 +42,7 @@ clock, and that leads back into the intro. The form of `evening` is intro(4) A(8
 interlude on kalimba) A2(8, flute+celesta) outro(4). Neither theme repeats a section literally.
 Each repeat changes instrumentation, harmony (thirds, counter-lines) or groove.
 
-**City theme: not delivered in this milestone.** The two themes already use 4.9 MB (Ogg) and 5.3 MB (M4A)
+**City theme: not delivered in this milestone.** The two themes already use 5.05 MB (Ogg) and 5.29 MB (M4A)
 of the ~6 MB budget, and a third 3-stem theme would add about 2.8 MB. The director already handles a `city` theme.
 Add a score and re-render (section 11) once the budget allows, or once the bitrates are re-balanced.
 
@@ -209,7 +209,7 @@ node tools/audio/render-music.mjs --keep-wav      # also keep float WAVs in tool
 
 | Command | Output |
 |---|---|
-| `node tools/audio/check-sfx.mjs [--wav]` | `docs/qa/audio-sfx-report.md`: every event/variation with duration, peak, RMS, loudness, centroid, band split and loop seam. Fails on silence, clipping, DC, bad seams and near-duplicate variations. `--wav` dumps WAVs to `tools/audio/out/sfx/` for listening. |
+| `node tools/audio/check-sfx.mjs [--wav]` (one warning is expected: `notify` v1/v2 are spectrally close but are different gestures, a falling 2-note kalimba vs a rising 3-note celesta) | `docs/qa/audio-sfx-report.md`: every event/variation with duration, peak, RMS, loudness, centroid, band split and loop seam. Fails on silence, clipping, DC, bad seams and near-duplicate variations. `--wav` dumps WAVs to `tools/audio/out/sfx/` for listening. |
 | `node tools/audio/check-music.mjs` | `docs/qa/audio-music-report.md`: sizes, bitrates, durations, LUFS/LRA/true peak per stem and full mix, band energy, decoded seam, Chromium decode lengths per format. |
 | `node tools/audio/test-runtime.mjs` | `docs/qa/audio-runtime-report.md`: the real `AudioManager` in headless Chromium (Vite on port 5191). Covers unlock, bank, caps, culling, clustering, music start, crossfade, adaptive stems, duck and suspend. |
 | `npx tsx tools/audio/selftest.ts` | Pure logic: spatial rules, clustering, catalog invariants, score sanity. |

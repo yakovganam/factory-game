@@ -13,6 +13,13 @@ import { createGeneric } from './generic';
 import { createWorkshop } from './buildings/workshop';
 import { createBelt, createBeltMk2, createBeltMk2TurnL, createBeltMk2TurnR, createBeltTurnL, createBeltTurnR, createSplitter } from './machines/belt';
 import { createPedestrian, createWorker } from './characters';
+import { createVan, createTruck } from './vehicles';
+import { createHouse } from './buildings/house';
+import { createToyStore } from './buildings/store';
+import { createImportDepot, createSubstation } from './buildings/utility';
+import {
+  createBench, createBin, createBollard, createBusStop, createFence, createHydrant, createPlanter, createSignForSale, createStreetlamp, createTree,
+} from './props';
 import { createRobotAssembler } from './machines/robot';
 import { getItemVisual as itemVisual, ITEM_IDS } from './items';
 import { createReceivingDock, createShippingDock } from './machines/docks';
@@ -28,6 +35,10 @@ type Factory = (o: ModelOptions) => ModelInstance;
 
 const REGISTRY: Record<string, Factory> = {
   bld_toy_workshop: (o) => createWorkshop(o),
+  bld_toy_store: (o) => createToyStore(o),
+  bld_import_depot: () => createImportDepot(),
+  bld_house: (o) => createHouse(o),
+  bld_substation: () => createSubstation(),
   mach_belt: () => createBelt(),
   mach_belt_mk2: () => createBeltMk2(),
   mach_belt_turn_r: () => createBeltTurnR(),
@@ -44,6 +55,18 @@ const REGISTRY: Record<string, Factory> = {
   mach_storage_crate: () => createStorageCrate(),
   chr_worker: (o) => createWorker(o),
   chr_pedestrian: (o) => createPedestrian(o),
+  veh_van: (o) => createVan(o),
+  veh_truck: (o) => createTruck(o),
+  prop_tree: (o) => createTree(o),
+  prop_streetlamp: () => createStreetlamp(),
+  prop_bench: () => createBench(),
+  prop_hydrant: () => createHydrant(),
+  prop_fence: (o) => createFence(o),
+  prop_bin: () => createBin(),
+  prop_planter: () => createPlanter(),
+  prop_sign_for_sale: () => createSignForSale(),
+  prop_bollard: () => createBollard(),
+  prop_bus_stop: () => createBusStop(),
 };
 
 export const MODEL_IDS: string[] = Object.keys(REGISTRY);

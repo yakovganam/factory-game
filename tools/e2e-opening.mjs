@@ -17,6 +17,9 @@ const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=sw
 const vp = phone ? { width: 844, height: 390 } : { width: 1366, height: 768 };
 const ctx = await browser.newContext({ viewport: vp, hasTouch: phone });
 const page = await ctx.newPage();
+page.setDefaultTimeout(240000);
+// The journey verifies controls and flow, not visuals: low quality keeps the CPU rasteriser responsive.
+await page.addInitScript(() => localStorage.setItem('tftc-settings', JSON.stringify({ quality: 'low', lang: 'en' })));
 const errors = [];
 page.on('pageerror', (e) => errors.push(e.message));
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -25,7 +28,7 @@ const step = async (name, fn) => {
   const t0 = Date.now();
   await fn();
   await page.waitForTimeout(400);
-  await page.screenshot({ path: `${out}/${String(steps.length).padStart(2, '0')}_${name}.png` });
+  await page.screenshot({ path: `${out}/${String(steps.length).padStart(2, '0')}_${name}.png`, timeout: 240000 });
   steps.push({ name, ms: Date.now() - t0 });
   console.log('step', name);
 };

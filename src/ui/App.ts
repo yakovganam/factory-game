@@ -3,7 +3,7 @@
  * audio/effects/notifications, panels, tutorial, saves and platform lifecycle.
  */
 import * as THREE from 'three';
-import { AudioManager } from './audioShim';
+import { audio } from '../audio/AudioManager';
 import type { ListenerContext } from '../audio/types';
 import type { ContentDB } from '../content/db';
 import { footprintOf } from '../content/db';
@@ -46,7 +46,7 @@ export class App implements UiCtx {
   db: ContentDB;
   settings: Settings;
   saves!: SaveManager;
-  audio = new AudioManager();
+  audio = audio;
   view!: View;
   icons!: IconRenderer;
   sim!: Sim;
@@ -563,9 +563,7 @@ export class App implements UiCtx {
       }
       const moving = f.entities.filter((e) => e.kind === 'belt' && e.items.length).length;
       this.audio.setLoop(`belts:${fid}`, 'loop_belt', new THREE.Vector3(fv.b.x + f.w / 2, 0.5, fv.b.z + f.h / 2), Math.min(1, moving / 8));
-      this.audio.setLoop('amb:interior', 'loop_amb_interior', new THREE.Vector3(fv.b.x + f.w / 2, 1, fv.b.z + f.h / 2), 0.6);
     } else {
-      this.audio.setLoop('amb:interior', 'loop_amb_interior', new THREE.Vector3(c.x, 1, c.z), 0);
       for (const id of Object.keys(s.factories)) this.audio.setLoop(`belts:${id}`, 'loop_belt', new THREE.Vector3(c.x, 0, c.z), 0);
     }
     for (const v of s.vehicles) {
@@ -578,9 +576,7 @@ export class App implements UiCtx {
       const b = s.buildings.find((x) => x.id === st.id)!;
       this.audio.setLoop(`shop:${st.id}`, 'loop_shop_chatter', new THREE.Vector3(b.x, 1.5, b.z), Math.min(1, st.queue.length / 3 + st.lastMinute.sold / 10));
     }
-    const night = this.view.night;
-    this.audio.setLoop('amb:day', 'loop_amb_city_day', new THREE.Vector3(c.x, 2, c.z), 1 - night);
-    this.audio.setLoop('amb:night', 'loop_amb_city_night', new THREE.Vector3(c.x, 2, c.z), night);
+    const night = this.view.night; // ambience beds (day/night/interior) are driven by the AudioManager itself
     const ctx: ListenerContext = { x: c.x, y: 0, z: c.z, zoom01, night, district: fid ? 'workshop' : 'city', activity, interior: !!fid, yaw: c.yaw };
     if (night > 0.6) ctx.district = 'city';
     this.audio.update(dt, ctx);

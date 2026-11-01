@@ -105,6 +105,8 @@ export interface SeamStats {
   edgeDb: number;
   /** max/min of 100 ms window RMS across the loop (dB) — detects crossfade bumps or gaps */
   flatnessDb: number;
+  /** 95th percentile of the level change between adjacent 50 ms windows inside the loop (dB) */
+  adjacentP95Db: number;
 }
 
 export function seam(chs: Float32Array[], sr: number): SeamStats {
@@ -140,7 +142,11 @@ export function seam(chs: Float32Array[], sr: number): SeamStats {
     mx = Math.max(mx, r);
     mn = Math.min(mn, r);
   }
-  return { wrapJump: wrap, typicalStep: typical, ratio: wrap / typical, edgeDb, flatnessDb: db(mx) - db(mn) };
+  const adj: number[] = [];
+  for (let s0 = w; s0 + w <= n; s0 += w) adj.push(Math.abs(db(rms(s0, s0 + w)) - db(rms(s0 - w, s0))));
+  adj.sort((a, b) => a - b);
+  const adjacentP95Db = adj[Math.floor(adj.length * 0.95)] ?? 0;
+  return { wrapJump: wrap, typicalStep: typical, ratio: wrap / typical, edgeDb, flatnessDb: db(mx) - db(mn), adjacentP95Db };
 }
 
 export function toBase64(buf: ArrayBuffer): string {

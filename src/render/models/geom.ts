@@ -309,7 +309,13 @@ export class Builder {
   }
   /** Thin flat quad facing +Z (or rotated), centred. */
   quad(m: MatRef, color: ColorSpec, w: number, h: number, x: number, y: number, z: number, xf?: Xf): this {
-    return this.add(m, new THREE.PlaneGeometry(w, h), color, x, y, z, xf);
+    const g = new THREE.PlaneGeometry(w, h);
+    if (m === 'wire') {
+      // tiling materials: UVs in metres so the mesh pitch is constant
+      const uv = g.attributes.uv as THREE.BufferAttribute;
+      for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * w, uv.getY(i) * h);
+    }
+    return this.add(m, g, color, x, y, z, xf);
   }
 
   isEmpty(): boolean {

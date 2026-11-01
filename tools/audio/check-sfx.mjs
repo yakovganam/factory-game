@@ -41,7 +41,8 @@ for (const d of list) {
     if (d.loop) {
       if (Math.abs(st.durationSec - d.duration) > 0.001) problems.push('loop-length');
       if (r.seam.ratio > 1.0) problems.push(`seam-jump x${r.seam.ratio.toFixed(2)}`);
-      if (r.seam.edgeDb > 3) problems.push(`seam-level ${r.seam.edgeDb.toFixed(1)}dB`);
+      // the level step across the seam must not stand out from the loop's own window-to-window variation
+      if (r.seam.edgeDb > Math.max(3, r.seam.adjacentP95Db + 1)) problems.push(`seam-level ${r.seam.edgeDb.toFixed(1)}dB (p95 inside ${r.seam.adjacentP95Db.toFixed(1)})`);
       if (st.silentFraction > 0.05) problems.push('loop-has-gaps');
     } else if (st.silentFraction > 0.8) problems.push('mostly-silent');
     for (const p of problems) failures.push(`${d.id}#${v}: ${p}`);
@@ -98,7 +99,7 @@ lines.push(`- Decoded bank size if fully rendered: ${((totalSamples * 4) / 10485
 lines.push(`- Total render time in headless Chromium: ${((Date.now() - t0) / 1000).toFixed(1)} s (includes page start-up)`);
 lines.push('');
 lines.push('Checks: not silent (peak > -40 dBFS, RMS > -60 dBFS), no clipping (peak <= -0.3 dBFS; renderer caps at -1 dBFS), DC < 1%,');
-lines.push('loops: exact loop length, wrap jump |x[0]-x[N-1]| <= 99.9th-percentile sample step, first/last 50 ms RMS within 3 dB, no gaps;');
+lines.push('loops: exact loop length, wrap jump |x[0]-x[N-1]| <= 99.9th-percentile sample step, first/last 50 ms level step <= max(3 dB, 95th-percentile adjacent-window step inside the loop + 1 dB), no gaps;');
 lines.push('variations: pairwise spectral/temporal feature distance >= 4% (near-duplicates fail, < 10% warns).');
 lines.push('');
 lines.push('Columns: `peak`/`rms` dBFS of the normalized buffer; `loud` = loudest 100 ms window of K-weighted (+100 Hz small-speaker high-pass) signal, LUFS-like — the normalization measure; `eff` = loud + 20·log10(catalog gain) (relative mix level before bus/spatial gain);');
@@ -123,7 +124,7 @@ for (const { d, per } of rows) {
     const s = r.stats;
     const eff = r.loudness + 20 * Math.log10(d.gain);
     const b = r.spectral.bands;
-    const seamTxt = r.seam ? `x${r.seam.ratio.toFixed(2)} / ${r.seam.edgeDb.toFixed(1)} dB` : '';
+    const seamTxt = r.seam ? `x${r.seam.ratio.toFixed(2)} / ${r.seam.edgeDb.toFixed(1)} dB (p95 ${r.seam.adjacentP95Db.toFixed(1)})` : '';
     lines.push(
       `| ${v === 0 ? `\`${d.id}\`` : ''} | ${v === 0 ? d.bus : ''} | ${v} | ${s.durationSec.toFixed(2)} | ${f1(s.peakDb)} | ${f1(s.rmsDb)} | ${f1(r.loudness)} | ${f1(eff)} | ${Math.round(r.spectral.centroidHz)} | ${pct(b.low)}/${pct(b.mid)}/${pct(b.high)} | ${seamTxt} | ${problems.length ? problems.join(', ') : 'ok'} |`,
     );

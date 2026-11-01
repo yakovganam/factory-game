@@ -21,7 +21,8 @@ Severity levels: **S1** blocks release or the platform gate · **S2** major gap 
 | C2 | S2 | City-level building, roads, expansion plots and districts aren't playable. The starter road graph is fixed | Milestone C |
 | C3 | S2 | Heatmaps, supply-relationship highlighting and production graphs aren't implemented | Milestone C |
 | C4 | S2 | Only the first chapter's mechanics are simulated. Mechanic modules for the other tags (curing, aging, cold chain, yield, …) aren't implemented | Per batch |
-| C5 | S2 | Soundtrack: the first themes exist. Eight themes and ~120 events are the full target | Audio workstream |
+| C5 | S2 | Soundtrack: 2 of the 8 target themes (`workshop` main theme 124.8 s, `evening` 126.3 s) and 75 of ~120 sound events (174 variations). The `city` theme was deferred to stay within the 6 MB first-load budget. **All audio is synthesized and has not been reviewed by a human listener** | Listening review using the checklist in `docs/audio-guide.md`. Then the remaining themes (food, retail, logistics, high-tech, large city, industrial) |
+| C7 | S3 | Decoded audio memory: ~80 MB for the `workshop` stems plus ~27 MB for the effects bank. That is high for low-end phones | Stream long stems or lower the sample rate after measuring on devices |
 | C6 | S3 | Weather isn't implemented (presentation-only weather is planned first) | Milestone C |
 
 ## Simulation and gameplay

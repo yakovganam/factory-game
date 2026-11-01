@@ -41,12 +41,12 @@ function depotBody(): THREE.Group {
   for (const z of [1.2, 3.6]) b.span('paint', PAL.yellow, -X + 0.5, 0, z - 0.06, X - 0.5, 0.006, z + 0.06, 0);
   for (let x = -X + 1; x < X - 1; x += 2.2) b.span('paint', PAL.white, x, 0, 2.38, x + 1.1, 0.006, 2.42, 0);
   // container slots outline
-  for (const [x, z] of [[-7.2, -4.6], [-0.8, -4.6], [-7.2, -1.9], [-0.8, -1.9]] as [number, number][]) {
+  for (const [x, z] of [[-6.6, -4.6], [0.5, -4.6], [-6.6, -1.9], [0.5, -1.9]] as [number, number][]) {
     b.span('paint', PAL.white, x - 3.15, 0, z - 1.3, x + 3.15, 0.006, z - 1.24, 0);
     b.span('paint', PAL.white, x - 3.15, 0, z + 1.24, x + 3.15, 0.006, z + 1.3, 0);
   }
   // container stacks
-  const stacks: [number, number, number][] = [[-7.2, -4.6, 3], [-0.8, -4.6, 2], [-7.2, -1.9, 2], [-0.8, -1.9, 1]];
+  const stacks: [number, number, number][] = [[-6.6, -4.6, 3], [0.5, -4.6, 2], [-6.6, -1.9, 2], [0.5, -1.9, 1]];
   let k = 0;
   for (const [x, z, n] of stacks) for (let i = 0; i < n; i++) container(b, x + (i % 2 ? 0.08 : 0), i * 2.59, z, CONT_COLS[k++ % CONT_COLS.length]);
   container(b, 6.8, 0, 2.6, CONT_COLS[5], 'z');
@@ -61,10 +61,14 @@ function depotBody(): THREE.Group {
   }
   b.box('satin', 0x5d666e, 0.9, 2.0, 0.04, 8.4, 1.05, -4.08, 0.01);
   // external stair to the upper cabin
-  for (let i = 0; i < 10; i++) b.box('metal', PAL.steelDark, 0.9, 0.04, 0.28, 3.25 - i * 0.0, 0.27 * (i + 1), -3.6 - i * 0.0 + 0, 0.004, { ry: 0 });
-  b.rod('metal', PAL.yellow, 0.03, [2.8, 0.0, -3.6], [2.8, 2.75, -3.6], 6);
-  b.rod('metal', PAL.yellow, 0.03, [3.7, 0.0, -3.6], [3.7, 2.75, -3.6], 6);
-  b.boxB('metal', PAL.steelDark, 1.2, 0.06, 1.0, 3.25, 2.7, -3.6, 0.01);
+  // external stair (rising toward +X) to the upper cabin landing
+  for (let i = 0; i < 10; i++) b.box('metal', PAL.steelDark, 0.26, 0.04, 0.9, 5.05 + i * 0.25, 0.27 * (i + 1), -3.6, 0.004);
+  for (const dz of [-0.47, 0.47]) {
+    b.rod('metal', PAL.steelDark, 0.03, [5.0, 0.0, -3.6 + dz], [7.6, 2.72, -3.6 + dz], 6);
+    b.rod('metal', PAL.yellow, 0.025, [5.0, 1.0, -3.6 + dz], [7.6, 3.7, -3.6 + dz], 6);
+  }
+  b.boxB('metal', PAL.steelDark, 1.4, 0.06, 1.0, 8.3, 2.7, -3.6, 0.01);
+  b.span('metal', PAL.steelDark, 8.9, 0, -3.2, 8.98, 2.7, -3.12, 0);
   b.boxB('satin', 0xd8dcdf, 0.8, 0.6, 0.35, 4.6, 3.6, -3.95, 0.03);
   // gatehouse + barrier + sign gantry
   b.boxB('paint', 0xf1e6cf, 2.4, 2.6, 2.2, -8.4, 0, 5.2, 0.04);
@@ -105,13 +109,13 @@ function depotBody(): THREE.Group {
     b.box('lamp', 0xffffff, 0.3, 0.02, 0.16, 8.6 + dx, 8.69, 5.42, 0.005, { rx: 0.5 });
   }
   // pallets with cartons near the office
-  for (const [x, z] of [[3.0, -1.0], [4.4, -1.0], [3.0, 0.2]] as [number, number][]) {
+  for (const [x, z] of [[-8.7, 1.2], [-8.7, 2.5], [-7.4, 1.2]] as [number, number][]) {
     b.boxB('wood', PAL.wood, 1.2, 0.14, 1.0, x, 0, z, 0.01);
     b.boxB('paint', PAL.cardboard, 1.1, 0.8, 0.9, x, 0.14, z, 0.03);
     b.box('paint', 0xe9d2a8, 1.1, 0.01, 0.12, x, 0.945, z, 0);
   }
   // crane static frame (legs, sill beams, bogies, top beams)
-  const cx0 = -4.3, cx1 = 2.7, cz0 = -6.4, cz1 = -0.35, top = 7.4;
+  const cx0 = -3.0, cx1 = 4.0, cz0 = -6.4, cz1 = -0.35, top = 9.0;
   for (const x of [cx0, cx1]) {
     for (const z of [cz0, cz1]) {
       b.span('satin', CRANE, x - 0.22, 0.75, z - 0.22, x + 0.22, top, z + 0.22, 0.03);
@@ -135,7 +139,7 @@ export function createImportDepot(): ModelInstance {
   root.add(cached('depot', depotBody));
   root.add(lightPool(6, 7.6, 4.4, 0.012));
   // trolley + spreader animation
-  const cx0 = -4.3, cx1 = 2.7, top = 7.4;
+  const cx0 = -3.0, cx1 = 4.0, top = 9.0;
   const trolley = new THREE.Group();
   const tb = new Builder();
   tb.span('satin', 0xe0a826, cx0 + 0.3, top + 0.7, -0.8, cx1 - 0.3, top + 1.3, 0.8, 0.04);
@@ -162,21 +166,19 @@ export function createImportDepot(): ModelInstance {
   return makeInstance({
     root,
     update: (_dt, s) => {
-      // 18 s loop: hoist down at row B, lift, traverse to row A, lower, release, return
-      const f = fract(s.time / 18);
+      // 20 s loop: shuffle a container between the two rows (lowers onto row B, hovers over row A)
+      const f = fract(s.time / 20);
       const zA = -4.6, zB = -1.9;
-      let z = zB, drop = 0, carry = false;
-      if (f < 0.15) { z = zB; drop = smooth(f / 0.15); }
-      else if (f < 0.3) { z = zB; drop = 1 - smooth((f - 0.15) / 0.15); carry = true; }
-      else if (f < 0.5) { z = zB + (zA - zB) * smooth((f - 0.3) / 0.2); carry = true; }
-      else if (f < 0.65) { z = zA; drop = smooth((f - 0.5) / 0.15) * 0.45; carry = true; }
-      else if (f < 0.8) { z = zA; drop = 0.45 * (1 - smooth((f - 0.65) / 0.15)); }
-      else { z = zA + (zB - zA) * smooth((f - 0.8) / 0.2); }
+      let z = zB, drop = 0;
+      if (f < 0.2) drop = smooth(f / 0.2);
+      else if (f < 0.35) drop = 1 - smooth((f - 0.2) / 0.15);
+      else if (f < 0.55) z = zB + (zA - zB) * smooth((f - 0.35) / 0.2);
+      else if (f < 0.75) { z = zA; drop = 0.15 * Math.sin(((f - 0.55) / 0.2) * Math.PI); }
+      else z = zA + (zB - zA) * smooth((f - 0.75) / 0.25);
       trolley.position.z = z;
-      const hang = 1.6 + drop * 2.2; // metres below the trolley
+      const hang = 0.9 + drop * 3.0; // metres below the trolley
       spreader.position.set((cx0 + cx1) / 2, top + 0.45 - hang, 0);
       cableM.scale.y = hang;
-      carried.visible = carry;
     },
   });
 }
@@ -230,7 +232,7 @@ export function createSubstation(): ModelInstance {
     for (let x = -3.0; x < 3.0; x += 0.5) b.rod('metal', G, 0.02, [x, 4.5, -2.8], [x + 0.5, 4.7, -3.4], 4);
     for (const x of [-2.1, -1.6, -1.1, 1.1, 1.6, 2.1]) {
       insulator(b, x, 3.85, -3.1, 7);
-      b.rod('metal', 0xc9a050, 0.025, [x, 3.85, -3.1], [x + (x < 0 ? 0.5 : -0.5) * 0 + (x < 0 ? x + 1.6 : x - 1.6) * 0, 2.6, -1.35], 6);
+      b.rod('metal', 0xc9a050, 0.025, [x, 3.85, -3.1], [x, 2.6, -1.35], 6);
     }
     for (let i = 0; i < 3; i++) b.rod('metal', 0xc9a050, 0.03, [-3.2, 4.0 + i * 0.12, -3.1], [3.2, 4.0 + i * 0.12, -3.1], 6);
     // kiosk
