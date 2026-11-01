@@ -92,7 +92,7 @@ export function createStreetlamp(): ModelInstance {
     b.sphere('satin', IRON, 0.04, 0, 4.62, lz, 6, 4);
     return b.build({ name: 'streetlamp' });
   });
-  root.add(body, contactShadow(0.45, 0.45, 0, 0, true), lightPool(3.0, 0, 0.62));
+  root.add(body, contactShadow(0.45, 0.45, 0, 0, true), lightPool(2.4, 0, 0.5));
   return makeInstance({ root });
 }
 

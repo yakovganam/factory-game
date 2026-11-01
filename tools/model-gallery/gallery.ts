@@ -305,24 +305,36 @@ function setupWorkshop(level: number) {
 }
 
 function setupGrid() {
-  const n = CATALOG.length;
-  const cols = Math.ceil(Math.sqrt(n * 1.6));
-  let x = 0, z = 0, rowDepth = 0, maxX = 0;
-  const cell = (id: string) => (id === 'bld_toy_workshop' ? 24 : id === 'bld_import_depot' ? 24 : id.startsWith('bld_') ? 15 : id.startsWith('veh_truck') ? 9 : id.startsWith('veh_') ? 7 : id.startsWith('mach_') ? 3.4 : 2.6);
-  CATALOG.forEach((e, i) => {
-    const c = cell(e.id);
-    if (i % cols === 0 && i > 0) { z += rowDepth; x = 0; rowDepth = 0; }
-    const pos = new THREE.Vector3(x + c / 2, e.id.startsWith('bld_') ? BUILDING_FLOOR_HEIGHT : 0, z + c / 2);
-    add(e.id, e.opts, pos, 0, e.st ?? {}, labelOf(e.id, e.opts));
-    x += c;
-    maxX = Math.max(maxX, x);
-    rowDepth = Math.max(rowDepth, c);
-  });
-  focus.set(maxX / 2, 0, (z + rowDepth) / 2);
-  viewRadius = Math.max(maxX, z + rowDepth) * 0.6;
-  if (!q.has('pitch')) q.set('pitch', '55');
-  if (!q.has('yaw')) q.set('yaw', '30');
-  placeCamera(viewRadius * 0.75, 'top');
+  // one row per category, rows stacked along +Z (toward the camera), each row centred on x = 0
+  const rows: Record<string, typeof CATALOG> = { bld: [], mach: [], veh: [], chr: [], prop: [] };
+  for (const e of CATALOG) rows[e.id.split('_')[0]]?.push(e);
+  const cell = (id: string) => (id === 'bld_toy_workshop' || id === 'bld_import_depot' ? 23 : id.startsWith('bld_') ? 13 : id.startsWith('veh_truck') ? 8.5 : id.startsWith('veh_') ? 6 : id.startsWith('mach_') ? 2.9 : id.startsWith('chr_') ? 1.2 : 2.6);
+  let z = 0, maxW = 0;
+  for (const key of ['bld', 'mach', 'veh', 'chr', 'prop']) {
+    const list = rows[key];
+    if (!list.length) continue;
+    const depth = Math.max(...list.map((e) => cell(e.id)));
+    // buildings wrap into two rows
+    const chunks = key === 'bld' ? [list.slice(0, 6), list.slice(6)] : [list];
+    for (const chunk of chunks) {
+      const width = chunk.reduce((a, e) => a + cell(e.id), 0);
+      maxW = Math.max(maxW, width);
+      let x = -width / 2;
+      const d = key === 'bld' ? Math.max(...chunk.map((e) => cell(e.id))) : depth;
+      for (const e of chunk) {
+        const c = cell(e.id);
+        const pos = new THREE.Vector3(x + c / 2, e.id.startsWith('bld_') ? BUILDING_FLOOR_HEIGHT : 0, z + d / 2);
+        add(e.id, e.opts, pos, 0, e.st ?? {}, labelOf(e.id, e.opts));
+        x += c;
+      }
+      z += d + 1;
+    }
+  }
+  focus.set(0, 0, z / 2);
+  viewRadius = Math.max(maxW, z) * 0.6;
+  if (!q.has('pitch')) q.set('pitch', '58');
+  if (!q.has('yaw')) q.set('yaw', '20');
+  placeCamera(Math.max(maxW, z) * 0.42, 'top');
 }
 
 function setupItems() {

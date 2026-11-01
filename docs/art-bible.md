@@ -105,16 +105,19 @@ Measured: **31 shared materials** for the whole library (`captures/models/stats.
 
 ## 6. Budgets (measured — `captures/models/stats.json`)
 
-| Class | Budget | Current |
+| Class | Budget | Measured (tris · draw calls) |
 |---|---|---|
-| Item | ≤ 400 tris, 1 draw (InstancedMesh) | 230–740 (see §10) |
-| Belt / curve | ≈ 700–1200 tris, 3 draws | belt ≈ 680, curves ≈ 1.1k |
-| Machine | ≤ 4 k tris, ≤ ~12 draws | 1.2–3.6 k |
-| Worker / pedestrian | ≤ 1.5 k tris, 2 draws (skinned body + blob) | ≈ 1.2–1.45 k |
-| Vehicle | ≤ 4 k | van ≈ 2.9 k, truck ≈ 3.4 k |
-| House | ≤ 5 k | 3.3–5.0 k |
-| Workshop L1/L2/L3 | L3 ≤ 20 k | ≈ 11 k / 15 k / 20 k |
-| Materials (library) | ≤ ~40 | 31 shared |
+| Item (18 + fallback) | ≤ 400 tris, 1 draw (InstancedMesh) | 72–388 · 1 |
+| Belt / belt Mk2 / curves | ≈ 700–1200, 3 draws | 680 / 752 / 1120–1180 · 3 |
+| Machines | ≤ 4 k | 1.0–3.6 k · 7–20 (robot cell 3.6 k · 20) |
+| Worker / pedestrian | ≤ 1.5 k, 2 draws (skinned body + blob) | 1.36–1.47 k / 1.14–1.31 k · 2 |
+| Vehicles | ≤ 4 k | van 2.8 k · 19, truck 3.35 k · 16 |
+| Houses (6) | ≤ 5 k | 3.3–5.0 k · 10–11 |
+| Workshop L1 / L2 / L3 | L3 ≤ 20 k | 10.6 k · 35 / 14.5 k · 45 / 19.8 k · 43 |
+| Toy store L1–L3 | (≈ 15 k) | 8.9–14.5 k · 25–27 |
+| Import depot / substation | — | 11.2 k · 17 / 8.0 k · 7 |
+| Props | — | 106–930 · 1–10 |
+| Materials (library) | ≤ ~40 | **31 shared** + per-instance: stack lens (1 shared program), halo sprite, dock rollers, paint mist/part, packed item |
 
 Static geometry of each model is merged per material and **cached per model id** (60 belts share one
 geometry); only animated parts are separate meshes. `update()` never allocates.
@@ -137,12 +140,45 @@ halo for phone readability.
 | `upgrading` | amber ⇄ green alternate | stops |
 | `idle` | dim white (reads grey) | stops; dock curtains close |
 
-Per-model drivers: belts scroll at `BELT_BASE_SPEED × speed` (1 m/s); robot cycle pick (0–0.26) →
+Per-model drivers: belts scroll at `BELT_BASE_SPEED × speed` (1 m/s); curved belts (`mach_belt[_mk2]_turn_r/_l`, exit +X, entry +Z for _r / −Z for _l, quarter circle r = 0.5 about the exit-side corner) rotate their cleats about that corner at the same surface speed; robot cycle pick (0–0.26) →
 place (0.26–0.48) → screw (0.52–0.78) → home; bench presses 3× per cycle; packer erects (0–0.14),
 item drops (0.16–0.36), flaps fold (0.42–0.7), tape passes (0.72–0.92), carton exits; paint booth
 sweeps 3× and tints the part toward `itemColor`; storage shows `round(progress × 8)` cartons.
 Characters: `pose` walk/carry/work/idle; root speed must be `WORKER_WALK_SPEED × speed` (1.3 m/s)
 for planted feet. Vehicles: wheels from `speed` in m/s.
+
+## 7b. Integration cookbook
+
+```ts
+import { createModel, getItemVisual, placeOnGrid, BUILDING_FLOOR_HEIGHT, BELT_TOP_Y, WORKER_WALK_SPEED } from './render/models';
+import { configureRenderer, createLightRig, createSkyAndFog } from './render/models/lighting';
+
+const bld = createModel('bld_toy_workshop', { level, interior: lvl.interior, bays: lvl.bays.map(b => ({ ...b, kind: role(b.machine) })) });
+bld.root.position.set(cityX, BUILDING_FLOOR_HEIGHT, cityZ);           // floor slab sits 15 cm above the street
+const m = createModel(def.model);                                     // e.g. 'mach_paint_booth'
+placeOnGrid(m.root, lvl.interior, x, y, def.footprint, rot);          // building-local
+bld.root.add(m.root);                                                 // or add bld.root.position yourself
+bld.setCutaway?.(cutaway01);                                          // call when it changes (ease it 0→1 over ~0.4 s)
+m.update?.(dt, { status, progress, time, night, speed, itemColor });  // every frame while visible
+```
+
+* Bays: pass `kind` (`'receiving' | 'shipping'`); if omitted, `x === 0` ⇒ receiving. A bay becomes a wall
+  opening on the wall its machine backs onto (receiving: behind its −X; shipping: in front of its +X).
+  The roll-up curtain belongs to the dock machine, so **always place the dock machines on the bay tiles**.
+* Cutaway hides the roof and the south and east walls (camera at +X,+Z). A rotated camera would need
+  the walls facing it instead; ask the art owner if that becomes a feature.
+* Night: one global value; pass the same `night` to all `update()` calls and to `rig.update` / `sky.update`.
+* Items: `const v = getItemVisual(id); new THREE.InstancedMesh(v.geometry, v.material, n)`; geometry base
+  is y = 0, so on belts set the instance y to `BELT_TOP_Y`. Geometry and material are shared — never
+  dispose them. One InstancedMesh per item id; unknown ids return a tinted crate.
+* Workers: move the root at `WORKER_WALK_SPEED × speed` m/s while `pose` is `walk`/`carry`; face the
+  travel direction with `rotation.y = atan2(-dz, dx)` (+X forward). Stand them at
+  `machine.root.userData.workerSpot` (local x, z, yaw) with `pose: 'work'`. `root.userData.hand` is the
+  carry bone if you want to attach a real item instead of the default carton.
+* Vehicles: `speed` in m/s drives wheel spin; status `loading`/`unloading` opens rear doors / shutter.
+* Storage crate: `progress` = fill ratio (0..1 → 0..8 cartons).
+* `dispose()` frees per-instance GPU resources only; shared geometry/materials live for the session
+  (`disposeMaterialLibrary()` / `clearGeometryCache()` exist for full teardown).
 
 ## 8. Naming
 
@@ -165,4 +201,35 @@ for planted feet. Vehicles: wheels from `speed` in m/s.
 
 ## 10. Honest self-review (current benchmark vs. the bar)
 
-See the end of this document — updated after each review pass.
+Review passes done: hero workshop ×3 (L1–L3, closed/cut away, day/night), robot cell ×2, full
+library sheet ×1. Fixed along the way: washed-out exposure and flat front lighting (sun moved to
+ESE, hemisphere lowered), sign hidden under the eave, accidental solid plate on the L3 office,
+saw-tooth gable teeth floating in cutaway (moved to the roof group), robot cell reading as a dark pit
+(lighter plinth, chunkier two-tone arm, camera-side fence opened to light curtains), pegboard dot
+noise (1.2 k triangles of 1 cm dots replaced by grooves), budget overruns (auto chamfer / segment LOD
+cut the store L3 from 30 k → 14 k and characters from 2.5 k → 1.4 k), a fragment-shader compile error
+in the shared `glow` material (`vColor` is `vec4` in r187 → use `.rgb`).
+
+**Where it meets the bar:** the cut-away workshop reads as a warm, coherent diorama at gameplay
+distance; every machine has a distinct silhouette and a readable status beacon; materials are
+consistent (31 shared), budgets are met, nothing is a plain cube — primary forms are chamfered and
+layered (plinths, copings, frames, sills, rails, guards). Night mode (glowing windows, rooflights,
+light pools, beacons) is the strongest look.
+
+**Where it falls short / top 5 improvements still needed:**
+1. **Characters** are rigid-segment toy figures (blocky hands, dot eyes, visible joint breaks at
+   extreme poses). Next: weighted skinning at shoulders/hips/knees, mitten hands, a few hair/hat
+   silhouettes per variant, secondary motion (head bob, box sway).
+2. **Surface depth**: no ambient occlusion (only contact blobs) and few decals — big floors, yard
+   slabs and roofs are clean flat colour. Bake per-vertex AO into the merged geometry (cheap, fits the
+   pipeline) and add a decal set (floor zones, oil stains, roof weathering, painted bay numbers).
+3. **Post / lighting**: no bloom or SSAO; status readability relies on additive halo sprites. A
+   cheap bloom on emissives and a tuned night exposure would lift the premium feel; shadow map is a
+   single 2048² cascade (soft but low-res at wide zoom).
+4. **City-scale cost**: buildings are 35–45 draw calls, machines 9–20; fine for one factory interior
+   but a full city needs per-model LODs (merge everything into 2–3 draw calls beyond ~40 m) and
+   instancing of belts/props.
+5. **Content depth**: houses are fixed set pieces (6 designs, no terrace tiling or corner variants);
+   items inside machines are placeholders (packer drops a tinted box, the paint booth always shows a
+   car body); cutaway assumes the default camera azimuth; the depot crane runs a canned loop rather
+   than reacting to deliveries.

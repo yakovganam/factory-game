@@ -13,7 +13,7 @@ import { findPath, nodePos } from '../sim/logistics';
 import type { GameState } from '../sim/types';
 import { CameraRig } from './camera';
 import { buildCity, type CityLayout } from './city';
-import { FactoryView } from './factoryView';
+import { FactoryView, FLOOR_Y } from './factoryView';
 import { createModel } from './models';
 import { configureRenderer, createLightRig } from './models/lighting';
 import type { ModelInstance } from './models/types';
@@ -164,7 +164,7 @@ export class View {
       }
       const def = this.db.buildings.get(b.def)!;
       const inst = createModel(def.model, { variant: b.variant, level: b.role === 'store' ? s.stores[b.id]?.level ?? 1 : 1 });
-      inst.root.position.set(b.x, 0, b.z);
+      inst.root.position.set(b.x, b.role === 'store' || b.role === 'house' || b.role === 'civic' ? FLOOR_Y : 0, b.z);
       inst.root.rotation.y = this.buildingYaw(b);
       inst.root.traverse((o) => (o.userData.pick = { type: 'building', id: b.id }));
       this.scene.add(inst.root);
@@ -197,7 +197,7 @@ export class View {
     old.dispose?.();
     const def = this.db.buildings.get(b.def)!;
     const inst = createModel(def.model, { variant: b.variant, level: sim.s.stores[id]?.level ?? 1 });
-    inst.root.position.set(b.x, 0, b.z);
+    inst.root.position.set(b.x, FLOOR_Y, b.z);
     inst.root.rotation.y = this.buildingYaw(b);
     inst.root.traverse((o) => (o.userData.pick = { type: 'building', id: b.id }));
     this.scene.add(inst.root);
@@ -327,7 +327,7 @@ export class View {
     const p = this.ndc(clientX, clientY);
     if (interiorOf) {
       const fv = this.factories.get(interiorOf)!;
-      const g = this.rig.groundAt(p.x, p.y, 0);
+      const g = this.rig.groundAt(p.x, p.y, FLOOR_Y);
       if (g) {
         const [tx, ty] = fv.tileAt(g);
         return { type: 'tile', f: interiorOf, x: tx, y: ty };
@@ -349,7 +349,7 @@ export class View {
   /** Tile under pointer for a given factory (used while drawing belts). */
   tileUnder(clientX: number, clientY: number, fid: string): [number, number] | null {
     const p = this.ndc(clientX, clientY);
-    const g = this.rig.groundAt(p.x, p.y, 0);
+    const g = this.rig.groundAt(p.x, p.y, FLOOR_Y);
     if (!g) return null;
     return this.factories.get(fid)!.tileAt(g);
   }
@@ -399,7 +399,7 @@ export class View {
     this.beltPreview.clear();
     if (!fid || !tiles.length) return;
     const fv = this.factories.get(fid)!;
-    this.beltPreview.position.copy(fv.root.position);
+    this.beltPreview.position.copy(fv.root.position); // includes the floor height
     const mat = valid ? this.ghostMats.ok : this.ghostMats.bad;
     const plate = new THREE.BoxGeometry(0.94, 0.06, 0.94);
     for (const t of tiles) {

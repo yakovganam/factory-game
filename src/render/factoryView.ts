@@ -15,6 +15,7 @@ import type { AnimState, ModelInstance, VisualStatus } from './models/types';
 import { BELT_TOP_Y } from './models/types';
 
 const WALK_SPEED: number = (models as any).WORKER_WALK_SPEED ?? 1.3;
+export const FLOOR_Y: number = (models as any).BUILDING_FLOOR_HEIGHT ?? 0;
 const ITEM_COLORS: Record<string, number> = { toy_car: 0xd9483b, toy_robot: 0x3c7fd9, smart_robot: 0x8a5cd6, block_set: 0xf2b134 };
 const WORK_HEIGHT: Record<string, number> = { bench: 0.92, packer: 0.92, booth: 0.95, arm: 0.88 };
 
@@ -59,7 +60,8 @@ export class FactoryView {
   private ring: THREE.Mesh;
 
   constructor(private db: ContentDB, public b: BuildingInst) {
-    this.root.position.set(b.x, 0, b.z);
+    // Building floors sit on a plinth; the whole hall (building + interior) is raised to the floor surface.
+    this.root.position.set(b.x, FLOOR_Y, b.z);
     this.root.add(this.interior);
     this.root.name = `factory:${b.id}`;
     const ringG = new THREE.RingGeometry(0.62, 0.78, 40);
@@ -205,6 +207,8 @@ export class FactoryView {
         const r = e.recipe ? this.db.recipes.get(e.recipe) : undefined;
         a.progress = e.working && r ? Math.min(1, e.progress / (r.durationSec * 10 * 100)) : 0;
         a.itemColor = r ? ITEM_COLORS[r.outputs[0].item] : undefined;
+        const role = this.db.machines.get(e.def)!.role;
+        if (role === 'storage') a.progress = Math.min(1, (e.queue?.length ?? 0) / (this.db.machines.get(e.def)!.storageCap ?? 1));
       }
       v.inst.update?.(dt, a);
       // spawn pop
@@ -470,7 +474,7 @@ export class FactoryView {
   entityWorld(e: Entity, out = new THREE.Vector3()) {
     const m = this.db.machines.get(e.def)!;
     const [fw, fh] = footprintOf(m, e.rot);
-    return out.set(this.b.x + e.x + fw / 2, 1.2, this.b.z + e.y + fh / 2);
+    return out.set(this.b.x + e.x + fw / 2, FLOOR_Y + 1.2, this.b.z + e.y + fh / 2);
   }
 
   /** Interior tile under a world point. */

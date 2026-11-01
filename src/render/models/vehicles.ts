@@ -102,17 +102,17 @@ export function createVan(o: ModelOptions = {}): ModelInstance {
       b.add(liveryMat(), decal(v, 2.5, 0.62), 0xffffff, -0.95, 1.38, sz * (W / 2 + 0.004), { ry: sz > 0 ? 0 : Math.PI });
     }
     // grille + lights
-    b.box('satin', 0x2a2d33, 0.04, 0.22, 1.2, 2.4, 0.86, 0, 0.02);
-    for (let i = 0; i < 3; i++) b.box('metal', PAL.chrome, 0.045, 0.02, 1.1, 2.41, 0.8 + i * 0.06, 0, 0);
+    b.box('satin', 0x2a2d33, 0.04, 0.22, 1.2, 2.47, 0.8, 0, 0.012);
+    for (let i = 0; i < 3; i++) b.box('metal', PAL.chrome, 0.02, 0.02, 1.1, 2.495, 0.74 + i * 0.06, 0, 0);
     for (const sz of [-1, 1]) {
-      b.box('lamp', 0xffffff, 0.05, 0.12, 0.3, 2.38, 0.98, sz * 0.72, 0.02);
-      b.box('satin', PAL.orange, 0.05, 0.06, 0.1, 2.36, 0.94, sz * 0.92, 0.01);
-      b.box('tail', 0xffffff, 0.04, 0.4, 0.12, -2.42, 1.3, sz * 0.88, 0.015);
+      b.box('lamp', 0xffffff, 0.05, 0.12, 0.3, 2.45, 0.94, sz * 0.66, 0.012, { rz: -0.35 });
+      b.box('satin', PAL.orange, 0.04, 0.06, 0.1, 2.46, 0.86, sz * 0.9, 0.0);
+      b.box('tail', 0xffffff, 0.04, 0.4, 0.12, -2.485, 1.3, sz * 0.86, 0.012);
     }
     b.box('paint', PAL.white, 0.02, 0.12, 0.4, 2.47, 0.52, 0, 0.005);
     b.box('paint', PAL.white, 0.02, 0.12, 0.4, -2.49, 0.55, 0, 0.005);
     // cargo opening (dark) behind the doors
-    b.box('paint', 0x1e2228, 0.02, 1.5, W - 0.25, -2.405, 1.22, 0, 0);
+    b.box('paint', 0x1e2228, 0.02, 1.5, W - 0.25, -2.475, 1.22, 0, 0);
     // roof rack
     for (const x of [-1.8, -0.6, 0.4]) b.box('metal', PAL.steelDark, 0.05, 0.05, W - 0.2, x, 2.14, 0, 0.01);
     return b.build({ name: 'vanBody' });
@@ -125,7 +125,7 @@ export function createVan(o: ModelOptions = {}): ModelInstance {
   const doors: THREE.Group[] = [];
   for (const s of [-1, 1]) {
     const hinge = new THREE.Group();
-    hinge.position.set(-2.43, 0, s * (W / 2 - 0.04));
+    hinge.position.set(-2.5, 0, s * (W / 2 - 0.04));
     const db = new Builder();
     db.box('satin', bg, 0.04, 1.58, W / 2 - 0.05, 0, 1.22, -s * (W / 4 - 0.02), 0.012);
     db.box('glass', GLASS, 0.02, 0.4, W / 2 - 0.3, -0.02, 1.72, -s * (W / 4 - 0.02), 0.006);
@@ -199,12 +199,12 @@ export function createTruck(o: ModelOptions = {}): ModelInstance {
     for (const sz of [-1, 1]) b.add('glass', extrude(sw, 0.02, 0, 1), GLASS, 0, 0, sz * (W / 2 - 0.01));
     // sun visor, grille, bumper, lights, steps, mirrors
     b.box('satin', shade(cabCol, 0.75), 0.25, 0.08, W - 0.1, 3.5, 3.08, 0, 0.02);
-    b.box('satin', 0x2a2d33, 0.05, 0.6, 1.5, 3.77, 1.2, 0, 0.02);
-    for (let i = 0; i < 4; i++) b.box('metal', PAL.chrome, 0.055, 0.025, 1.4, 3.785, 0.98 + i * 0.13, 0, 0);
+    b.box('satin', 0x2a2d33, 0.05, 0.6, 1.5, 3.85, 1.2, 0, 0.012);
+    for (let i = 0; i < 4; i++) b.box('metal', PAL.chrome, 0.02, 0.025, 1.4, 3.88, 0.98 + i * 0.13, 0, 0);
     b.box('satin', 0x3a3f46, 0.22, 0.3, W + 0.04, 3.82, 0.62, 0, 0.05);
     for (const sz of [-1, 1]) {
-      b.box('lamp', 0xffffff, 0.05, 0.16, 0.32, 3.78, 1.6, sz * 0.88, 0.02);
-      b.box('satin', PAL.orange, 0.05, 0.08, 0.12, 3.76, 1.45, sz * 1.08, 0.01);
+      b.box('lamp', 0xffffff, 0.05, 0.16, 0.32, 3.85, 1.6, sz * 0.86, 0.012);
+      b.box('satin', PAL.orange, 0.04, 0.08, 0.12, 3.85, 1.45, sz * 1.08, 0);
       b.box('metal', PAL.steelDark, 0.4, 0.04, 0.22, 2.5, 0.7, sz * (W / 2 + 0.05), 0.01);
       b.box('metal', PAL.steelDark, 0.4, 0.04, 0.22, 2.5, 0.45, sz * (W / 2 + 0.05), 0.01);
       b.rod('metal', PAL.graphite, 0.02, [3.45, 2.6, sz * (W / 2)], [3.55, 2.6, sz * (W / 2 + 0.25)], 6);

@@ -78,6 +78,8 @@ export type MatKey =
   | 'lightPool'; // additive light pool under street lamps at night
 
 const mats = new Map<string, THREE.Material>();
+/** sign materials (kept in an array so night updates don't allocate iterators) */
+const signList: THREE.MeshStandardMaterial[] = [];
 const textures = new Map<string, THREE.Texture>();
 let nightLevel = -1;
 
@@ -289,7 +291,7 @@ function wireTexture(): THREE.Texture | null {
     const [c, g] = cv;
     g.clearRect(0, 0, 64, 64);
     g.strokeStyle = '#ffffff';
-    g.lineWidth = 3;
+    g.lineWidth = 4;
     g.beginPath();
     for (let k = 0; k <= 64; k += 16) {
       g.moveTo(k, 0);
@@ -299,7 +301,7 @@ function wireTexture(): THREE.Texture | null {
     }
     g.stroke();
     const t = canvasTexture(c, true);
-    t.repeat.set(1 / 0.2, 1 / 0.2);
+    t.repeat.set(1 / 0.24, 1 / 0.24);
     return t;
   });
 }
@@ -486,8 +488,11 @@ export function setNightLevel(n: number): void {
   const lamp = mats.get('lamp') as THREE.MeshStandardMaterial | undefined;
   if (lamp) lamp.emissiveIntensity = 0.45 + 2.2 * k;
   const pool = mats.get('lightPool') as THREE.MeshBasicMaterial | undefined;
-  if (pool) pool.opacity = 0.4 * k;
-  for (const [key, m] of mats) if (key.startsWith('sign:')) (m as THREE.MeshStandardMaterial).emissiveIntensity = (m.userData.dayGlow ?? 0) + (m.userData.nightGlow ?? 1.2) * k;
+  if (pool) pool.opacity = 0.36 * k;
+  for (let i = 0; i < signList.length; i++) {
+    const m = signList[i];
+    m.emissiveIntensity = (m.userData.dayGlow ?? 0) + (m.userData.nightGlow ?? 1.2) * k;
+  }
 }
 
 export interface SignSpec {
@@ -633,33 +638,44 @@ export function signMat(key: string, spec: SignSpec): THREE.Material {
       g.lineWidth = Math.max(4, h * 0.05);
       g.strokeRect(h * 0.06, h * 0.06, w - h * 0.12, h - h * 0.12);
     }
+    const portrait = w < h * 1.6;
     let tx = w / 2;
+    // text block: [top, bottom] in px
+    let ty0 = 0, ty1 = h;
     if (spec.icon) {
-      const s = h * 0.62;
-      drawIcon(g, spec.icon, h * 0.55, h / 2, s, spec.fg, spec.accent ?? spec.bg);
-      tx = h * 0.55 + (w - h * 0.55) / 2;
+      if (portrait) {
+        const s = Math.min(w, h) * 0.5;
+        drawIcon(g, spec.icon, w / 2, h * 0.3, s, spec.fg, spec.accent ?? spec.bg);
+        ty0 = h * 0.55;
+      } else {
+        drawIcon(g, spec.icon, h * 0.55, h / 2, h * 0.62, spec.fg, spec.accent ?? spec.bg);
+        tx = h * 0.55 + (w - h * 0.55) / 2;
+      }
     }
-    g.fillStyle = spec.fg;
     g.textAlign = 'center';
     g.textBaseline = 'middle';
-    const avail = w - (spec.icon ? h * 1.1 : h * 0.3);
-    let size = spec.sub ? h * 0.42 : h * 0.56;
-    g.font = `800 ${size}px ${SIGN_FONT}`;
-    const mw = g.measureText(spec.text).width;
-    if (mw > avail) {
-      size *= avail / mw;
-      g.font = `800 ${size}px ${SIGN_FONT}`;
-    }
-    g.fillText(spec.text, tx, spec.sub ? h * 0.4 : h * 0.53);
+    const bh = ty1 - ty0;
+    const avail = (spec.icon && !portrait ? w - h * 1.1 : w - Math.min(w, h) * 0.24);
+    const fit = (txt: string, weight: number, size: number) => {
+      g.font = `${weight} ${size}px ${SIGN_FONT}`;
+      const mw = g.measureText(txt).width;
+      if (mw > avail) {
+        size *= avail / mw;
+        g.font = `${weight} ${size}px ${SIGN_FONT}`;
+      }
+    };
+    g.fillStyle = spec.fg;
+    fit(spec.text, 800, spec.sub ? bh * 0.42 : bh * 0.56);
+    g.fillText(spec.text, tx, ty0 + (spec.sub ? bh * 0.4 : bh * 0.53));
     if (spec.sub) {
-      g.font = `600 ${h * 0.2}px ${SIGN_FONT}`;
       g.fillStyle = spec.accent ?? spec.fg;
-      g.fillText(spec.sub, tx, h * 0.76);
+      fit(spec.sub, 600, bh * 0.2);
+      g.fillText(spec.sub, tx, ty0 + bh * 0.76);
     }
     map = canvasTexture(c, true, false);
   }
   const glow = spec.nightGlow ?? 0;
-  m = new THREE.MeshStandardMaterial({
+  const sm = new THREE.MeshStandardMaterial({
     name: k,
     map,
     roughness: 0.6,
@@ -668,10 +684,12 @@ export function signMat(key: string, spec: SignSpec): THREE.Material {
     emissiveMap: glow > 0 ? map : null,
     emissiveIntensity: spec.dayGlow ?? 0,
   });
-  m.userData.shared = true;
-  m.userData.nightGlow = glow;
-  m.userData.dayGlow = spec.dayGlow ?? 0;
-  mats.set(k, m);
+  sm.userData.shared = true;
+  sm.userData.nightGlow = glow;
+  sm.userData.dayGlow = spec.dayGlow ?? 0;
+  mats.set(k, sm);
+  signList.push(sm);
+  m = sm;
   if (nightLevel >= 0) {
     const n = nightLevel;
     nightLevel = -1;
@@ -733,5 +751,6 @@ export function disposeMaterialLibrary(): void {
   for (const t of textures.values()) t.dispose();
   mats.clear();
   textures.clear();
+  signList.length = 0;
   nightLevel = -1;
 }

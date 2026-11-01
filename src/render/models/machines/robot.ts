@@ -202,14 +202,17 @@ export function createRobotAssembler(): ModelInstance {
     for (const [x, z] of [[-F, -F], [F, -F], [-F, F], [F, F]] as [number, number][]) post(b, x, z, 1.36);
     meshPanel(b, -0.52, -F, F - 0.03, -F, 0.12, 1.3);
     meshPanel(b, -F, -0.5, -F, F - 0.03, 0.72, 1.3);
-    meshPanel(b, F, -F + 0.03, F, F - 0.03, 0.72, 1.3);
+    meshPanel(b, F, -F + 0.03, F, -0.45, 0.72, 1.3);
     b.box('satin', PAL.yellow, 0.035, 0.035, 1.88, -F, 1.335, 0, 0.008);
-    b.box('satin', PAL.yellow, 0.035, 0.035, 1.88, F, 1.335, 0, 0.008);
+    post(b, F, -0.45, 1.36);
     // front light curtain (open side, faces the camera): emitter + receiver strips
     for (const x of [-F, F]) {
       b.span('satin', PAL.graphite, x - 0.03, 0.15, F - 0.075, x + 0.03, 1.3, F - 0.045, 0.006);
       b.span('tail', 0xffffff, x - 0.012, 0.2, F - 0.044, x + 0.012, 1.25, F - 0.04, 0);
     }
+    // light-curtain pair on the open output side too
+    b.span('satin', PAL.graphite, F - 0.075, 0.15, -0.36, F - 0.045, 1.3, -0.3, 0.006);
+    b.span('tail', 0xffffff, F - 0.08, 0.2, -0.345, F - 0.076, 1.25, -0.315, 0);
     b.box('hazard', 0xffffff, 1.7, 0.012, 0.12, 0, 0.086, F - 0.1, 0.002);
     return b.build({ name: 'robotCell' });
   });

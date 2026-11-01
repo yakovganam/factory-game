@@ -189,8 +189,29 @@ export function createToyStore(opts: ModelOptions = {}): ModelInstance {
     b.cylB('satin', i % 2 ? PAL.yellow : PAL.white, 0.32, 0.3, x, 0, h / 2 - 0.45, 16);
     b.add('satin', itemGeometry(id).clone(), KEEP_COLORS, x, 0.3, h / 2 - 0.45, { sx: s, sy: s, sz: s, ry: -0.6 });
   });
-  // entrance mat
+  // entrance mat + red aisle runner into the shop
   b.span('paint', 0x5a4a3a, doorU - 0.7, 0, h / 2 - 1.2, doorU + 0.7, 0.008, h / 2 - 0.05, 0);
+  b.span('paint', 0xc8463d, doorU - 0.45, 0, -h / 2 + 1.2, doorU + 0.45, 0.006, h / 2 - 1.2, 0);
+  b.span('paint', PAL.yellow, doorU - 0.5, 0, -h / 2 + 1.2, doorU - 0.45, 0.007, h / 2 - 1.2, 0);
+  b.span('paint', PAL.yellow, doorU + 0.45, 0, -h / 2 + 1.2, doorU + 0.5, 0.007, h / 2 - 1.2, 0);
+  // back-wall mural band + toy posters (what the cut-away camera looks at)
+  for (const side of ['N', 'W'] as Side[]) {
+    const f = sideFrame(side, w, h);
+    const len = side === 'N' ? w : h;
+    pushSide(b, f);
+    const cols = [PAL.red, PAL.yellow, PAL.blue, PAL.green, PAL.orange];
+    const n = Math.round(len / 0.9);
+    for (let i = 0; i < n; i++) b.span('paint', cols[i % 5], -len / 2 + (len * i) / n, 2.15, -0.012, -len / 2 + (len * (i + 1)) / n, 2.3, 0, 0);
+    const posters = side === 'N' ? (level === 3 ? [] : [-len / 2 + 1.3, len / 2 - 1.0]) : [-0.2];
+    posters.forEach((u, k) => {
+      if (side === 'N' && Math.abs(u) < 1.0) return;
+      b.box('satin', PAL.white, 0.86, 1.06, 0.03, u, 2.75 + (level === 3 ? -0.0 : 0), -0.015, 0.01);
+      b.box('paint', [PAL.blue, PAL.purple, PAL.teal][k % 3], 0.74, 0.94, 0.006, u, 2.75, -0.033, 0);
+      b.box('paint', PAL.yellow, 0.4, 0.4, 0.006, u, 2.85, -0.037, 0);
+      b.box('paint', PAL.white, 0.6, 0.1, 0.006, u, 2.45, -0.037, 0);
+    });
+    b.pop();
+  }
   if (level === 3) {
     // play corner: rug + blocks + mini slide
     const px = -1.6, pz = 1.2;
@@ -222,7 +243,7 @@ export function createToyStore(opts: ModelOptions = {}): ModelInstance {
     for (let i = 0; i < n; i++) {
       const u = -len / 2 + (len * (i + 0.5)) / n;
       if (side === 'N' && Math.abs(u) < 0.9) continue;
-      const y = level === 3 ? 2.6 : 3.0;
+      const y = level === 3 ? 2.6 : H - 0.7;
       b.box('satin', PAL.graphite, 0.3, 0.06, 0.18, u, y, -0.09, 0.01);
       b.box('lamp', 0xffffff, 0.26, 0.02, 0.14, u, y - 0.04, -0.1, 0.004);
       const [px, pz] = frameToLocal(f, u, -1.3);
@@ -230,8 +251,16 @@ export function createToyStore(opts: ModelOptions = {}): ModelInstance {
     }
     b.pop();
   }
-  // roof slab + parapet top + ceiling lights + HVAC
-  roof.span('paint', 0xb9bdbf, -w / 2, H - 0.25, -h / 2, w / 2, H, h / 2, 0);
+  // roof slab + parapet top + ceiling lights + HVAC + rooflight + vents (the roof is what the city camera sees)
+  roof.span('paint', 0xcbc3b4, -w / 2, H - 0.25, -h / 2, w / 2, H, h / 2, 0);
+  roof.span('paint', 0xbdb5a6, -w / 2 + 0.3, H, -h / 2 + 0.3, w / 2 - 0.3, H + 0.015, h / 2 - 0.3, 0);
+  roof.boxB('satin', 0xe0e4e6, 2.0, 0.25, 1.2, -w / 2 + 2.2, H, -0.4, 0.04);
+  roof.boxB('glassLit', 0xa9cfe0, 1.8, 0.1, 1.0, -w / 2 + 2.2, H + 0.25, -0.4, 0.03);
+  roof.boxB('satin', PAL.graphite, 0.7, 0.5, 0.7, -w / 2 + 1.0, H, -h / 2 + 1.0, 0.04);
+  for (const [vx, vz] of [[0.6, 0.8], [1.4, -1.2]] as [number, number][]) {
+    roof.cylB('metal', PAL.steel, 0.08, 0.6, vx, H, vz, 8);
+    roof.cylB('metal', PAL.steelDark, 0.14, 0.05, vx, H + 0.6, vz, 8, 0.04);
+  }
   for (let x = -w / 2 + 1.5; x < w / 2 - 0.5; x += 2.5) for (const z of [-h / 4, h / 4]) roof.box('lampCool', 0xffffff, 1.2, 0.03, 0.4, x, H - 0.27, z, 0.005);
   roof.boxB('satin', 0xd8dcdf, 1.3, 0.8, 0.9, w / 2 - 1.4, H, -h / 2 + 1.0, 0.05);
   roof.cyl('satin', PAL.graphite, 0.3, 0.04, w / 2 - 1.4, H + 0.81, -h / 2 + 1.0, 'y', 16);

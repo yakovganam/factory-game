@@ -304,7 +304,7 @@ function gableRoof(c: Ctx, x0: number, x1: number, H: number, pitch: number, col
     const pz = (s * run) / 2, py = ridge - (run / 2) * tan;
     b.box('ribbed', color, lx, rt, L, cx, py + (rt / 2) * cos, pz + s * (rt / 2) * sin, 0.01, { rx: s * pitch });
     // rooflights: framed glazed strips set into the slope
-    const nl = Math.max(1, Math.round((x1 - x0) / 3.2));
+    const nl = s > 0 ? Math.max(1, Math.round((x1 - x0) / 3.2)) : 0; // street-facing slope only
     for (let i = 0; i < nl; i++) {
       const lx = x0 + ((x1 - x0) * (i + 0.5)) / nl;
       const d0 = run * 0.42; // distance from the ridge along the horizontal run
@@ -527,8 +527,8 @@ export function createWorkshop(opts: ModelOptions = {}): ModelInstance {
   let ridge = H1;
   if (level === 1) {
     ridge = gableRoof(c, -w / 2 - T, w / 2 + T, H1, 0.4, PAL.roof, true);
-    gableTri(c.st, 'W', c, [[-(h / 2 + T), H1 + 0.08], [h / 2 + T, H1 + 0.08], [0, ridge - 0.02]]);
-    gableTri(c.up.E, 'E', c, [[-(h / 2 + T), H1 + 0.08], [h / 2 + T, H1 + 0.08], [0, ridge - 0.02]]);
+    gableTri(c.st, 'W', c, [[-(h / 2 + T), H1 + 0.08], [h / 2 + T, H1 + 0.08], [0, ridge]]);
+    gableTri(c.up.E, 'E', c, [[-(h / 2 + T), H1 + 0.08], [h / 2 + T, H1 + 0.08], [0, ridge]]);
     roofTurbine(c, -1.5, ridge + 0.05, 0, 'roof');
     roofTurbine(c, 2.0, ridge + 0.05, 0, 'roof');
     // flue
@@ -536,7 +536,7 @@ export function createWorkshop(opts: ModelOptions = {}): ModelInstance {
     c.roof.cylB('metal', PAL.steelDark, 0.16, 0.06, w / 2 - 1.5, H1 + 1.8, -h / 4, 10, 0.05);
   } else if (level === 2) {
     ridge = gableRoof(c, -w / 2 - T, xs, H1, 0.4, PAL.roof, false);
-    gableTri(c.st, 'W', c, [[-(h / 2 + T), H1 + 0.08], [h / 2 + T, H1 + 0.08], [0, ridge - 0.02]]);
+    gableTri(c.st, 'W', c, [[-(h / 2 + T), H1 + 0.08], [h / 2 + T, H1 + 0.08], [0, ridge]]);
     // inner gable toward the extension (sits above the extension roof line, part of roof group)
     c.roof.push(xs + T / 2, 0, 0, HALF_PI);
     c.roof.add('brick', prism([[-(h / 2 + T), H1 + 0.08], [h / 2 + T, H1 + 0.08], [0, ridge - 0.02]], T), 0xffffff, 0, 0, 0);
@@ -606,11 +606,11 @@ export function createWorkshop(opts: ModelOptions = {}): ModelInstance {
   if (level === 1) {
     const sm = signMat('toyworks1', { text: 'TOY WORKS', sub: 'HANDMADE TOYS', bg: '#2e7c78', fg: '#f5f3ee', accent: '#f2bb2c', w: 512, h: 128, icon: 'toy', nightGlow: 0.5 });
     const su = (doorU + 0.9 + w / 2) / 2 - 0.2;
-    signBoard(c.up.S, sm, su, 3.22, 3.4, 0.78, T, PAL.woodDark);
+    signBoard(c.up.S, sm, su, 3.12, 3.3, 0.72, T, PAL.woodDark);
   } else if (level === 2) {
     const sm = signMat('toyworks2', { text: 'TOY WORKS', sub: 'TOYS · ROBOTS · FUN', bg: '#f5f3ee', fg: '#1f5654', accent: '#ef7f3a', w: 512, h: 128, icon: 'robot', nightGlow: 1.1, dayGlow: 0.05 });
     const su = (-w / 2 + 2 + xs) / 2 + 0.3;
-    signBoard(c.up.S, sm, su, 3.22, 3.6, 0.8, T, PAL.teal);
+    signBoard(c.up.S, sm, su, 3.12, 3.5, 0.72, T, PAL.teal);
   } else {
     const sm = signMat('toyworks3', { text: 'TOY WORKS', sub: 'ROBOTICS HALL', bg: '#1f5654', fg: '#f5f3ee', accent: '#93d6c3', w: 512, h: 128, icon: 'gear', nightGlow: 1.2, dayGlow: 0.05 });
     signBoard(c.up.S, sm, -1.0, 6.95, 3.6, 0.9, T, PAL.graphite);

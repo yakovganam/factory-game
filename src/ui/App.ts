@@ -20,6 +20,7 @@ import type { Dir, GameState } from '../sim/types';
 import { DX, DY, TPS } from '../sim/types';
 import { IconRenderer } from '../render/icons';
 import { clockOf, View, type Pick } from '../render/View';
+import { FLOOR_Y } from '../render/factoryView';
 import { InputController } from '../render/camera';
 import type { Selection, SheetName, UiCtx } from './ctx';
 import { bdi, clear, h } from './dom';
@@ -319,7 +320,7 @@ export class App implements UiCtx {
   /** Screen position of an interior tile centre (automation/QA helper). */
   tileScreen(fid: string, x: number, y: number) {
     const b = this.sim.s.buildings.find((q) => q.id === fid)!;
-    return this.view.project(new THREE.Vector3(b.x + x + 0.5, 0, b.z + y + 0.5));
+    return this.view.project(new THREE.Vector3(b.x + x + 0.5, FLOOR_Y, b.z + y + 0.5));
   }
 
   // ======================================================================== saves

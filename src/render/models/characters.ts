@@ -141,11 +141,14 @@ function bodyGeometry(key: string, L: Look, worker: boolean): THREE.BufferGeomet
     b.add('paint', new THREE.SphereGeometry(0.13, 10, 6), L.skin, 0, hy, 0, { sx: 0.93, sy: 1.04, sz: 0.92 });
     b.box('paint', shadeK(L.skin, 0.92), 0.04, 0.045, 0.035, 0.122, hy - 0.005, 0, 0.012);
     for (const s of [-1, 1]) {
-      b.box('paint', 0x1d1f24, 0.02, 0.034, 0.026, 0.115, hy + 0.025, s * 0.045, 0);
+      b.box('paint', 0x1d1f24, 0.02, 0.03, 0.02, 0.117, hy + 0.012, s * 0.05, 0);
     }
     if (L.beard) b.box('paint', L.hair, 0.06, 0.07, 0.17, 0.095, hy - 0.07, 0, 0.025);
     // hair
-    if (L.hair2 !== 'bald') b.add('paint', new THREE.SphereGeometry(0.137, 10, 4, 0, TAU, 0, Math.PI * 0.55), L.hair, -0.012, hy + 0.0, 0, { sx: 0.95, sz: 0.95 });
+    if (L.hair2 !== 'bald') {
+      b.add('paint', new THREE.SphereGeometry(0.137, 10, 4, 0, TAU, 0, Math.PI * 0.4), L.hair, -0.008, hy + 0.006, 0, { sx: 0.96, sz: 0.97 });
+      b.box('paint', L.hair, 0.1, 0.15, 0.25, -0.065, hy - 0.01, 0, 0.04);
+    }
     if (L.hair2 === 'bob') b.box('paint', L.hair, 0.16, 0.14, 0.27, -0.035, hy - 0.06, 0, 0.05);
     if (L.hair2 === 'long') b.box('paint', L.hair, 0.08, 0.26, 0.22, -0.1, hy - 0.12, 0, 0.04);
     if (L.hair2 === 'bun') b.sphere('paint', L.hair, 0.06, -0.12, hy + 0.06, 0, 8, 6);

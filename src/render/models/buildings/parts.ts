@@ -227,9 +227,9 @@ export function bayExterior(b: Builder, u: number, w: number, h: number, T: numb
   const frame = o.frame ?? PAL.graphite;
   const fw = 0.12;
   // jambs and header (proud of the wall)
-  b.span('satin', frame, u - w / 2 - fw, 0, T - 0.01, u - w / 2, h, T + 0.07, 0.01);
-  b.span('satin', frame, u + w / 2, 0, T - 0.01, u + w / 2 + fw, h, T + 0.07, 0.01);
-  b.span('satin', frame, u - w / 2 - fw, h, T - 0.01, u + w / 2 + fw, h + 0.14, T + 0.07, 0.01);
+  b.span('satin', frame, u - w / 2 - fw, 0, T - 0.01, u - w / 2, h, T + 0.07, 0);
+  b.span('satin', frame, u + w / 2, 0, T - 0.01, u + w / 2 + fw, h, T + 0.07, 0);
+  b.span('satin', frame, u - w / 2 - fw, h, T - 0.01, u + w / 2 + fw, h + 0.14, T + 0.07, 0.012);
   b.span('hazard', 0xffffff, u - w / 2 - fw - 0.002, 0, T + 0.07, u - w / 2 + 0.002, 0.9, T + 0.075, 0);
   b.span('hazard', 0xffffff, u + w / 2 - 0.002, 0, T + 0.07, u + w / 2 + fw + 0.002, 0.9, T + 0.075, 0);
   // threshold plate through the wall thickness

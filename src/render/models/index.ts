@@ -30,6 +30,8 @@ export { BELT_BASE_SPEED } from './machines/belt';
 export { WORKER_WALK_SPEED } from './characters';
 export { PLINTH as BUILDING_FLOOR_HEIGHT } from './buildings/parts';
 export { ITEM_IDS };
+export { disposeMaterialLibrary, setNightLevel, PAL } from './materials';
+export { clearGeometryCache } from './geom';
 
 type Factory = (o: ModelOptions) => ModelInstance;
 
