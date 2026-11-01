@@ -261,6 +261,7 @@ function createPerson(worker: boolean, opts: ModelOptions): ModelInstance {
 
   return makeInstance({
     root,
+    extraDispose: () => skel.dispose(),
     update: (dt, s: AnimState) => {
       const pose = s.pose ?? 'idle';
       const moving = pose === 'walk' || pose === 'carry';

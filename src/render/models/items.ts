@@ -27,14 +27,10 @@ function wheel(b: Builder, x: number, y: number, z: number, r: number, wdt: numb
 function carBody(b: Builder, body: number, cabin: number, glass: number | null, tire: number, hub: number, lights: boolean): void {
   b.boxB(M, body, 0.3, 0.085, 0.15, 0, 0.035, 0, 0.025);
   b.boxB(M, cabin, 0.15, 0.075, 0.13, -0.025, 0.12, 0, 0.025);
-  if (glass !== null) {
-    b.box(M, glass, 0.11, 0.045, 0.134, -0.025, 0.16, 0, 0.01);
-    b.box(M, glass, 0.155, 0.045, 0.09, -0.025, 0.16, 0, 0.01);
-  }
+  if (glass !== null) b.box(M, glass, 0.155, 0.045, 0.134, -0.025, 0.16, 0, 0.012);
   for (const x of [-0.095, 0.095]) for (const z of [-0.078, 0.078]) wheel(b, x, 0.042, z, 0.042, 0.03, tire, hub);
   if (lights) {
     for (const z of [-0.045, 0.045]) b.box(M, PAL.yellow, 0.012, 0.022, 0.03, 0.151, 0.085, z, 0.004);
-    b.box(M, PAL.white, 0.006, 0.014, 0.1, 0.15, 0.06, 0, 0.002);
   }
 }
 
@@ -60,20 +56,20 @@ function robot(b: Builder, body: number, head: number, limbs: number, face: numb
 
 function smartBot(b: Builder, shell: number, trim: number, visor: number | null, base: number, chest: number): void {
   // tread base
-  b.boxB(M, base, 0.17, 0.05, 0.05, 0, 0, -0.05, 0.02);
-  b.boxB(M, base, 0.17, 0.05, 0.05, 0, 0, 0.05, 0.02);
-  for (const x of [-0.06, 0, 0.06]) for (const z of [-0.077, 0.077]) b.cyl(M, GREY2, 0.017, 0.006, x, 0.025, z, 'z', 8);
+  b.boxB(M, base, 0.17, 0.05, 0.05, 0, 0, -0.05, 0);
+  b.boxB(M, base, 0.17, 0.05, 0.05, 0, 0, 0.05, 0);
+  for (const x of [-0.05, 0.05]) for (const z of [-0.077, 0.077]) b.cyl(M, GREY2, 0.017, 0.006, x, 0.025, z, 'z', 6);
   // torso (tapered via two boxes)
   b.boxB(M, shell, 0.13, 0.1, 0.12, 0, 0.05, 0, 0.03);
   b.boxB(M, trim, 0.14, 0.02, 0.13, 0, 0.145, 0, 0.008);
   b.box(M, chest, 0.006, 0.05, 0.06, 0.066, 0.1, 0, 0.004);
   // dome head
-  b.add(M, new THREE.SphereGeometry(0.065, 12, 6, 0, TAU, 0, Math.PI / 2), shell, 0, 0.165, 0);
-  b.cylB(M, trim, 0.067, 0.02, 0, 0.155, 0, 12);
-  if (visor !== null) b.add(M, new THREE.CylinderGeometry(0.0665, 0.0665, 0.03, 12, 1, true, -0.9, 1.8), visor, 0, 0.198, 0);
+  b.add(M, new THREE.SphereGeometry(0.065, 10, 4, 0, TAU, 0, Math.PI / 2), shell, 0, 0.165, 0);
+  b.cylB(M, trim, 0.067, 0.02, 0, 0.155, 0, 10);
+  if (visor !== null) b.add(M, new THREE.CylinderGeometry(0.0665, 0.0665, 0.03, 6, 1, true, -0.9, 1.8), visor, 0, 0.198, 0);
   // arms
-  b.box(M, trim, 0.03, 0.08, 0.04, 0, 0.1, -0.08, 0.01, { rx: 0.2 });
-  b.box(M, trim, 0.03, 0.08, 0.04, 0, 0.1, 0.08, 0.01, { rx: -0.2 });
+  b.box(M, trim, 0.03, 0.08, 0.04, 0, 0.1, -0.08, 0, { rx: 0.2 });
+  b.box(M, trim, 0.03, 0.08, 0.04, 0, 0.1, 0.08, 0, { rx: -0.2 });
   b.sphere(M, PAL.orange, 0.012, 0, 0.245, 0, 6, 4);
 }
 
@@ -172,9 +168,8 @@ function build(id: string): THREE.BufferGeometry | null {
       const cols = [PAL.red, PAL.blue, PAL.yellow, PAL.green, 0x4f9be0, PAL.orange];
       cols.forEach((c, i) => {
         const x = -0.08 + (i % 3) * 0.08, z = i < 3 ? -0.045 : 0.045;
-        b.boxB(M, c, 0.06, 0.04, 0.05, x, 0.046, z, 0.008, { ry: (i % 2) * 0.3 });
-        b.cylB(M, c, 0.011, 0.012, x - 0.014, 0.086, z, 6);
-        b.cylB(M, c, 0.011, 0.012, x + 0.014, 0.086, z, 6);
+        b.boxB(M, c, 0.06, 0.04, 0.05, x, 0.046, z, 0, { ry: (i % 2) * 0.3 });
+        b.cylB(M, c, 0.014, 0.012, x, 0.086, z, 6);
       });
       break;
     }

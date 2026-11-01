@@ -76,7 +76,7 @@ function stackOnBeforeCompile(shader: THREE.WebGLProgramParametersWithUniforms, 
   );
   shader.fragmentShader = 'varying float vOn;\n' + shader.fragmentShader
     .replace('#include <color_fragment>', '#include <color_fragment>\n diffuseColor.rgb *= mix(0.38, 0.9, vOn);')
-    .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n totalEmissiveRadiance += vColor.rgb * diffuse * vOn * 3.2;');
+    .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n totalEmissiveRadiance += vColor.rgb * diffuse * vOn * 2.0;');
 }
 
 const lensGeoCache = new Map<string, THREE.BufferGeometry>();
@@ -193,6 +193,7 @@ export class StackLight {
     this.haloMat = new THREE.SpriteMaterial({ map: haloTex, color: 0xffffff, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
     this.haloMat.userData.perInstance = true;
     this.halo = new THREE.Sprite(this.haloMat);
+    this.halo.geometry.userData.shared = true; // three's module-level sprite quad
     this.halo.scale.setScalar(0.42 * size);
     this.halo.position.copy(lens.position);
     this.halo.renderOrder = 10;

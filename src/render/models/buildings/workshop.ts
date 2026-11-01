@@ -60,8 +60,8 @@ const BAY_W = 1.8;
 const BAY_H = 2.5;
 
 const COL = {
-  dado: 0x7d9a92,
-  lining: 0xf3ead8,
+  dado: 0x6c8f86,
+  lining: 0xeadcc3,
   cap: 0xe8dcc4,
   frame: 0x2f4a4c,
   truss: 0x6f8590,
@@ -303,6 +303,15 @@ function gableRoof(c: Ctx, x0: number, x1: number, H: number, pitch: number, col
   for (const s of [1, -1]) {
     const pz = (s * run) / 2, py = ridge - (run / 2) * tan;
     b.box('ribbed', color, lx, rt, L, cx, py + (rt / 2) * cos, pz + s * (rt / 2) * sin, 0.01, { rx: s * pitch });
+    // rooflights: framed glazed strips set into the slope
+    const nl = Math.max(1, Math.round((x1 - x0) / 3.2));
+    for (let i = 0; i < nl; i++) {
+      const lx = x0 + ((x1 - x0) * (i + 0.5)) / nl;
+      const d0 = run * 0.42; // distance from the ridge along the horizontal run
+      const ly = ridge - d0 * tan + (rt + 0.015) * cos, lz = s * d0 + s * (rt + 0.015) * sin;
+      b.box('satin', 0xd5dadc, 1.0, 0.05, 1.7, lx, ly, lz, 0.015, { rx: s * pitch });
+      b.box('glassLit', 0xa9cfe0, 0.86, 0.03, 1.56, lx, ly + 0.025 * cos, lz + s * 0.025 * sin, 0, { rx: s * pitch });
+    }
     // fascia + gutter
     const ez = s * run, ey = ridge - run * tan;
     b.box('satin', shade(color, 0.7), lx, 0.16, 0.04, cx, ey - 0.02, ez + s * 0.03, 0.008);
@@ -427,7 +436,7 @@ export function createWorkshop(opts: ModelOptions = {}): ModelInstance {
   const c: Ctx = { w, h, level, st: new Builder(), up: { S: new Builder(), E: new Builder() }, roof: new Builder(), truss: new Builder(), anim: [], pools: [] };
 
   // ---- floor slab (exactly the grid) + foundation
-  c.st.span('concrete', 0xe4ded3, -w / 2, -PLINTH - 0.05, -h / 2, w / 2, 0, h / 2, 0);
+  c.st.span('concrete', 0xcfc6b7, -w / 2, -PLINTH - 0.05, -h / 2, w / 2, 0, h / 2, 0);
   // perimeter safety line (inside the grid, 0.08 from the wall)
   const ly = 0.004;
   c.st.span('paint', PAL.yellow, -w / 2 + 0.06, 0, -h / 2 + 0.06, w / 2 - 0.06, ly, -h / 2 + 0.11, 0);

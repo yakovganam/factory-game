@@ -391,7 +391,7 @@ function create(key: MatKey): THREE.Material {
       // one shared emissive material; the glow colour comes from the vertex colour (see GLOW_TINT)
       const m = std({ name: 'glow', roughness: 0.3, metalness: 0, emissive: new THREE.Color(0xffffff), emissiveIntensity: 0.45 });
       m.onBeforeCompile = (sh) => {
-        sh.fragmentShader = sh.fragmentShader.replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n totalEmissiveRadiance *= vColor;');
+        sh.fragmentShader = sh.fragmentShader.replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n totalEmissiveRadiance *= vColor.rgb;');
       };
       m.customProgramCacheKey = () => 'glowVC';
       return m;

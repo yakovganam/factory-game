@@ -299,7 +299,7 @@ function setupWorkshop(level: number) {
   walk.position.set(0, 0.006, interior[1] / 2 + 1.8);
   walk.receiveShadow = true;
   scene.add(walk);
-  if (!q.has('dist')) q.set('dist', '0.62');
+  if (!q.has('dist')) q.set('dist', cutaway > 0.5 ? '0.64' : '0.74');
   frameObject(bld.inst.root, q.get('cam') ?? '34');
   return bld;
 }
