@@ -219,11 +219,12 @@ function entityActions(ctx: UiCtx, f: FactoryState, e: Entity, def: MachineDef) 
   const s = ctx.sim.s;
   const next = e.tier + 1;
   const canUp = next < def.speedPct.length;
-  const beltLocked = def.role === 'belt' && !s.unlocked.includes('ch1_belt_mk2');
+  const gate = def.tierUnlocks?.[next];
+  const beltLocked = !!gate && !s.unlocked.includes(gate);
   return h(
     'div',
     { class: 'section chips' },
-    canUp ? btn(`${t('panel.upgrade', { n: next + 1 })} · ${money(def.upgradeCost[next] ?? 0)}`, () => ctx.run({ t: 'upgradeMachine', f: f.id, e: e.id }, 'upgrade_complete'), { cls: 'small', disabled: beltLocked, title: beltLocked ? t('err.locked', { what: 'unlock.ch1_belt_mk2' }) : `${t('panel.upgrade_speed', { pct: (def.speedPct[next] ?? 100) - (def.speedPct[e.tier] ?? 100) })}` }) : null,
+    canUp ? btn(`${t('panel.upgrade', { n: next + 1 })} · ${money(def.upgradeCost[next] ?? 0)}`, () => ctx.run({ t: 'upgradeMachine', f: f.id, e: e.id }, 'upgrade_complete'), { cls: 'small', disabled: beltLocked, title: beltLocked ? t('err.locked', { what: `unlock.${gate}` }) : `${t('panel.upgrade_speed', { pct: (def.speedPct[next] ?? 100) - (def.speedPct[e.tier] ?? 100) })}` }) : null,
     btn(t('panel.rotate'), () => ctx.run({ t: 'rotate', f: f.id, e: e.id }, 'build_rotate'), { cls: 'small' }),
     e.kind === 'machine' ? btn(t('panel.move'), () => ctx.startMove(f.id, e.id), { cls: 'small' }) : null,
     btn(t('panel.remove_refund', { v: money(refundFor(s, e, ctx.db)) }), () => {

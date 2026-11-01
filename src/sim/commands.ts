@@ -228,7 +228,8 @@ export function execCommand(s: GameState, db: ContentDB, c: Command, ev: EventBu
       const m = db.machines.get(e.def)!;
       const next = e.tier + 1;
       if (next >= m.speedPct.length) return fail('err.max_tier');
-      if (m.role === 'belt' && !s.unlocked.includes('ch1_belt_mk2')) return fail('err.locked', { what: 'unlock.ch1_belt_mk2' });
+      const gate = m.tierUnlocks?.[next];
+      if (gate && !s.unlocked.includes(gate)) return fail('err.locked', { what: `unlock.${gate}` });
       const cost = m.upgradeCost[next] ?? 0;
       if (!trySpend(s, 'construction', cost)) return fail('err.no_cash', { cost });
       e.tier = next;

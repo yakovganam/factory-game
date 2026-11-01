@@ -383,7 +383,10 @@ function checkUnlocks(ctx: Ctx): void {
   const used = new Set<string>();
   for (const u of ctx.unlocks.values()) u.requires.forEach((r) => used.add(r));
   for (const r of ctx.recipes.values()) if (r.unlock) used.add(r.unlock);
-  for (const m of ctx.machines.values()) if (m.unlock) used.add(m.unlock);
+  for (const m of ctx.machines.values()) {
+    if (m.unlock) used.add(m.unlock);
+    for (const u of m.tierUnlocks ?? []) if (u) used.add(u);
+  }
   for (const s of ctx.sources.values()) if (s.unlock) used.add(s.unlock);
   for (const b of ctx.buildings.values()) {
     if (b.unlock) used.add(b.unlock);

@@ -129,6 +129,8 @@ export interface MachineDef {
   speedPct: number[];
   /** Upgrade cost in cents to reach tier index i (index 0 unused). */
   upgradeCost: number[];
+  /** Optional unlock required to reach tier index i (index 0 unused). */
+  tierUnlocks?: (UnlockId | undefined)[];
   anim: MachineAnim;
   /** Render model id. */
   model: string;

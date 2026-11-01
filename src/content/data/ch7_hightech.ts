@@ -22,7 +22,7 @@ const sites = collect([
   }),
   site({
     id: LED, kind: 'factory', index: 48, chapter: 7, plot: [24, 18], unlock: 'ch7_led',
-    machines: ['mocvd_reactor', 'led_binner', 'luminaire_line'], mechanics: ['spec_variants', 'quality_sorting'],
+    machines: ['mocvd_reactor', 'led_binner', 'luminaire_line'], mechanics: ['efficiency_grading', 'spec_variants', 'quality_sorting'],
     identity: 'LED dies are binned by efficiency and brightness; high bins become panel lights and streetlights with strict illumination specs, low bins become household bulbs.',
     interior: [12, 8], cost: 900000, kw: 60, staff: 4, dock: 100, bay: 'bay_clean',
     visual: ['Clean hall with a glowing reactor window.', 'Binning lab and luminaire assembly line.', 'Facade of colour-changing light panels.'],
