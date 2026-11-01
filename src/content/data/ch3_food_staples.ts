@@ -29,6 +29,7 @@ const sites = collect([
     identity: 'Dough batches are scheduled through a shared tunnel oven; every bake starts a freshness clock, so the oven plan must follow same-day demand.',
     interior: [12, 7], cost: 240000, kw: 45, staff: 4, dock: 150, bay: 'bay_food',
     visual: ['Bakery hall with one tunnel oven and a flour hopper.', 'Second oven line and cooling spiral.', 'Glazed bakery front with a 24-hour dispatch yard.'],
+    l3Req: ['ch3_supermarket'],
     l2: [{ t: 'produced', item: 'bread_loaf', qty: 800 }], l3: [{ t: 'sold', item: 'sliced_bread', qty: 3000 }],
   }),
   site({
@@ -53,6 +54,7 @@ const sites = collect([
     identity: 'Curd is pressed into wheels and aging-room space must be split between quick young cheese and slow, valuable matured cheese.',
     interior: [12, 8], cost: 300000, kw: 30, staff: 4, dock: 150, bay: 'bay_cold',
     visual: ['Stone-clad dairy with copper vats.', 'Cellar extension with wooden aging racks.', 'Climate-controlled aging tower with tasting room.'],
+    l3Req: ['ch3_aged_cheese'],
     l2: [{ t: 'produced', item: 'young_cheese', qty: 400 }], l3: [{ t: 'produced', item: 'aged_cheese', qty: 1000 }],
   }),
   site({
@@ -61,6 +63,7 @@ const sites = collect([
     identity: 'Allocates shelf, chiller and freezer space across city-made groceries; restocking, freshness and checkout queues decide what residents actually buy.',
     interior: [14, 10], grow: [4, 2], cost: 300000, kw: 12, staff: 6,
     visual: ['Neighbourhood grocery with green awning and four aisles.', 'Chilled wall, bakery corner and extra checkouts.', 'Flagship market with rooftop parking and self-checkout.'],
+    l2Req: ['ch3_dairy'],
     l2: [{ t: 'sold', item: 'milk_carton', qty: 1000 }], l3: [{ t: 'revenue', cents: 8000000 }],
     sells: [
       'flour_bag', 'sliced_bread', 'wholemeal_loaf', 'croissant', 'spaghetti_pack', 'penne_pack', 'fresh_ravioli',

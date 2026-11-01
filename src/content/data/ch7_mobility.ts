@@ -30,6 +30,7 @@ const sites = collect([
     identity: 'Payload and range trade off through motor and battery count, and every drone must be scheduled into the netted flight-test cage before it ships.',
     interior: [12, 8], cost: 800000, kw: 30, staff: 4, dock: 80, bay: 'bay_clean',
     visual: ['Assembly room beside a netted flight cage.', 'Larger test cage and battery store.', 'Rooftop test pad with a hovering mascot drone.'],
+    l3Req: ['ch7_drone_delivery'],
     l2: [{ t: 'produced', item: 'camera_drone', qty: 100 }], l3: [{ t: 'produced', item: 'delivery_drone', qty: 100 }],
   }),
   site({
@@ -38,6 +39,7 @@ const sites = collect([
     identity: 'Frames, wheelsets and drivetrains meet at assembly stations, where each order can be customised into a city, mountain or cargo e-bike.',
     interior: [14, 8], cost: 450000, kw: 40, staff: 5, dock: 150, bay: 'bay_heavy',
     visual: ['Workshop with a frame jig and bike racks.', 'Paint line and wheel-building corner.', 'Test track loop around the factory roof.'],
+    l3Req: ['ch7_mtb'],
     l2: [{ t: 'produced', item: 'city_bicycle', qty: 300 }], l3: [{ t: 'produced', item: 'mountain_bike', qty: 400 }],
   }),
   site({
@@ -46,6 +48,7 @@ const sites = collect([
     identity: 'Standard and long-range scooters compete for battery packs and charge-test bays, so the product balance follows both demand and cell supply.',
     interior: [12, 8], cost: 500000, kw: 50, staff: 4, dock: 120, bay: 'bay_heavy',
     visual: ['Compact plant with a charging wall.', 'Second line and a scooter test ramp.', 'Neon-lit flagship with a rooftop charging garden.'],
+    l3Req: ['ch7_lr_scooter'],
     l2: [{ t: 'produced', item: 'e_scooter', qty: 200 }], l3: [{ t: 'produced', item: 'e_scooter_lr', qty: 300 }],
   }),
   site({
@@ -62,6 +65,7 @@ const sites = collect([
     identity: 'Masts, counterweights and electric drives become forklifts and reach trucks that must pass load testing; they raise warehouse productivity when delivered.',
     interior: [14, 9], cost: 900000, kw: 80, staff: 6, dock: 150, bay: 'bay_heavy',
     visual: ['Yellow-striped hall with a mast welding jig.', 'Load-test tower and battery charging room.', 'Demo yard with stacked pallets and a forklift ballet.'],
+    l3Req: ['ch7_reach_truck'],
     l2: [{ t: 'produced', item: 'forklift', qty: 30 }], l3: [{ t: 'produced', item: 'reach_truck', qty: 40 }],
   }),
 ]);

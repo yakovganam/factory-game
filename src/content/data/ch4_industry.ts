@@ -57,6 +57,7 @@ const sites = collect([
     identity: 'Lathes, mills, grinders and presses are specialised by tooling; tighter tolerances raise value but cut throughput and send more steel to scrap.',
     interior: [12, 8], cost: 450000, kw: 70, staff: 5, dock: 200, bay: 'bay_metal',
     visual: ['Machine shop with sawtooth roof and a bar-stock rack.', 'Climate-controlled grinding room.', 'Metrology lab and automated tool tower.'],
+    l3Req: ['ch4_gearbox'],
     l2: [{ t: 'produced', item: 'machined_shaft', qty: 1000 }], l3: [{ t: 'produced', item: 'precision_gearbox', qty: 300 }],
   }),
   site({

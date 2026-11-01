@@ -52,6 +52,7 @@ const sites = collect([
     identity: 'One tunnel kiln is loaded with bricks, roof tiles or glazed ceramic tiles; what goes on each kiln car sets the week’s product mix and fuel bill.',
     interior: [14, 7], cost: 420000, kw: 80, staff: 4, dock: 400, bay: 'bay_bulk',
     visual: ['Brick shed with a tall chimney and clay heap.', 'Tunnel kiln extension and drying racks.', 'Glazing hall and showroom of tile samples.'],
+    l3Req: ['ch4_paint'],
     l2: [{ t: 'produced', item: 'brick', qty: 3000 }], l3: [{ t: 'produced', item: 'ceramic_tile', qty: 2000 }],
   }),
   site({
@@ -118,7 +119,8 @@ export const ch4a: ContentPack = {
     recipe('anneal_jars', 'annealing_lehr', 'hot_jars*5', 'glass_jar*5', 20),
     recipe('temper_cover_glass', 'annealing_lehr', 'glass_pane*1', 'cover_glass*4', 25, { unlock: 'ch6_pcb' }),
     recipe('smelt_pig_iron', 'blast_furnace', 'iron_ore*6,coke*2,limestone*1', 'pig_iron*4,slag*2', 40),
-    recipe('convert_steel', 'arc_furnace', 'pig_iron*4,steel_scrap*1', 'steel_billet*4', 30),
+    recipe('convert_steel', 'arc_furnace', 'pig_iron*5', 'steel_billet*4', 30),
+    recipe('charge_mixed_steel', 'arc_furnace', 'pig_iron*3,steel_scrap*3', 'steel_billet*5', 32),
     recipe('melt_scrap_steel', 'arc_furnace', 'steel_scrap*5', 'steel_billet*4', 35, { recycling: true }),
     recipe('roll_sheet', 'rolling_mill', 'steel_billet*2', 'steel_sheet*4,steel_scrap*1@300', 12),
     recipe('draw_steel_wire', 'rolling_mill', 'steel_billet*1', 'steel_wire*4', 10),

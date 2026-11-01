@@ -18,6 +18,7 @@ const sites = collect([
     identity: 'Compact assembly packs sensors, cells and screens into tiny cases; every added feature trades battery life and yield against a higher price tier.',
     interior: [10, 7], cost: 500000, kw: 30, staff: 4, dock: 80, bay: 'bay_clean',
     visual: ['Small clean studio with magnifier benches.', 'Micro-assembly cell and strap molding room.', 'Design lab with a rotating watch-face sign.'],
+    l3Req: ['ch6_smartwatch'],
     l2: [{ t: 'produced', item: 'fitness_band', qty: 300 }], l3: [{ t: 'produced', item: 'smartwatch', qty: 600 }],
   }),
   site({
@@ -26,6 +27,7 @@ const sites = collect([
     identity: 'Drivers are built in-house and every product is tuned in an anechoic booth; booth time is split between earbuds, portable speakers and premium hi-fi pairs.',
     interior: [12, 8], cost: 450000, kw: 30, staff: 4, dock: 100, bay: 'bay_clean',
     visual: ['Workshop with a foam-lined test booth.', 'Wood cabinet shop and second booth.', 'Listening lounge with a giant speaker-cone facade.'],
+    l3Req: ['ch6_hifi'],
     l2: [{ t: 'produced', item: 'wireless_earbuds', qty: 400 }], l3: [{ t: 'produced', item: 'hifi_speaker_pair', qty: 300 }],
   }),
   site({
@@ -34,6 +36,7 @@ const sites = collect([
     identity: 'Bulky fridges, washers and microwaves need floor space, pallets and long test cycles; better motors and gaskets raise energy ratings at higher cost.',
     interior: [14, 9], cost: 650000, kw: 70, staff: 6, dock: 200, bay: 'bay_heavy',
     visual: ['Big shed with a sheet-metal press and paint booth.', 'Second assembly line and pallet yard.', 'Test lab with an energy-label billboard.'],
+    l3Req: ['ch6_washer'],
     l2: [{ t: 'produced', item: 'fridge', qty: 150 }], l3: [{ t: 'produced', item: 'washing_machine', qty: 300 }],
   }),
   site({
@@ -42,6 +45,7 @@ const sites = collect([
     identity: 'Lenses are ground and bonded to sensors, and every module needs calibration time; specification choices route modules to phones, drones, security or pro cameras.',
     interior: [10, 7], cost: 600000, kw: 30, staff: 4, dock: 80, bay: 'bay_clean',
     visual: ['Optics lab with lens polishing heads.', 'Calibration darkroom and module line.', 'Camera-shaped atrium with a lens-iris window.'],
+    l3Req: ['ch6_digital_camera'],
     l2: [{ t: 'produced', item: 'camera_module', qty: 400 }], l3: [{ t: 'produced', item: 'digital_camera', qty: 200 }],
   }),
   site({
@@ -50,6 +54,7 @@ const sites = collect([
     identity: 'Routers and switches are configured per order and must survive long burn-in on test racks before shipping, so rack space sets output.',
     interior: [10, 7], cost: 500000, kw: 30, staff: 4, dock: 100, bay: 'bay_clean',
     visual: ['Assembly room with blinking burn-in racks.', 'Configuration lab and second rack row.', 'Data-centre style hall with an antenna mast.'],
+    l3Req: ['ch6_switch'],
     l2: [{ t: 'produced', item: 'home_router', qty: 400 }], l3: [{ t: 'produced', item: 'network_switch', qty: 200 }],
   }),
 ]);
@@ -141,9 +146,9 @@ export const ch6b: ContentPack = {
     { id: 'ch6_appliance', chapter: 6, cost: 450000, requires: ['ch6_pcb', 'ch4_tire', 'ch4_glassworks'], conditions: [{ t: 'produced', item: 'controller_board', qty: 200 }], category: 'building' },
     { id: 'ch6_network', chapter: 6, cost: 300000, requires: ['ch6_computer'], conditions: [{ t: 'produced', item: 'data_cable', qty: 200 }], category: 'building' },
     { id: 'ch6_smartwatch', chapter: 6, cost: 200000, requires: ['ch6_wearables', 'ch6_smartphone'], conditions: [{ t: 'sold', item: 'fitness_band', qty: 100 }], category: 'product' },
-    { id: 'ch6_hifi', chapter: 6, cost: 150000, requires: ['ch6_audio', 'ch2_engineered_wood'], conditions: [{ t: 'sold', item: 'bluetooth_speaker', qty: 100 }], category: 'product' },
+    { id: 'ch6_hifi', chapter: 6, cost: 150000, requires: ['ch6_audio', 'ch2_engineered_wood', 'ch6_electronics_store'], conditions: [{ t: 'sold', item: 'bluetooth_speaker', qty: 100 }], category: 'product' },
     { id: 'ch6_digital_camera', chapter: 6, cost: 200000, requires: ['ch6_camera', 'ch6_battery'], conditions: [{ t: 'produced', item: 'camera_module', qty: 100 }], category: 'product' },
-    { id: 'ch6_washer', chapter: 6, cost: 150000, requires: ['ch6_appliance'], conditions: [{ t: 'sold', item: 'fridge', qty: 50 }], category: 'product' },
+    { id: 'ch6_washer', chapter: 6, cost: 150000, requires: ['ch6_appliance', 'ch6_electronics_store'], conditions: [{ t: 'sold', item: 'fridge', qty: 50 }], category: 'product' },
     { id: 'ch6_switch', chapter: 6, cost: 200000, requires: ['ch6_network'], conditions: [{ t: 'sold', item: 'home_router', qty: 100 }], category: 'product' },
     ...sites.unlocks,
   ],

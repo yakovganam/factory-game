@@ -107,7 +107,7 @@ const epiano: Track = {
   ],
 };
 const padT: Track = {
-  name: 'pad', stem: 'base', instrument: 'pad', gain: 0.5, reverb: 0.4, opts: { attack: 0.9, release: 1.6, cutoff: 2100 },
+  name: 'pad', stem: 'base', instrument: 'pad', gain: 0.5, reverb: 0.4, opts: { attack: 0.9, release: 1.6, cutoff: 2800 },
   notes: [
     ...sustain(chart, S.intro, S.intro + 3, 66, 3, 0.45),
     ...sustain(chart, S.B, S.B + 7, 67, 4, 0.6),

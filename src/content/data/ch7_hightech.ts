@@ -26,6 +26,7 @@ const sites = collect([
     identity: 'LED dies are binned by efficiency and brightness; high bins become panel lights and streetlights with strict illumination specs, low bins become household bulbs.',
     interior: [12, 8], cost: 900000, kw: 60, staff: 4, dock: 100, bay: 'bay_clean',
     visual: ['Clean hall with a glowing reactor window.', 'Binning lab and luminaire assembly line.', 'Facade of colour-changing light panels.'],
+    l3Req: ['ch7_streetlights'],
     l2: [{ t: 'produced', item: 'led_bulb', qty: 2000 }], l3: [{ t: 'produced', item: 'led_streetlight', qty: 200 }],
   }),
   site({
@@ -34,6 +35,7 @@ const sites = collect([
     identity: 'Fictional diagnostic monitors and ultrasound scanners are built in traceable batches, and strict QA release checks reject any unit that fails.',
     interior: [12, 8], cost: 1100000, kw: 40, staff: 6, dock: 60, bay: 'bay_clean',
     visual: ['White clean hall with a glass QA lab.', 'Second clean bench row and batch archive.', 'Calm campus with a garden atrium.'],
+    l3Req: ['ch7_ultrasound'],
     l2: [{ t: 'produced', item: 'patient_monitor', qty: 40 }], l3: [{ t: 'produced', item: 'ultrasound_scanner', qty: 40 }],
   }),
   site({

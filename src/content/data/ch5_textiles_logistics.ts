@@ -41,6 +41,7 @@ const sites = collect([
     identity: 'Uppers and soles must meet as matched pairs on the lasting machine, and the curing oven is the bottleneck that sets daily pair output.',
     interior: [12, 8], cost: 300000, kw: 40, staff: 4, dock: 150, bay: 'bay_textile',
     visual: ['Workshop with sole press and lasting benches.', 'Curing tunnel and shoebox store.', 'Sneaker lab with a glass-walled design floor.'],
+    l3Req: ['ch5_boots'],
     l2: [{ t: 'produced', item: 'sneaker_pair', qty: 400 }], l3: [{ t: 'produced', item: 'boot_pair', qty: 600 }],
   }),
   site({
@@ -120,7 +121,7 @@ export const ch5: ContentPack = {
 
   recipes: [
     recipe('spin_cotton_yarn', 'spinning_frame', 'cotton*4', 'cotton_yarn*4', 15),
-    recipe('spin_recycled_yarn', 'spinning_frame', 'fabric_scraps*5', 'cotton_yarn*3', 15, { recycling: true }),
+    recipe('spin_recycled_yarn', 'spinning_frame', 'fabric_scraps*5', 'cotton_yarn*3', 15, { recycling: true, unlock: 'ch5_clothing' }),
     recipe('extrude_polyester', 'fiber_extruder', 'polymer_pellets*2', 'polyester_yarn*5', 12),
     recipe('weave_greige', 'loom', 'cotton_yarn*4', 'greige_fabric*3', 20),
     recipe('weave_upholstery', 'loom', 'polyester_yarn*4,cotton_yarn*2', 'upholstery_fabric*3', 25),
@@ -186,8 +187,8 @@ export const ch5: ContentPack = {
     { id: 'ch5_fulfillment', chapter: 5, cost: 300000, requires: ['ch5_warehouse'], conditions: [{ t: 'produced', item: 'shipping_box', qty: 2000 }], category: 'building' },
     { id: 'ch5_depot', chapter: 5, cost: 200000, requires: ['ch5_fulfillment'], conditions: [{ t: 'produced', item: 'parcel', qty: 200 }], category: 'building' },
     { id: 'ch5_sofa', chapter: 5, cost: 80000, requires: ['ch5_textile', 'ch2_furniture'], conditions: [{ t: 'produced', item: 'upholstery_fabric', qty: 100 }], category: 'product' },
-    { id: 'ch5_hoodie', chapter: 5, cost: 60000, requires: ['ch5_clothing'], conditions: [{ t: 'sold', item: 'tshirt', qty: 200 }], category: 'product' },
-    { id: 'ch5_boots', chapter: 5, cost: 80000, requires: ['ch5_footwear'], conditions: [{ t: 'sold', item: 'sneaker_pair', qty: 100 }], category: 'product' },
+    { id: 'ch5_hoodie', chapter: 5, cost: 60000, requires: ['ch5_clothing', 'ch5_fulfillment'], conditions: [{ t: 'sold', item: 'tshirt', qty: 200 }], category: 'product' },
+    { id: 'ch5_boots', chapter: 5, cost: 80000, requires: ['ch5_footwear', 'ch5_fulfillment'], conditions: [{ t: 'sold', item: 'sneaker_pair', qty: 100 }], category: 'product' },
     ...sites.unlocks,
   ],
 

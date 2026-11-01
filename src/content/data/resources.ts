@@ -158,6 +158,9 @@ export interface SiteSpec {
   visual: [string, string, string];
   l2: UnlockCondition[];
   l3: UnlockCondition[];
+  /** Extra prerequisites (beyond the building / previous level) for the level-2 and level-3 unlocks. */
+  l2Req?: string[];
+  l3Req?: string[];
   l2Machines?: string[];
   l3Machines?: string[];
   sells?: string[];
@@ -207,8 +210,8 @@ export function site(s: SiteSpec): { building: BuildingDef; unlocks: UnlockDef[]
     ...(s.consumes ? { consumes: s.consumes } : {}),
   };
   const unlocks: UnlockDef[] = [
-    { id: `${s.id}_l2`, chapter: s.chapter, cost: round100(s.cost * 0.4), requires: [s.unlock], conditions: s.l2, category: 'building' },
-    { id: `${s.id}_l3`, chapter: s.chapter, cost: round100(s.cost), requires: [`${s.id}_l2`], conditions: s.l3, category: 'building' },
+    { id: `${s.id}_l2`, chapter: s.chapter, cost: round100(s.cost * 0.4), requires: [s.unlock, ...(s.l2Req ?? [])], conditions: s.l2, category: 'building' },
+    { id: `${s.id}_l3`, chapter: s.chapter, cost: round100(s.cost), requires: [`${s.id}_l2`, ...(s.l3Req ?? [])], conditions: s.l3, category: 'building' },
   ];
   return { building, unlocks };
 }

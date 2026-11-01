@@ -38,6 +38,7 @@ const sites = collect([
     identity: 'Panels, dried lumber and fittings flow through configurable assembly routes — flat-pack or pre-assembled, plain or upholstered — trading freight volume against showroom value.',
     interior: [12, 8], cost: 280000, kw: 25, staff: 5, dock: 120, bay: 'bay_timber',
     visual: ['Joinery hall with workbenches and a varnish booth.', 'Flat-pack wing with carton feeders.', 'Upholstery loft and branded showroom facade.'],
+    l3Req: ['ch2_showroom'],
     l2: [{ t: 'produced', item: 'chair', qty: 150 }], l3: [{ t: 'sold', item: 'dining_table', qty: 200 }],
   }),
   site({
@@ -62,6 +63,7 @@ const sites = collect([
     identity: 'Displays furniture room sets; floor space per line and the home-delivery schedule decide what sells.',
     interior: [12, 8], grow: [4, 2], cost: 200000, kw: 6, staff: 3,
     visual: ['Glass-fronted showroom with three room sets.', 'Mezzanine gallery and delivery van bay.', 'Two-storey flagship with lit totem sign.'],
+    l3Req: ['ch2_bed_frame'],
     l2: [{ t: 'sold', item: 'chair', qty: 100 }], l3: [{ t: 'sold', item: 'bed_frame', qty: 120 }],
     sells: ['chair', 'dining_table', 'bookshelf_kit', 'bookshelf', 'bed_frame', 'sofa'],
   }),
@@ -122,7 +124,7 @@ export const ch2: ContentPack = {
     recipe('assemble_bed_frame', 'joinery_bench', 'dried_lumber*4,furniture_panel*2,furniture_fittings*2', 'bed_frame*1', 18, { unlock: 'ch2_bed_frame' }),
     recipe('upholster_sofa', 'upholstery_station', 'plywood*2,dried_lumber*2,upholstery_fabric*3', 'sofa*1', 24, { unlock: 'ch5_sofa' }),
     recipe('pulp_chips', 'pulper', 'wood_chips*6', 'pulp*4', 20, { waterL: 400 }),
-    recipe('pulp_recovered', 'pulper', 'waste_paper*5', 'pulp*4', 18, { waterL: 250, recycling: true }),
+    recipe('pulp_recovered', 'pulper', 'waste_paper*5', 'pulp*4', 18, { waterL: 250, recycling: true, unlock: 'ch2_recycling' }),
     recipe('form_web', 'paper_machine', 'pulp*4', 'wet_web*4', 12, { waterL: 300 }),
     recipe('dry_kraft', 'dryer_section', 'wet_web*4', 'kraft_paper*3', 30),
     recipe('dry_paperboard', 'dryer_section', 'wet_web*6', 'paperboard*3', 36),
@@ -166,7 +168,7 @@ export const ch2: ContentPack = {
   buildings: sites.buildings,
 
   sources: [
-    source('imp_resin_glue', 'resin_glue', 'import', 45, 200, undefined, 'ch2_engineered_wood'),
+    source('imp_resin_glue', 'resin_glue', 'import', 45, 200, undefined, 'ch2_sawmill'),
     source('imp_furniture_fittings', 'furniture_fittings', 'import', 50, 200, undefined, 'ch2_furniture'),
   ],
 

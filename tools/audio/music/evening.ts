@@ -79,7 +79,7 @@ const epiano: Track = {
   ],
 };
 const padT: Track = {
-  name: 'pad', stem: 'base', instrument: 'pad', gain: 0.55, reverb: 0.5, opts: { attack: 1.4, release: 2.2, cutoff: 1700 },
+  name: 'pad', stem: 'base', instrument: 'pad', gain: 0.55, reverb: 0.5, opts: { attack: 1.4, release: 2.2, cutoff: 2200 },
   notes: [...sustain(chart, S.intro, S.outro + 3, 65, 4, 0.5)],
 };
 const bassT: Track = {
@@ -129,7 +129,7 @@ export const evening: Score = {
   bars: BARS,
   key: 'Bb major',
   swing: 0.08,
-  presenceDb: 2,
+  presenceDb: 3,
   sections: Object.entries(S).map(([name, bar]) => ({ name, bar })),
   stems: [
     { id: 'base', channels: 2, gain: 1, lufs: -19.5, description: 'arpeggiated e-piano, warm pad, soft bass, nylon arpeggio, whisper-quiet brushes' },

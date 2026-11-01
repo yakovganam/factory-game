@@ -48,8 +48,15 @@ export const epiano: InstrumentFn = (k, dest, t, midi, dur, vel, o = {}) => {
     // tine: short high partial gives the "bell" in the attack
     const tine = k.osc('sine', f * 4.0, t, Math.min(end, t + 0.5));
     const tg = k.gain(0);
-    k.perc(tg.gain, t, 0.035 * velGain(vel, 0.1) * bright, 0.001, 0.22);
-    // body: a quiet sub-octave-free second harmonic for warmth on small speakers
+    k.perc(tg.gain, t, 0.05 * velGain(vel, 0.1) * bright, 0.001, 0.25);
+    // short metallic 'bark' high in the spectrum gives the attack definition
+    if (f * 7 < k.sr * 0.45) {
+      const bark = k.osc('sine', f * 7.02, t, Math.min(end, t + 0.2));
+      const bk = k.gain(0);
+      k.perc(bk.gain, t, 0.012 * velGain(vel, 0) * bright, 0.0008, 0.09);
+      bark.connect(bk).connect(amp);
+    }
+    // body: a quiet second harmonic for warmth on small speakers
     const h2 = k.osc('sine', f * 2, t, end);
     const h2g = k.gain(0.05);
     car.connect(amp);

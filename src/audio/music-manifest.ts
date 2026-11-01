@@ -70,7 +70,7 @@ export const MUSIC_THEMES: MusicTheme[] = [
       }
     ],
     "loudness": {
-      "mixLufs": -18.1,
+      "mixLufs": -18,
       "gainDb": -2.5
     },
     "stems": [
@@ -83,8 +83,8 @@ export const MUSIC_THEMES: MusicTheme[] = [
           "m4a": "audio/music/workshop_base.m4a"
         },
         "bytes": {
-          "ogg": 1115294,
-          "m4a": 1277995
+          "ogg": 1184159,
+          "m4a": 1278916
         },
         "gainDb": -8.9
       },
@@ -97,10 +97,10 @@ export const MUSIC_THEMES: MusicTheme[] = [
           "m4a": "audio/music/workshop_rhythm.m4a"
         },
         "bytes": {
-          "ogg": 1460892,
-          "m4a": 1322590
+          "ogg": 1465658,
+          "m4a": 1326051
         },
-        "gainDb": -1.3
+        "gainDb": -1.4
       },
       {
         "id": "lead",
@@ -111,8 +111,8 @@ export const MUSIC_THEMES: MusicTheme[] = [
           "m4a": "audio/music/workshop_lead.m4a"
         },
         "bytes": {
-          "ogg": 681676,
-          "m4a": 854590
+          "ogg": 690978,
+          "m4a": 853834
         },
         "gainDb": -1.8
       }
@@ -168,10 +168,10 @@ export const MUSIC_THEMES: MusicTheme[] = [
           "m4a": "audio/music/evening_base.m4a"
         },
         "bytes": {
-          "ogg": 1327252,
-          "m4a": 1287547
+          "ogg": 1406606,
+          "m4a": 1287899
         },
-        "gainDb": -6.6
+        "gainDb": -6.5
       },
       {
         "id": "lead",
@@ -182,8 +182,8 @@ export const MUSIC_THEMES: MusicTheme[] = [
           "m4a": "audio/music/evening_lead.m4a"
         },
         "bytes": {
-          "ogg": 541339,
-          "m4a": 795710
+          "ogg": 551849,
+          "m4a": 796746
         },
         "gainDb": 0.3
       }

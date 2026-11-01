@@ -59,7 +59,7 @@ export async function renderStem(score: Score, stemId: string, sr: number): Prom
   const shelf = ctx.createBiquadFilter();
   shelf.type = 'highshelf';
   shelf.frequency.value = 3200;
-  shelf.gain.value = score.presenceDb ?? 3;
+  shelf.gain.value = score.presenceDb ?? 4;
   stemBus.connect(hp).connect(shelf).connect(comp).connect(ctx.destination);
 
   const kit = new Kit(ctx, stemBus, hashString(`${score.id}:${stemId}`));

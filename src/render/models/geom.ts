@@ -171,7 +171,7 @@ export function roundedRectShape(w: number, h: number, r: number, cx = 0, cy = 0
 function normalize(g: THREE.BufferGeometry): THREE.BufferGeometry {
   let out = g.index ? g.toNonIndexed() : g;
   if (out === g) out = g.clone();
-  for (const name of Object.keys(out.attributes)) if (name !== 'position' && name !== 'normal' && name !== 'uv') out.deleteAttribute(name);
+  for (const name of Object.keys(out.attributes)) if (name !== 'position' && name !== 'normal' && name !== 'uv' && name !== 'color') out.deleteAttribute(name);
   if (!out.attributes.normal) out.computeVertexNormals();
   if (!out.attributes.uv) out.setAttribute('uv', new THREE.Float32BufferAttribute(new Float32Array(out.attributes.position.count * 2), 2));
   out.morphAttributes = {};
@@ -180,9 +180,13 @@ function normalize(g: THREE.BufferGeometry): THREE.BufferGeometry {
 }
 
 export type ColorSpec = number | ((x: number, y: number, z: number) => number);
+/** Pass as colour to keep a geometry's existing vertex colours (e.g. reusing item geometry). */
+export const KEEP_COLORS = -1;
 
 function paint(g: THREE.BufferGeometry, color: ColorSpec): void {
   const p = g.attributes.position;
+  if (color === KEEP_COLORS && g.attributes.color && g.attributes.color.itemSize === 3) return;
+  if (color === KEEP_COLORS) color = 0xffffff;
   const arr = new Float32Array(p.count * 3);
   if (typeof color === 'number') {
     _c.setHex(color);

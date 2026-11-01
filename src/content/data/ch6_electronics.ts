@@ -48,6 +48,7 @@ const sites = collect([
     identity: 'Configurable specifications — budget plastic laptops, aluminium pro laptops and desktops — share one assembly line, and test stations cap how many systems ship per hour.',
     interior: [12, 8], cost: 600000, kw: 40, staff: 6, dock: 150, bay: 'bay_clean',
     visual: ['Assembly hall with long benches and test racks.', 'CNC chassis room and burn-in shelves.', 'Glass-fronted showroom with a lit laptop logo.'],
+    l3Req: ['ch6_pro_laptop'],
     l2: [{ t: 'produced', item: 'budget_laptop', qty: 200 }], l3: [{ t: 'produced', item: 'pro_laptop', qty: 400 }],
   }),
   site({
@@ -56,6 +57,7 @@ const sites = collect([
     identity: 'Basic and pro model variants share a precision assembly cell; tight tolerances on housings and display bonding decide yield and margin.',
     interior: [12, 8], cost: 800000, kw: 45, staff: 5, dock: 120, bay: 'bay_clean',
     visual: ['Clean assembly room with blue ESD floor.', 'Unibody CNC room and display-bonding booth.', 'Flagship campus with a giant phone-screen facade.'],
+    l3Req: ['ch6_pro_phone'],
     l2: [{ t: 'produced', item: 'smartphone_basic', qty: 300 }], l3: [{ t: 'produced', item: 'smartphone_pro', qty: 500 }],
   }),
   site({
@@ -64,6 +66,7 @@ const sites = collect([
     identity: 'Chooses an assortment of city-made devices and appliances; limited display space and fast-moving trends decide which models earn a counter.',
     interior: [12, 8], cost: 350000, kw: 15, staff: 4,
     visual: ['Bright store with three display tables.', 'Appliance hall and demo wall.', 'Two-floor flagship with a video-wall facade.'],
+    l3Req: ['ch6_pro_phone'],
     l2: [{ t: 'revenue', cents: 30000000 }], l3: [{ t: 'sold', item: 'smartphone_pro', qty: 300 }],
     sells: [
       'budget_laptop', 'pro_laptop', 'desktop_pc', 'smartphone_basic', 'smartphone_pro', 'fitness_band', 'smartwatch',

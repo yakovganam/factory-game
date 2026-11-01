@@ -947,9 +947,30 @@ export class App implements UiCtx {
   }
 
   // ======================================================================== rendering: HUD / toolbar / panel
+  /** HUD elements are created once and updated in place: rebuilding them would drop presses mid-tap. */
+  private hudEls: { cash: HTMLElement; rate: HTMLElement; clock: HTMLElement; speed: HTMLButtonElement[]; overdraft: HTMLElement; save: HTMLElement; lang: string } | null = null;
+
   renderHud() {
     if (this.mode === 'title') return;
     const s = this.sim.s;
+    if (!this.hudEls || this.hudEls.lang !== getLang()) {
+      clear(this.hud);
+      const cash = h('div', { class: 'cash' });
+      const rate = h('div', { class: 'rate' });
+      const clock = h('div', { class: 'clock' });
+      const speed = [0, 1, 2, 3].map((n) => h('button', { class: 'btn small', 'aria-label': n ? t('hud.speed', { n }) : t('hud.pause'), onclick: () => this.setSpeed(n) }, n === 0 ? '❚❚' : n === 1 ? '▶' : n === 2 ? '▶▶' : '▶▶▶'));
+      const overdraft = h('div', { class: 'chip small bad hidden' }, t('hud.overdraft'));
+      const save = h('span', { class: 'savestate' });
+      this.hud.append(
+        h('div', { class: 'chip' }, h('div', null, cash, rate)),
+        h('div', { class: 'chip' }, clock, h('div', { class: 'speed', role: 'group' }, ...speed)),
+        h('div', { class: 'spacer' }),
+        overdraft,
+        h('div', { class: 'chip' }, save, h('button', { class: 'btn small', onclick: () => this.menuModal(), 'aria-label': t('tb.menu') }, '☰')),
+      );
+      this.hudEls = { cash, rate, clock, speed, overdraft, save, lang: getLang() };
+    }
+    const el = this.hudEls;
     const mins = s.ledger.minutes.slice(-6, -1);
     let rate = 0;
     for (const m of mins) for (const k of ['sales', 'contracts', 'imports', 'wages', 'energy', 'maintenance', 'freight'] as const) rate += m.a[k] ?? 0;
@@ -957,14 +978,22 @@ export class App implements UiCtx {
     const clk = clockOf(s.tick);
     const hh = Math.floor(clk.hour);
     const mm = Math.floor((clk.hour - hh) * 60);
-    clear(this.hud);
-    this.hud.append(
-      h('div', { class: 'chip' }, h('div', null, h('div', { class: 'cash' }, bdi(money(s.cash))), h('div', { class: `rate ${rate > 0 ? 'pos' : rate < 0 ? 'neg' : ''}` }, bdi(t('hud.per_min', { v: (rate >= 0 ? '+' : '') + money(Math.round(rate)) }))))),
-      h('div', { class: 'chip' }, h('div', { class: 'clock' }, bdi(t('hud.day', { d: clk.day, time: `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}` }))), h('div', { class: 'speed', role: 'group' }, ...[0, 1, 2, 3].map((n) => h('button', { class: `btn small ${this.speed === n ? 'on' : ''}`, 'aria-pressed': this.speed === n, 'aria-label': n ? t('hud.speed', { n }) : t('hud.pause'), onclick: () => this.setSpeed(n) }, n === 0 ? '❚❚' : n === 1 ? '▶' : n === 2 ? '▶▶' : '▶▶▶')))),
-      h('div', { class: 'spacer' }),
-      s.cash < 0 ? h('div', { class: 'chip small bad' }, t('hud.overdraft')) : '',
-      h('div', { class: 'chip' }, h('span', { class: 'savestate' }, this.saves.lastError ? t('hud.save_failed') : t('hud.saved')), h('button', { class: 'btn small', onclick: () => this.menuModal(), 'aria-label': t('tb.menu') }, '☰')),
-    );
+    const setText = (e: HTMLElement, v: string) => {
+      if (e.textContent !== v) {
+        clear(e);
+        e.append(bdi(v));
+      }
+    };
+    setText(el.cash, money(s.cash));
+    setText(el.rate, t('hud.per_min', { v: (rate >= 0 ? '+' : '') + money(Math.round(rate)) }));
+    el.rate.className = `rate ${rate > 0 ? 'pos' : rate < 0 ? 'neg' : ''}`;
+    setText(el.clock, t('hud.day', { d: clk.day, time: `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}` }));
+    el.speed.forEach((b, n) => {
+      b.classList.toggle('on', this.speed === n);
+      b.setAttribute('aria-pressed', String(this.speed === n));
+    });
+    el.overdraft.classList.toggle('hidden', s.cash >= 0);
+    el.save.textContent = this.saves.lastError ? t('hud.save_failed') : t('hud.saved');
   }
 
   renderToolbar() {
