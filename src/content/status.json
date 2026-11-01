@@ -3,9 +3,9 @@
     "data": true,
     "simMechanics": "partial",
     "interiorPlayable": true,
-    "art": "none",
-    "audio": "none",
-    "saveTested": false
+    "art": "benchmark",
+    "audio": "partial",
+    "saveTested": true
   },
   "sawmill": {
     "data": true,
@@ -419,9 +419,9 @@
     "data": true,
     "simMechanics": "partial",
     "interiorPlayable": false,
-    "art": "none",
-    "audio": "none",
-    "saveTested": false
+    "art": "benchmark",
+    "audio": "partial",
+    "saveTested": true
   },
   "furniture_showroom": {
     "data": true,

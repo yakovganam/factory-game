@@ -19,7 +19,8 @@ Severity levels: **S1** blocks release or the platform gate · **S2** major gap 
 |---|---|---|---|
 | C1 | S2 | Only factory #01 and business #3 are playable. The other 49 factories and 9 businesses are defined as data (recipes, sources, unlocks, levels, mechanics tags) but aren't simulated, modelled or reachable in play | Milestone C/D batches, each passing the content checklist |
 | C2 | S2 | City-level building, roads, expansion plots and districts aren't playable. The starter road graph is fixed | Milestone C |
-| C3 | S2 | Heatmaps, supply-relationship highlighting and production graphs aren't implemented | Milestone C |
+| C3 | S2 | Heatmaps and production graphs aren't implemented. Supply-route highlighting works for the workshop, store and depot | Milestone C |
+| C8 | S3 | Content-catalog balance hasn't been simulated. Internal production costs leave out labour, power and maintenance, so backward-integration margins are overstated (e.g. internal wood pieces ≈4¢ vs a 60¢ import) | Add operating costs to the cost model; run balance tools per chapter before making it playable |
 | C4 | S2 | Only the first chapter's mechanics are simulated. Mechanic modules for the other tags (curing, aging, cold chain, yield, …) aren't implemented | Per batch |
 | C5 | S2 | Soundtrack: 2 of the 8 target themes (`workshop` main theme 124.8 s, `evening` 126.3 s) and 75 of ~120 sound events (174 variations). The `city` theme was deferred to stay within the 6 MB first-load budget. **All audio is synthesized and has not been reviewed by a human listener** | Listening review using the checklist in `docs/audio-guide.md`. Then the remaining themes (food, retail, logistics, high-tech, large city, industrial) |
 | C7 | S3 | Decoded audio memory: ~80 MB for the `workshop` stems plus ~27 MB for the effects bank. That is high for low-end phones | Stream long stems or lower the sample rate after measuring on devices |

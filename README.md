@@ -19,7 +19,7 @@ slice of the opening, not the full game.
 | Imports, delivery vans, supplier trucks, contracts, research, tutorial | Implemented and playable |
 | Saves (IndexedDB atomic + backup, migrations, export/import), offline catch-up | Implemented and tested |
 | English + Hebrew (real RTL) | Implemented. Hebrew needs review by a native speaker |
-| Remaining 49 factories + 9 businesses | **Data only.** They are defined in the content catalog but not playable |
+| Remaining 49 factories + 9 businesses | **Data only.** The catalog has 377 items, 346 recipes, 255 machines and 226 unlocks, and it validates with 0 errors. None of it is playable yet |
 | Web build | Builds (`npm run build`). Tested only in headless Chromium |
 | Android | Capacitor project generated. **Doesn't build here:** the Android SDK host is blocked by the network policy |
 | iOS/iPadOS | Capacitor Xcode project generated. **Not compiled:** needs macOS, Xcode and signing |

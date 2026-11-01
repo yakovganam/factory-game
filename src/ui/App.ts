@@ -10,6 +10,7 @@ import { footprintOf } from '../content/db';
 import { duration, getLang, itemName, LANGS, machineName, money, setLang, t, type Lang } from '../i18n';
 import { makeEnvelope, MemoryBackend, parseEnvelope, SaveManager, serialize, SLOT_COUNT } from '../persist/saves';
 import { checkPlacement, entityAt } from '../sim/factory';
+import { stockFedOnly } from '../sim/logistics';
 import type { Command } from '../sim/commands';
 import { applyDemoLayout } from '../sim/demo';
 import { newGame, Sim } from '../sim/game';
@@ -1171,7 +1172,11 @@ export class App implements UiCtx {
         const m = this.db.machines.get(e.def)!;
         if (m.role === 'shipping' && st !== 'blocked') continue;
         // An unassigned bay only matters once there is something in receiving storage to unload.
-        if (m.role === 'receiving' && st === 'no_recipe' && !Object.keys(f.inbound).length) continue;
+        if (m.role === 'receiving' && st === 'no_recipe') {
+          const assigned = new Set(f.entities.map((x) => (x.kind === 'machine' ? x.filter : null)).filter(Boolean));
+          const needsBay = Object.keys(f.inbound).some((k) => !assigned.has(k) && !stockFedOnly(this.db, k));
+          if (!needsBay) continue;
+        }
         const label =
           m.role === 'receiving' && st === 'no_recipe'
             ? t('panel.choose_item')
